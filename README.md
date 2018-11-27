@@ -1,1 +1,71 @@
-# media-platform-python-sdk
+# Wix Media Platform
+
+[![Build Status][travis-image]][travis-url] 
+
+[Wix Media Platform][wixmp-url] is an end-to-end solution for all modern web media management, handling images, video and audio in the most efficient way on the market. From upload, storage, metadata management and all the way to delivery, Wix Media Platform takes care of all possible media workflows.
+
+# JavaScript SDK
+
+This package is an isomorphic JavaScript library (works both in Node JS and in the browser) that provides a convenient API to access Wix Media Platform services.  
+Its documentation can be found [here](https://wix.github.io/media-platform-js-sdk).
+ 
+The docs for older versions (v5) can be found in [Wiki tab](https://github.com/wix/media-platform-js-sdk/wiki).
+
+
+## Installation
+
+```bash
+npm install media-platform-js-sdk --save
+```
+To get the most up-to-date version of the JS SDK, move to your project directory and type in ```npm update```:
+```bash
+cd media-platform-js-sdk
+npm update
+```
+[Click here](https://docs.npmjs.com/getting-started/updating-local-packages) for more info.
+
+## Running the Demo
+
+```bash
+git clone git@github.com:wix/media-platform-js-sdk.git
+
+cd media-platform-js-sdk
+
+npm install
+
+npm run start:demo
+```
+and open http://localhost:3333/ in the browser
+
+
+## Reporting Issues
+
+Please use [the issue tracker](https://github.com/wix/media-platform-js-sdk/issues) to report issues related to this library, or to the Wix Media Platform API in general.
+
+## Develop
+If you want to help make Media Platform JS SDK better - you are welcome and **you are awesome**!
+
+- Create an issue or make a Pull Request
+- Use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) for commits names.
+
+## License
+
+We use a custom license, see [LICENSE.md](LICENSE.md).
+
+## About Wix
+
+[Wix.com][wix-url] is a leading cloud-based web development platform with more than 100 million registered users worldwide. 
+Our powerful technology makes it simple for everyone to create a beautiful website and grow their business online.
+
+## About Google Cloud Platform
+
+[Google Cloud Platform][google-url] enables developers to build, test and deploy applications on Google’s reliable infrastructure.
+It offers computing, storage and application services for web, mobile and backend solutions.
+
+
+[wix-url]: https://www.wix.com/
+[google-url]: https://cloud.google.com/
+[wixmp-url]: https://console.wixmp.com/
+
+[travis-image]: https://travis-ci.org/wix/media-platform-python-sdk.svg?branch=master
+[travis-url]: https://travis-ci.org/wix/media-platform-python-sdk
