@@ -6,7 +6,7 @@
 
 # Python SDK
  
-The docs for older versions (v5) can be found in [Wiki tab](https://github.com/wix/media-platform-python-sdk/wiki).
+...
 
 
 ## Installation
