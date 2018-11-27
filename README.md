@@ -2,48 +2,23 @@
 
 [![Build Status][travis-image]][travis-url] 
 
-[Wix Media Platform][wixmp-url] is an end-to-end solution for all modern web media management, handling images, video and audio in the most efficient way on the market. From upload, storage, metadata management and all the way to delivery, Wix Media Platform takes care of all possible media workflows.
+[Wix Media Platform][wixmp-url] is an end-to-end solution for all modern web media management, handling images, video and audio in the most efficient way on the market. From upload, storage, metadata management and all the way to delivery, Wix Media Platform takes care of all possible media work flows.
 
-# JavaScript SDK
-
-This package is an isomorphic JavaScript library (works both in Node JS and in the browser) that provides a convenient API to access Wix Media Platform services.  
-Its documentation can be found [here](https://wix.github.io/media-platform-js-sdk).
+# Python SDK
  
-The docs for older versions (v5) can be found in [Wiki tab](https://github.com/wix/media-platform-js-sdk/wiki).
+The docs for older versions (v5) can be found in [Wiki tab](https://github.com/wix/media-platform-python-sdk/wiki).
 
 
 ## Installation
 
-```bash
-npm install media-platform-js-sdk --save
-```
-To get the most up-to-date version of the JS SDK, move to your project directory and type in ```npm update```:
-```bash
-cd media-platform-js-sdk
-npm update
-```
-[Click here](https://docs.npmjs.com/getting-started/updating-local-packages) for more info.
-
-## Running the Demo
-
-```bash
-git clone git@github.com:wix/media-platform-js-sdk.git
-
-cd media-platform-js-sdk
-
-npm install
-
-npm run start:demo
-```
-and open http://localhost:3333/ in the browser
-
+...
 
 ## Reporting Issues
 
-Please use [the issue tracker](https://github.com/wix/media-platform-js-sdk/issues) to report issues related to this library, or to the Wix Media Platform API in general.
+Please use [the issue tracker](https://github.com/wix/media-platform-python-sdk/issues) to report issues related to this library, or to the Wix Media Platform API in general.
 
 ## Develop
-If you want to help make Media Platform JS SDK better - you are welcome and **you are awesome**!
+If you want to help make Media Platform Python SDK better - you are welcome and **you are awesome**!
 
 - Create an issue or make a Pull Request
 - Use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) for commits names.
