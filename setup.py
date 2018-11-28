@@ -2,11 +2,18 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='media_platform_python_sdk',
+    name='media-platform-python-sdk',
     version='1.0.0',
     description='Wix Media Platform python SDK',
     author='Elad Laufer',
     author_email='elad@wix.com',
     url='https://console.wixmp.com/',
-    packages=find_packages(),
+    package_dir={'': 'media_platform'},
+    packages=find_packages(where='media_platform'),
+    install_requires=[
+        'python-jose==3.0.1',
+    ],
+    tests_require=[
+        'PyHamcrest==1.9.0',
+    ]
 )
