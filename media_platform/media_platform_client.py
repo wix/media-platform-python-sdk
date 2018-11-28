@@ -1,4 +1,4 @@
-from configuration.configuration import Configuration
+from media_platform.configuration.configuration import Configuration
 
 
 class MediaPlatformClient(object):
