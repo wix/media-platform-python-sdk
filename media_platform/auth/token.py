@@ -45,4 +45,4 @@ class Token(object):
     def _extract_additional_claims(claims):
         # type: (dict) -> dict
 
-        return {k: v for k, v in claims.iteritems() if k not in ['iss', 'sub', 'aud', 'iat', 'exp', 'jti']}
+        return {k: v for k, v in claims.items() if k not in ['iss', 'sub', 'aud', 'iat', 'exp', 'jti']}
