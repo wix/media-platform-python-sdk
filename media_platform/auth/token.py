@@ -14,7 +14,7 @@ class Token(object):
 
         self.verbs = verbs or list()
         self.issued_at = issued_at or (int(time.time()) - 10)
-        self.expiration = expiration or (issued_at + 600)
+        self.expiration = expiration or (self.issued_at + 600)
         self.additional_claims = additional_claims or dict()
         self.id = token_id or binascii.hexlify(os.urandom(6))
 
@@ -39,7 +39,7 @@ class Token(object):
         data = {
             'iss': self.issuer,
             'sub': self.subject,
-            'aud': self.verbs if self.verbs else None,
+            'aud': self.verbs if self.verbs else list(),
             'iat': self.issued_at,
             'exp': self.expiration,
             'jti': self.id
