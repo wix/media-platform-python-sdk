@@ -6,7 +6,7 @@ import time
 class Token(object):
     def __init__(self, issuer, subject, verbs=None, issued_at=None, expiration=None,
                  additional_claims=None, token_id=None):
-        # type: (str, str, [str], long, long, dict, str) -> None
+        # type: (str, str, [str], int, int, dict, str) -> None
         super(Token, self).__init__()
 
         self.issuer = issuer
@@ -16,7 +16,7 @@ class Token(object):
         self.issued_at = issued_at or (int(time.time()) - 10)
         self.expiration = expiration or (self.issued_at + 600)
         self.additional_claims = additional_claims or dict()
-        self.id = token_id or binascii.hexlify(os.urandom(6))
+        self.id = token_id or binascii.hexlify(os.urandom(6)).decode('utf-8')
 
     @staticmethod
     def from_claims(data):
