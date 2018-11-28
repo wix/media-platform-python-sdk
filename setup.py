@@ -15,5 +15,6 @@ setup(
     ],
     tests_require=[
         'PyHamcrest==1.9.0',
+        'nose'
     ]
 )
