@@ -1,6 +1,7 @@
 import requests
 
 from media_platform.auth.authenticator import Authenticator
+from media_platform.service.rest_result import RestResult
 
 
 class AuthenticatedHTTPClient(object):
@@ -13,10 +14,15 @@ class AuthenticatedHTTPClient(object):
 
         self.authenticator = authenticator
 
-    def get(self, url):
+    def get(self, url, params=None):
+        # type: (str, dict) -> RestResult
 
         signed_token = self.authenticator.default_signed_token()
 
-        requests.get(url, headers={
+        response = requests.get(url, params, headers={
             'Authorization': signed_token
         })
+
+        data = response.json()
+
+        return RestResult.deserialize(data)
