@@ -11,7 +11,9 @@
 
 ## Installation
 
-...
+```bash
+pip install media-platform-python-sdk
+```
 
 ## Reporting Issues
 

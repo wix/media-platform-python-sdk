@@ -25,8 +25,12 @@ source venv/bin/activate
 
 ### Installing Requirements
 
-#### Local Development:
-
 ```bash
 pip install -e .
+```
+
+### Running Tests
+
+```bash
+python setup.py test
 ```
