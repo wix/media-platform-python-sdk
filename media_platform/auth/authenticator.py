@@ -7,3 +7,6 @@ class Authenticator(object):
         super(Authenticator, self).__init__()
 
         self.configuration = configuration
+
+    def get_header(self):
+        raise NotImplementedError()

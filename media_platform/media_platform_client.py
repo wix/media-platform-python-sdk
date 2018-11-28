@@ -6,4 +6,3 @@ class MediaPlatformClient(object):
         super(MediaPlatformClient, self).__init__()
 
         self.configuration = Configuration(domain, app_id, shared_secret)
-
