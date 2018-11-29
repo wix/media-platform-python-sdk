@@ -14,6 +14,7 @@ class MediaPlatformRequest(object):
         self.payload_type = payload_type
 
     def execute(self):
+        # type: () -> Serializable or None
 
         self.validate()
 

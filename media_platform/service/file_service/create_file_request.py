@@ -5,7 +5,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class CreateFileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client, base_url):
-        super(CreateFileRequest, self).__init__(authenticated_http_client, "POST", base_url + "/files", FileDescriptor)
+        super(CreateFileRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/files', FileDescriptor)
 
         self.path = None
         self.mime_type = file_descriptor.FileMimeType.directory
