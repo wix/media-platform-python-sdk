@@ -55,6 +55,10 @@ class AuthenticatedHTTPClient(object):
     # todo: delete
     # todo: post (form-data)
 
+    # todo: post (JSON)
+    # todo: post (form-data)
+    # todo: delete
+
     def _headers(self):
         # type: () -> CaseInsensitiveDict
 
