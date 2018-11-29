@@ -37,7 +37,7 @@ class AuthenticatedHTTPClient(object):
         self.session.mount('https://', HTTPAdapter(max_retries=retry))
 
     def get(self, url, params=None, payload_type=None):
-        # type: (str, dict, Serializable) -> Serializable or None
+        # type: (str, dict, object) -> Serializable or None
 
         response = self.session.get(url, params=params, headers=self._headers())
 
@@ -56,7 +56,7 @@ class AuthenticatedHTTPClient(object):
         return headers
 
     def _handle_response(self, response, payload_type=None):
-        # type: (Response, Serializable) -> Serializable or None
+        # type: (Response, object) -> Serializable or None
 
         if response.status_code == 401:
             raise UnauthorizedException()
