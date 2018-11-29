@@ -48,5 +48,5 @@ class TestFileService(unittest.TestCase):
 
         assert_that(file_descriptor.serialize(), is_(payload))
         assert_that(file_descriptor, instance_of(FileDescriptor))
-        assert_that(httpretty.last_request().body,
+        assert_that(httpretty.last_request().body.decode('utf-8'),
                     is_('{"mimeType": "application/vnd.wix-media.dir", "path": "/fish.txt", "size": 0, "type": "d", "acl": "public"}'))
