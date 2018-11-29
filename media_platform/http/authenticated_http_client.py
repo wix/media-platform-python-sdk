@@ -1,6 +1,7 @@
 import requests
 from requests import Response
 from requests.adapters import HTTPAdapter
+from requests.exceptions import RetryError
 from requests.structures import CaseInsensitiveDict
 from urllib3 import Retry
 
@@ -30,7 +31,7 @@ class AuthenticatedHTTPClient(object):
         self.session = requests.Session()
 
         retry = Retry(total=self.MAX_RETRIES,
-                      backoff_factor=0.5,
+                      backoff_factor=0.2,
                       status_forcelist=self.RETRYABLE_CODES,
                       method_whitelist=self.RETRYABLE_METHODS)
         self.session.mount('http://', HTTPAdapter(max_retries=retry))
@@ -39,7 +40,10 @@ class AuthenticatedHTTPClient(object):
     def get(self, url, params=None, payload_type=None):
         # type: (str, dict, object) -> Serializable or None
 
-        response = self.session.get(url, params=params, headers=self._headers())
+        try:
+            response = self.session.get(url, params=params, headers=self._headers())
+        except RetryError as e:
+            raise MediaPlatformException(e)
 
         return self._handle_response(response, payload_type)
 
@@ -79,7 +83,7 @@ class AuthenticatedHTTPClient(object):
             # todo: code -> exception mapper (Alon, have fun :))
             raise MediaPlatformException()
 
-        if payload_type:
+        if payload_type and rest_result.payload is not None:
             return payload_type.deserialize(rest_result.payload)
         else:
             return None
