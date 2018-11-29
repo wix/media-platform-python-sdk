@@ -13,7 +13,27 @@ class CreateFileRequest(MediaPlatformRequest):
         self.acl = file_descriptor.ACL.public
         self.size = 0
 
-    def serialize(self):
+    def set_path(self, path):
+        self.path = path
+        return self
+
+    def set_mime_type(self, mime_type):
+        self.mime_type = mime_type
+        return self
+
+    def set_type(self, type):
+        self.type = type
+        return self
+
+    def set_acl(self, acl):
+        self.acl = acl
+        return self
+
+    def set_size(self, size):
+        self.size = size
+        return self
+
+    def _param(self):
         return {
             'path': self.path,
             'mimeType': self.mime_type,
