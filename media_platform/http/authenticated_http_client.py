@@ -39,6 +39,9 @@ class AuthenticatedHTTPClient(object):
 
         return self._send_request('POST', url, params, payload_type)
 
+    # todo: delete
+    # todo: post (form-data)
+
     def _send_request(self, verb, url, params=None, payload_type=None):
         # type: (str, str, dict, Type[Deserializable]) -> object or None
 
@@ -60,6 +63,3 @@ class AuthenticatedHTTPClient(object):
         headers['Accept'] = self.APPLICATION_JSON
 
         return headers
-
-    # todo: delete
-    # todo: post (form-data)
