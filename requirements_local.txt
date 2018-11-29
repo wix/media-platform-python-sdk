@@ -1,2 +1,3 @@
 pyhamcrest
-nose
+httpretty
+mockito

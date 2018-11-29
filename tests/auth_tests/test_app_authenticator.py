@@ -3,15 +3,16 @@ import unittest
 
 from hamcrest import assert_that, is_, not_none
 
-from media_platform.auth.authenticator import Authenticator
+from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.auth.token import Token
-from media_platform.configuration.configuration import Configuration
 
 
 class TestAuthenticator(unittest.TestCase):
-    configuration = Configuration('domain', 'app-id', '95eee2c63ac2d15270628664c84f6ddd')
-
-    authenticator = Authenticator(configuration)
+    @classmethod
+    def setUpClass(cls):
+        cls.shared_secret = '95eee2c63ac2d15270628664c84f6ddd'
+        cls.app_id = 'app-id'
+        cls.authenticator = AppAuthenticator(cls.app_id, cls.shared_secret)
 
     def test_default_signed_token(self):
         signed_token = self.authenticator.default_signed_token()
@@ -22,15 +23,15 @@ class TestAuthenticator(unittest.TestCase):
         now = int(time.time() - 10)
         later = now + 10
 
-        token = Token('urn:app:app-id', 'urn:app:app-id', ['urn:service:file.upload'], now, later, {'fish': 'cat'},
-                      'id!')
+        app_urn = 'urn:app:%s' % self.app_id
+        token = Token(app_urn, app_urn, ['urn:service:file.upload'], now, later, {'fish': 'cat'}, 'id!')
 
         signed_token = self.authenticator.sign_token(token)
 
         decoded_token = self.authenticator.decode_token(signed_token)
 
-        assert_that(decoded_token.to_claims(), is_({'sub': 'urn:app:app-id',
-                                                    'iss': 'urn:app:app-id',
+        assert_that(decoded_token.to_claims(), is_({'sub': app_urn,
+                                                    'iss': app_urn,
                                                     'fish': 'cat',
                                                     'jti': 'id!',
                                                     'exp': later,

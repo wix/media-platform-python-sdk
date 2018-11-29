@@ -5,7 +5,7 @@ import httpretty
 from mockito import mock, when, forget_invocations, unstub
 from hamcrest import assert_that, instance_of, is_
 
-from media_platform.auth.authenticator import Authenticator
+from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
 from media_platform.exception.not_found_exception import NotFoundException
@@ -16,7 +16,7 @@ from tests.http.dummy_payload import DummyPayload
 
 
 class TestAuthenticatedHTTPClient(unittest.TestCase):
-    authenticator = mock(Authenticator)
+    authenticator = mock(AppAuthenticator)
 
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 

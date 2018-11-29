@@ -1,8 +1,8 @@
-from media_platform.configuration.configuration import Configuration
+from media_platform.configuration.client_configuration import ClientConfiguration
 
 
 class MediaPlatformClient(object):
     def __init__(self, domain, app_id, shared_secret):
-        super(MediaPlatformClient, self).__init__()
+        # type: (str, str, str) -> None
 
-        self.configuration = Configuration(domain, app_id, shared_secret)
+        self.configuration = ClientConfiguration(domain, app_id, shared_secret)
