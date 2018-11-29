@@ -14,11 +14,17 @@ class MediaPlatformRequest(object):
         self.payload_type = payload_type
 
     def execute(self):
+        # type: () -> Serializable or None
 
         self.validate()
 
         if self.method == 'GET':
             return self.authenticated_http_client.get(self.url, self._param(), self.payload_type)
+
+        if self.method == 'POST':
+            return self.authenticated_http_client.post(self.url, self._param(), self.payload_type)
+
+        raise NotImplementedError()
 
     # override for request pre-flight check
     def validate(self):

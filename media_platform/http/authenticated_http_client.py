@@ -42,9 +42,18 @@ class AuthenticatedHTTPClient(object):
 
         return ResponseProcessor.process(response, payload_type)
 
-    # todo: post (JSON)
-    # todo: post (form-data)
+    def post(self, url, params=None, payload_type=None):
+        # type: (str, dict, Serializable) -> Serializable or None
+
+        try:
+            response = self.session.post(url, json=params, headers=self._headers())
+        except RetryError as e:
+            raise MediaPlatformException(e)
+
+        return ResponseProcessor.process(response, payload_type)
+
     # todo: delete
+    # todo: post (form-data)
 
     def _headers(self):
         # type: () -> CaseInsensitiveDict

@@ -33,3 +33,26 @@ class TestFileService(unittest.TestCase):
 
         assert_that(file_descriptor.serialize(), is_(payload))
         assert_that(file_descriptor, instance_of(FileDescriptor))
+
+    @httpretty.activate
+    def test_get_create_request(self):
+        payload = FileDescriptor('/fish.txt', 'file-id', FileType.file, 'txt/plain', 123).serialize()
+        response_body = RestResult(0, 'OK', payload)
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/files',
+            body=json.dumps(response_body.serialize())
+        )
+
+        file_descriptor = self.file_service.create_file_request().set_path('/fish.txt').execute()
+
+        assert_that(file_descriptor.serialize(), is_(payload))
+        assert_that(file_descriptor, instance_of(FileDescriptor))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'mimeType': 'application/vnd.wix-media.dir',
+                        'path': '/fish.txt',
+                        'size': 0,
+                        'type': 'd',
+                        'acl': 'public'
+                    }))
