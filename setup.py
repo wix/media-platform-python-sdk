@@ -12,9 +12,10 @@ setup(
     packages=find_packages(where='media_platform'),
     install_requires=[
         'python-jose==3.0.1',
+        'requests==2.20.1',
     ],
     tests_require=[
         'PyHamcrest==1.9.0',
-        'nose'
+        'nose==1.3.7'
     ]
 )
