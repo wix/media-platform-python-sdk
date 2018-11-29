@@ -16,7 +16,6 @@ setup(
     ],
     tests_require=[
         'PyHamcrest==1.9.0',
-        'nose==1.3.7',
         'mockito==1.1.1',
         'httpretty==0.9.6'
     ]

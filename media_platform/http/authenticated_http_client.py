@@ -1,17 +1,13 @@
 import requests
-from requests import Response
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RetryError
 from requests.structures import CaseInsensitiveDict
 from urllib3 import Retry
 
-from media_platform.auth.authenticator import Authenticator
-from media_platform.exception.forbidden_exception import ForbiddenException
+from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.exception.media_platform_exception import MediaPlatformException
-from media_platform.exception.not_found_exception import NotFoundException
-from media_platform.exception.unauthorized_exception import UnauthorizedException
+from media_platform.http.response_processor import ResponseProcessor
 from media_platform.lang.serializable import Serializable
-from media_platform.service.rest_result import RestResult
 
 
 class AuthenticatedHTTPClient(object):
@@ -23,8 +19,7 @@ class AuthenticatedHTTPClient(object):
     RETRYABLE_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 
     def __init__(self, authenticator):
-        # type: (Authenticator) -> None
-        super(AuthenticatedHTTPClient, self).__init__()
+        # type: (AppAuthenticator) -> None
 
         self.authenticator = authenticator
 
@@ -38,14 +33,14 @@ class AuthenticatedHTTPClient(object):
         self.session.mount('https://', HTTPAdapter(max_retries=retry))
 
     def get(self, url, params=None, payload_type=None):
-        # type: (str, dict, object) -> Serializable or None
+        # type: (str, dict, Serializable) -> Serializable or None
 
         try:
             response = self.session.get(url, params=params, headers=self._headers())
         except RetryError as e:
             raise MediaPlatformException(e)
 
-        return self._handle_response(response, payload_type)
+        return ResponseProcessor().process(response, payload_type)
 
     # todo: post (JSON)
     # todo: post (form-data)
@@ -62,32 +57,3 @@ class AuthenticatedHTTPClient(object):
         headers['Accept'] = self.APPLICATION_JSON
 
         return headers
-
-    def _handle_response(self, response, payload_type=None):
-        # type: (Response, object) -> Serializable or None
-
-        if response.status_code == 401:
-            raise UnauthorizedException()
-
-        if response.status_code == 403:
-            raise ForbiddenException()
-
-        if response.status_code == 404:
-            raise NotFoundException()
-
-        if response.status_code < 200 or response.status_code > 299:
-            raise MediaPlatformException()
-
-        try:
-            rest_result = RestResult.deserialize(response.json())
-        except ValueError as e:
-            raise MediaPlatformException(e)
-
-        if rest_result.code != 0:
-            # todo: code -> exception mapper (Alon, have fun :))
-            raise MediaPlatformException()
-
-        if payload_type and rest_result.payload is not None:
-            return payload_type.deserialize(rest_result.payload)
-        else:
-            return None
