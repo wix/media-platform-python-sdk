@@ -24,6 +24,8 @@ class MediaPlatformRequest(object):
         if self.method == 'POST':
             return self.authenticated_http_client.post(self.url, self._param(), self.payload_type)
 
+        raise NotImplementedError()
+
     # override for request pre-flight check
     def validate(self):
         pass
