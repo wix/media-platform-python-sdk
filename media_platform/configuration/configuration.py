@@ -6,3 +6,5 @@ class Configuration(object):
         self.domain = domain
         self.app_id = app_id
         self.shared_secret = shared_secret
+
+        self.base_url = 'https://' + domain + '/_api'

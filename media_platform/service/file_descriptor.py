@@ -43,7 +43,7 @@ class FileDescriptor(Serializable):
         self.mime_type = mime_type
         self.size = size
         self.acl = acl
-        self.lifecycle = lifecycle  # type: Lifecycle
+        self.lifecycle = lifecycle
         self.hash = file_hash
         self.date_created = date_created or datetime.utcnow()
         self.date_updated = date_updated or datetime.utcnow()
