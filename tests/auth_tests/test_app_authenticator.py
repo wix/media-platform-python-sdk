@@ -8,6 +8,7 @@ from media_platform.auth.token import Token
 
 
 class TestAuthenticator(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         cls.shared_secret = '95eee2c63ac2d15270628664c84f6ddd'

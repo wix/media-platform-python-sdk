@@ -1,6 +1,6 @@
 from jose import jwt
 
-from auth.token import Token
+from media_platform.auth.token import Token
 
 
 def sign_jwt(token, secret):

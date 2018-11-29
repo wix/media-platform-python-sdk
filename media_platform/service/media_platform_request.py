@@ -1,9 +1,10 @@
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.lang.serializable import Serializable
 
 
 class MediaPlatformRequest(object):
     def __init__(self,  authenticated_http_client, method, url, payload_type=None):
-        # type: (AuthenticatedHTTPClient, str, str, object) -> None
+        # type: (AuthenticatedHTTPClient, str, str, Serializable) -> None
         super(MediaPlatformRequest, self).__init__()
         self.authenticated_http_client = authenticated_http_client
 
