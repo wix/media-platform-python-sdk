@@ -1,14 +1,26 @@
 import requests
 from requests import Response
+from requests.adapters import HTTPAdapter
+from requests.exceptions import RetryError
 from requests.structures import CaseInsensitiveDict
+from urllib3 import Retry
 
 from media_platform.auth.authenticator import Authenticator
+from media_platform.exception.forbidden_exception import ForbiddenException
+from media_platform.exception.media_platform_exception import MediaPlatformException
+from media_platform.exception.not_found_exception import NotFoundException
+from media_platform.exception.unauthorized_exception import UnauthorizedException
+from media_platform.lang.serializable import Serializable
 from media_platform.service.rest_result import RestResult
 
 
 class AuthenticatedHTTPClient(object):
-
     USER_AGENT = 'WixMP Python SDK 1.x'
+    APPLICATION_JSON = 'application/json'
+    MAX_RETRIES = 5
+
+    RETRYABLE_CODES = [500, 503, 504, 429]
+    RETRYABLE_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 
     def __init__(self, authenticator):
         # type: (Authenticator) -> None
@@ -16,12 +28,24 @@ class AuthenticatedHTTPClient(object):
 
         self.authenticator = authenticator
 
-    def get(self, url, params=None):
-        # type: (str, dict) -> RestResult
+        self.session = requests.Session()
 
-        response = requests.get(url, params, headers=self._headers())
+        retry = Retry(total=self.MAX_RETRIES,
+                      backoff_factor=0.2,
+                      status_forcelist=self.RETRYABLE_CODES,
+                      method_whitelist=self.RETRYABLE_METHODS)
+        self.session.mount('http://', HTTPAdapter(max_retries=retry))
+        self.session.mount('https://', HTTPAdapter(max_retries=retry))
 
-        return self._handle_response(response)
+    def get(self, url, params=None, payload_type=None):
+        # type: (str, dict, object) -> Serializable or None
+
+        try:
+            response = self.session.get(url, params=params, headers=self._headers())
+        except RetryError as e:
+            raise MediaPlatformException(e)
+
+        return self._handle_response(response, payload_type)
 
     def _headers(self):
         # type: () -> CaseInsensitiveDict
@@ -31,14 +55,35 @@ class AuthenticatedHTTPClient(object):
         headers = requests.utils.default_headers()
         headers['Authorization'] = signed_token
         headers['User-Agent'] = self.USER_AGENT
-        headers['Accept'] = 'application/json'
+        headers['Accept'] = self.APPLICATION_JSON
 
         return headers
 
-    def _handle_response(self, response):
-        # type: (Response) -> RestResult
+    def _handle_response(self, response, payload_type=None):
+        # type: (Response, object) -> Serializable or None
 
-        # todo: error handling
+        if response.status_code == 401:
+            raise UnauthorizedException()
 
-        data = response.json()
-        return RestResult.deserialize(data)
+        if response.status_code == 403:
+            raise ForbiddenException()
+
+        if response.status_code == 404:
+            raise NotFoundException()
+
+        if response.status_code < 200 or response.status_code > 299:
+            raise MediaPlatformException()
+
+        try:
+            rest_result = RestResult.deserialize(response.json())
+        except ValueError as e:
+            raise MediaPlatformException(e)
+
+        if rest_result.code != 0:
+            # todo: code -> exception mapper (Alon, have fun :))
+            raise MediaPlatformException()
+
+        if payload_type and rest_result.payload is not None:
+            return payload_type.deserialize(rest_result.payload)
+        else:
+            return None
