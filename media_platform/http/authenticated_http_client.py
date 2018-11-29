@@ -40,7 +40,11 @@ class AuthenticatedHTTPClient(object):
         except RetryError as e:
             raise MediaPlatformException(e)
 
-        return ResponseProcessor().process(response, payload_type)
+        return ResponseProcessor.process(response, payload_type)
+
+    # todo: post (JSON)
+    # todo: post (form-data)
+    # todo: delete
 
     def _headers(self):
         # type: () -> CaseInsensitiveDict

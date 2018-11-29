@@ -10,9 +10,14 @@ from media_platform.service.rest_result import RestResult
 
 class ResponseProcessor(object):
 
-    def process(self, response, payload_type=None):
-        self._raise_for_status(response.status_code)
-        return self._handle_response(response, payload_type)
+    @staticmethod
+    def process(response, payload_type=None):
+        # type: (Response, Serializable) -> Serializable or None
+
+        # sort of a process chain todo: make proper chain
+        return ResponseProcessor._handle_response(
+            ResponseProcessor._raise_for_status(response),
+            payload_type)
 
     @staticmethod
     def _handle_response(response, payload_type=None):
@@ -33,7 +38,11 @@ class ResponseProcessor(object):
             return None
 
     @staticmethod
-    def _raise_for_status(status_code):
+    def _raise_for_status(response):
+        # type: (Response) -> Response
+
+        status_code = response.status_code
+
         if status_code == 401:
             raise UnauthorizedException()
 
@@ -45,3 +54,5 @@ class ResponseProcessor(object):
 
         if status_code < 200 or status_code > 299:
             raise MediaPlatformException()
+
+        return response
