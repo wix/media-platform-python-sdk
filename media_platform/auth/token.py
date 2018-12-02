@@ -7,7 +7,6 @@ class Token(object):
     def __init__(self, issuer, subject, verbs=None, issued_at=None, expiration=None,
                  additional_claims=None, token_id=None):
         # type: (str, str, [str], int, int, dict, str) -> None
-        super(Token, self).__init__()
 
         self.issuer = issuer
         self.subject = subject

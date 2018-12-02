@@ -5,7 +5,6 @@ import httpretty
 from hamcrest import assert_that, instance_of, is_
 
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.configuration.client_configuration import ClientConfiguration
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_descriptor import FileDescriptor, FileType
 from media_platform.service.file_service.file_service import FileService
@@ -13,11 +12,10 @@ from media_platform.service.rest_result import RestResult
 
 
 class TestFileService(unittest.TestCase):
-    configuration = ClientConfiguration('fish.barrel', 'app', 'secret')
-    authenticator = AppAuthenticator(configuration.app_id, configuration.shared_secret)
+    authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 
-    file_service = FileService(configuration, authenticated_http_client)
+    file_service = FileService('fish.barrel', authenticated_http_client)
 
     @httpretty.activate
     def test_get_file_request(self):

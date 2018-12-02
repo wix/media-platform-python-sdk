@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'python-jose==3.0.1',
         'requests==2.20.1',
+        'typing==3.6.6'
     ],
     tests_require=[
         'PyHamcrest==1.9.0',

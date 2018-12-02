@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from media_platform.lang import datetime_serializer
-from media_platform.lang.serializable import Serializable
+from media_platform.lang.serializable_deserializable import Serializable, Deserializable
 from media_platform.service.lifecycle import Lifecycle
 
 
@@ -25,17 +25,12 @@ class FileMimeType(object):
     symlink = 'application/vnd.wix-media.symlink'
 
 
-class FileDescriptor(Serializable):
+class FileDescriptor(Serializable, Deserializable):
     def __init__(self, path, file_id, file_type, mime_type, size, acl=ACL.public, lifecycle=None, file_hash=None,
                  date_created=None, date_updated=None):
         # type: (str, str, str, str, int, str, Lifecycle, str, datetime, datetime) -> None
-        super(FileDescriptor, self).__init__()
 
-        if not path.startswith('/'):
-            raise ValueError('path must start with "/"' % path)
-
-        if not ACL.has_value(acl):
-            raise ValueError('ACL %s not supported' % acl)
+        self._validate_values(acl, path)
 
         self.path = path
         self.id = file_id
@@ -74,3 +69,10 @@ class FileDescriptor(Serializable):
             'dateUpdated': datetime_serializer.serialize(self.date_updated),
             'dateCreated': datetime_serializer.serialize(self.date_created)
         }
+
+    @staticmethod
+    def _validate_values(acl, path):
+        if not path.startswith('/'):
+            raise ValueError('path must start with "/"' % path)
+        if not ACL.has_value(acl):
+            raise ValueError('ACL %s not supported' % acl)

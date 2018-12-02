@@ -7,12 +7,12 @@ class AppAuthenticator(object):
         # type: (str, str) -> None
 
         self._shared_secret = shared_secret
-        self._urn = "urn:app:" + app_id
+        self._app_urn = "urn:app:" + app_id
 
     def default_signed_token(self):
         # type: () -> str
 
-        token = Token(self._urn, self._urn)
+        token = Token(self._app_urn, self._app_urn)
         return self.sign_token(token)
 
     def sign_token(self, token):
@@ -23,4 +23,4 @@ class AppAuthenticator(object):
     def decode_token(self, signed_token):
         # type: (str) -> Token
 
-        return decode_jwt(self._shared_secret, self._urn, signed_token)
+        return decode_jwt(self._shared_secret, self._app_urn, signed_token)

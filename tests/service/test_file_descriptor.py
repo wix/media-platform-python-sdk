@@ -31,7 +31,10 @@ class TestFileDescriptor(TestCase):
             'acl': ACL.private,
             'hash': '324234234',
             'id': '123456789',
-            'lifecycle': None,
+            'lifecycle': {
+                'age': 500,
+                'action': 'delete'
+            },
             'dateUpdated': '2017-01-01T00:00:00Z',
             'dateCreated': '2017-01-01T00:00:00Z'
         }

@@ -1,4 +1,4 @@
-from media_platform.lang.serializable import Serializable
+from media_platform.lang.serializable_deserializable import Serializable, Deserializable
 
 
 class Action(object):
@@ -9,19 +9,11 @@ class Action(object):
         return value in [cls.delete]
 
 
-class Lifecycle(Serializable):
+class Lifecycle(Serializable, Deserializable):
     def __init__(self, age, action):
         # type: (int, str) -> None
-        super(Lifecycle, self).__init__()
 
-        if age < 30:
-            raise ValueError('age must be greater than 30 seconds')
-
-        if age > 365 * 24 * 60 * 60:
-            raise ValueError('age must be less than 365 days')
-
-        if not Action.has_value(action):
-            raise ValueError('action %s not supported' % action)
+        self._validate_values(action, age)
 
         self.age = age          # int seconds
         self.action = action    # delete
@@ -37,3 +29,14 @@ class Lifecycle(Serializable):
             'age': self.age,
             'action': self.action
         }
+
+    @staticmethod
+    def _validate_values(action, age):
+        if age < 30:
+            raise ValueError('age must be greater than 30 seconds')
+
+        if age > 365 * 24 * 60 * 60:
+            raise ValueError('age must be less than 365 days')
+
+        if not Action.has_value(action):
+            raise ValueError('action %s not supported' % action)

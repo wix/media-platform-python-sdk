@@ -2,8 +2,8 @@ import json
 import unittest
 
 import httpretty
-from mockito import mock, when, forget_invocations, unstub
-from hamcrest import assert_that, instance_of, is_
+from hamcrest import assert_that, instance_of, is_, equal_to, not_none
+from requests.exceptions import RetryError
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.exception.forbidden_exception import ForbiddenException
@@ -16,48 +16,41 @@ from tests.http.dummy_payload import DummyPayload
 
 
 class TestAuthenticatedHTTPClient(unittest.TestCase):
-    authenticator = mock(AppAuthenticator)
-
-    authenticated_http_client = AuthenticatedHTTPClient(authenticator)
-
-    def tearDown(self):
-        forget_invocations()
 
     @classmethod
-    def tearDownClass(cls):
-        unstub()
+    def setUpClass(cls):
+        cls.app_authenticator = AppAuthenticator('app-id', '95eee2c63ac2d15270628664c84f6ddd')
+        cls.authenticated_http_client = AuthenticatedHTTPClient(cls.app_authenticator)
+        cls.test_endpoint = 'https://fish.barrel/get'
 
     @httpretty.activate
     def test_get(self):
         payload = DummyPayload('fish')
         response_body = RestResult(0, 'OK', payload.serialize())
+
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             body=json.dumps(response_body.serialize())
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
-        payload = self.authenticated_http_client.get('https://fish.barrel/get', payload_type=DummyPayload)
+        payload = self.authenticated_http_client.get(self.test_endpoint, payload_type=DummyPayload)
 
         assert_that(payload, instance_of(DummyPayload))
         assert_that(payload.dumdum, is_('fish'))
-        assert_that(httpretty.last_request().headers.get('Authorization'), is_('xxx'))
+        assert_that(httpretty.last_request().headers.get('Authorization'), not_none())
 
     @httpretty.activate
     def test_get_unexpected_null_payload(self):
         response_body = RestResult(0, 'OK')
+
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             body=json.dumps(response_body.serialize())
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
-        payload = self.authenticated_http_client.get('https://fish.barrel/get', payload_type=DummyPayload)
-
+        payload = self.authenticated_http_client.get(self.test_endpoint, payload_type=DummyPayload)
         assert_that(payload, is_(None))
 
     @httpretty.activate
@@ -65,83 +58,74 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
         response_body = RestResult(0, 'OK')
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             body=json.dumps(response_body.serialize())
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
-        payload = self.authenticated_http_client.get('https://fish.barrel/get')
-
+        payload = self.authenticated_http_client.get(self.test_endpoint)
         assert_that(payload, is_(None))
 
     @httpretty.activate
     def test_get_401(self):
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             status=401
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
         with self.assertRaises(UnauthorizedException):
-            payload = self.authenticated_http_client.get('https://fish.barrel/get')
+            payload = self.authenticated_http_client.get(self.test_endpoint)
             assert_that(payload, is_(None))
 
     @httpretty.activate
     def test_get_403(self):
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             status=403
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
         with self.assertRaises(ForbiddenException):
-            payload = self.authenticated_http_client.get('https://fish.barrel/get')
+            payload = self.authenticated_http_client.get(self.test_endpoint)
             assert_that(payload, is_(None))
 
     @httpretty.activate
     def test_get_404(self):
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             status=404
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
         with self.assertRaises(NotFoundException):
-            payload = self.authenticated_http_client.get('https://fish.barrel/get')
+            payload = self.authenticated_http_client.get(self.test_endpoint)
             assert_that(payload, is_(None))
 
     @httpretty.activate
     def test_get_some_other_error_status(self):
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             status=405
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
         with self.assertRaises(MediaPlatformException):
-            payload = self.authenticated_http_client.get('https://fish.barrel/get')
+            payload = self.authenticated_http_client.get(self.test_endpoint)
             assert_that(payload, is_(None))
 
     @httpretty.activate
     def test_get_500_retry(self):
+        authenticated_http_client = AuthenticatedHTTPClient(self.app_authenticator, retry_count=1, retry_backoff_factor=0)
+
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/get',
+            self.test_endpoint,
             status=500
         )
 
-        when(self.authenticator).default_signed_token().thenReturn('xxx')
-
-        with self.assertRaises(MediaPlatformException):
-            payload = self.authenticated_http_client.get('https://fish.barrel/get')
-            assert_that(payload, is_(None))
+        with self.assertRaises(MediaPlatformException) as e:
+            authenticated_http_client.get(self.test_endpoint)
             # todo: assert httpretty.latest_requests() when released
+
+        media_platform_exception = e.exception
+        assert_that(isinstance(media_platform_exception.cause, RetryError), equal_to(True))

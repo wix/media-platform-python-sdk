@@ -1,7 +1,7 @@
-from media_platform.lang.serializable import Serializable
+from media_platform.lang.serializable_deserializable import Serializable, Deserializable
 
 
-class DummyPayload(Serializable):
+class DummyPayload(Serializable, Deserializable):
     def __init__(self, dumdum=None):
         # type: (str) -> None
         super(DummyPayload, self).__init__()
