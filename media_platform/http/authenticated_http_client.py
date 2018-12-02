@@ -32,21 +32,21 @@ class AuthenticatedHTTPClient(object):
     def get(self, url, params=None, payload_type=None):
         # type: (str, dict, Type[Deserializable]) -> object or None
 
-        return self._send_request('GET', url, params, payload_type)
+        return self._send_request('GET', url, params=params, payload_type=payload_type)
 
-    def post(self, url, params=None, payload_type=None):
+    def post(self, url, data=None, payload_type=None):
         # type: (str, dict, Type[Deserializable]) -> object or None
 
-        return self._send_request('POST', url, params, payload_type)
+        return self._send_request('POST', url, json=data, payload_type=payload_type)
 
     # todo: delete
     # todo: post (form-data)
 
-    def _send_request(self, verb, url, params=None, payload_type=None):
-        # type: (str, str, dict, Type[Deserializable]) -> object or None
+    def _send_request(self, verb, url, json=None, params=None, payload_type=None):
+        # type: (str, str, dict, dict, Type[Deserializable]) -> object or None
 
         try:
-            response = self._session.request(verb, url, json=params, headers=self._headers())
+            response = self._session.request(verb, url, params=params, json=json, headers=self._headers())
         except RetryError as e:
             raise MediaPlatformException(e)
 
