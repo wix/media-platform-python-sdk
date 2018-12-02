@@ -1,4 +1,3 @@
-from media_platform.configuration.client_configuration import ClientConfiguration
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_service.create_file_request import CreateFileRequest
 from media_platform.service.file_service.get_file_request import GetFileRequest
@@ -6,12 +5,12 @@ from media_platform.service.media_platform_service import MediaPlatformService
 
 
 class FileService(MediaPlatformService):
-    def __init__(self, configuration, authenticated_http_client):
-        # type: (ClientConfiguration, AuthenticatedHTTPClient) -> None
-        super(FileService, self).__init__(configuration, authenticated_http_client)
+    def __init__(self, domain, authenticated_http_client):
+        # type: (str, AuthenticatedHTTPClient) -> None
+        super(FileService, self).__init__(domain, authenticated_http_client)
 
     def get_file_request(self):
-        return GetFileRequest(self.authenticated_http_client, self.configuration.base_url)
+        return GetFileRequest(self.authenticated_http_client, self.base_url)
 
     def create_file_request(self):
-        return CreateFileRequest(self.authenticated_http_client, self.configuration.base_url)
+        return CreateFileRequest(self.authenticated_http_client, self.base_url)
