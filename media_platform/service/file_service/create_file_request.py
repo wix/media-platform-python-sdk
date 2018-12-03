@@ -39,7 +39,7 @@ class CreateFileRequest(MediaPlatformRequest):
         self.size = size
         return self
 
-    def _param(self):
+    def _params(self):
         return {
             'path': self.path,
             'mimeType': self.mime_type,

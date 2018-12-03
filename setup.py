@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'python-jose==3.0.1',
         'requests==2.20.1',
+        'requests-toolbelt==0.8.0',
         'typing==3.6.6'
     ],
     tests_require=[

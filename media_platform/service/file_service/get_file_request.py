@@ -15,7 +15,7 @@ class GetFileRequest(MediaPlatformRequest):
         self.path = path
         return self
 
-    def _param(self):
+    def _params(self):
         # type: () -> dict
         return {
             'path': self.path

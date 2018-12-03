@@ -20,7 +20,7 @@ class ResponseProcessor(object):
 
     @staticmethod
     def _handle_response(response, payload_type=None):
-        # type: (requests.Response, Type[Deserializable]) -> object or None
+        # type: (requests.Response, Type[Deserializable] or [Type[Deserializable]]) -> object or None
 
         try:
             rest_result = RestResult.deserialize(response.json())

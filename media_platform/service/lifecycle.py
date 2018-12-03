@@ -12,6 +12,7 @@ class Action(object):
 class Lifecycle(Serializable, Deserializable):
     def __init__(self, age, action):
         # type: (int, str) -> None
+        super(Lifecycle, self).__init__()
 
         self._validate_values(action, age)
 

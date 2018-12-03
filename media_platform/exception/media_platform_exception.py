@@ -1,9 +1,9 @@
-from collections import Iterator
+from typing import Any
 
 
 class MediaPlatformException(Exception):
-    def __init__(self, cause=None, *args, **kwargs):
-        # type: (Exception, Iterator, dict) -> None
-        super(MediaPlatformException, self).__init__(*args, **kwargs)
+    def __init__(self, cause=None, *args):
+        # type: (Exception, Any) -> None
+        super(MediaPlatformException, self).__init__(*args)
         
         self.cause = cause

@@ -24,11 +24,14 @@ class FileMimeType(object):
     directory = 'application/vnd.wix-media.dir'
     symlink = 'application/vnd.wix-media.symlink'
 
+    defualt = 'application/octet-stream'
+
 
 class FileDescriptor(Serializable, Deserializable):
     def __init__(self, path, file_id, file_type, mime_type, size, acl=ACL.public, lifecycle=None, file_hash=None,
                  date_created=None, date_updated=None):
         # type: (str, str, str, str, int, str, Lifecycle, str, datetime, datetime) -> None
+        super(FileDescriptor, self).__init__()
 
         self._validate_values(acl, path)
 
@@ -72,7 +75,16 @@ class FileDescriptor(Serializable, Deserializable):
 
     @staticmethod
     def _validate_values(acl, path):
+        FileDescriptor.path_validator(path)
+        FileDescriptor.acl_validator(acl)
+
+    @staticmethod
+    def path_validator(path):
+        # type: (str) -> None
         if not path.startswith('/'):
             raise ValueError('path must start with "/"' % path)
+
+    @staticmethod
+    def acl_validator(acl):
         if not ACL.has_value(acl):
             raise ValueError('ACL %s not supported' % acl)

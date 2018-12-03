@@ -3,6 +3,7 @@ import urllib3
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RetryError
 from requests.structures import CaseInsensitiveDict
+from requests_toolbelt import MultipartEncoder
 from typing import Type
 
 from media_platform.lang.serializable_deserializable import Deserializable
@@ -30,7 +31,7 @@ class AuthenticatedHTTPClient(object):
         self._session.mount('https://', HTTPAdapter(max_retries=retry))
 
     def get(self, url, params=None, payload_type=None):
-        # type: (str, dict, Type[Deserializable]) -> object or None
+        # type: (str, dict, Type[Deserializable]) -> Deserializable or None
 
         return self._send_request('GET', url, params=params, payload_type=payload_type)
 
@@ -39,8 +40,24 @@ class AuthenticatedHTTPClient(object):
 
         return self._send_request('POST', url, json=data, payload_type=payload_type)
 
+    def post_data(self, url, content, mime_type, params=None, payload_type=None):
+        # type: (str, str, str, dict, Type[Deserializable]) -> Deserializable or None
+
+        fields = {
+            'file': ('file-name', content, mime_type)
+        }
+        fields.update(params)
+
+        encoder = MultipartEncoder(fields)
+
+        try:
+            response = self._session.post(url, data=encoder, headers={'Content-Type': encoder.content_type})
+        except RetryError as e:
+            raise MediaPlatformException(e)
+
+        return ResponseProcessor.process(response, payload_type)
+
     # todo: delete
-    # todo: post (form-data)
 
     def _send_request(self, verb, url, json=None, params=None, payload_type=None):
         # type: (str, str, dict, dict, Type[Deserializable]) -> object or None

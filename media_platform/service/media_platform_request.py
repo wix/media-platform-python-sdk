@@ -14,24 +14,23 @@ class MediaPlatformRequest(object):
         self.payload_type = payload_type
 
     def execute(self):
-        # type: () -> object or None
+        # type: () -> Deserializable or None
 
         self.validate()
 
         if self.method == 'GET':
-            return self.authenticated_http_client.get(self.url, self._param(), self.payload_type)
+            return self.authenticated_http_client.get(self.url, self._params(), self.payload_type)
 
         if self.method == 'POST':
-            return self.authenticated_http_client.post(self.url, self._param(), self.payload_type)
+            return self.authenticated_http_client.post(self.url, self._params(), self.payload_type)
 
         raise NotImplementedError('method not supported')
 
     # override for request pre-flight check
-    # todo: we do not need this if no one implements this - consider to remove this
     def validate(self):
         pass
 
     # noinspection PyMethodMayBeStatic
-    def _param(self):
+    def _params(self):
         # type: () -> dict
         return {}

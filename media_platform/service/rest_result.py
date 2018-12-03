@@ -4,7 +4,8 @@ from media_platform.lang.serializable_deserializable import Serializable, Deseri
 
 class RestResult(Serializable, Deserializable):
     def __init__(self, code, message, payload=None):
-        # type: (int, str, dict) -> None
+        # type: (int, str, dict or list) -> None
+        super(RestResult, self).__init__()
 
         self.code = code
         self.message = message
