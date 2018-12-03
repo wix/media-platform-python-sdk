@@ -6,7 +6,7 @@ from media_platform.lang.serialization import Deserializable
 
 class MediaPlatformRequest(object):
     def __init__(self, authenticated_http_client, method, url, payload_type=None):
-        # type: (AuthenticatedHTTPClient, str, str, Type[Deserializable]) -> None
+        # type: (AuthenticatedHTTPClient, str, str, Type[Deserializable] or None) -> None
         self.authenticated_http_client = authenticated_http_client
 
         self.method = method
@@ -23,6 +23,9 @@ class MediaPlatformRequest(object):
 
         if self.method == 'POST':
             return self.authenticated_http_client.post(self.url, self._params(), self.payload_type)
+
+        if self.method == 'DELETE':
+            return self.authenticated_http_client.delete(self.url, self._params(), self.payload_type)
 
         raise NotImplementedError('method not supported')
 

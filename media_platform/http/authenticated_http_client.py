@@ -40,6 +40,11 @@ class AuthenticatedHTTPClient(object):
 
         return self._send_request('POST', url, json=data, payload_type=payload_type)
 
+    def delete(self, url, params=None, payload_type=None):
+        # type: (str, dict, Type[Deserializable]) -> Deserializable or None
+
+        return self._send_request('DELETE', url, params=params, payload_type=payload_type)
+
     def post_data(self, url, content, mime_type, params=None, payload_type=None):
         # type: (str, str, str, dict, Type[Deserializable]) -> Deserializable or None
 
@@ -56,8 +61,6 @@ class AuthenticatedHTTPClient(object):
             raise MediaPlatformException(e)
 
         return ResponseProcessor.process(response, payload_type)
-
-    # todo: delete
 
     def _send_request(self, verb, url, json=None, params=None, payload_type=None):
         # type: (str, str, dict, dict, Type[Deserializable]) -> object or None

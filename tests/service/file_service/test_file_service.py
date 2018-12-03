@@ -38,6 +38,21 @@ class TestFileService(unittest.TestCase):
         }))
 
     @httpretty.activate
+    def test_delete_file_request(self):
+        response_body = RestResult(0, 'OK', None)
+        httpretty.register_uri(
+            httpretty.DELETE,
+            'https://fish.barrel/_api/files?path=%2Ffist.txt',
+            body=json.dumps(response_body.serialize())
+        )
+
+        self.file_service.delete_file_request().set_path('/fish.txt').execute()
+
+        assert_that(httpretty.last_request().querystring, is_({
+            'path': ['/fish.txt']
+        }))
+
+    @httpretty.activate
     def test_create_file_request(self):
         payload = FileDescriptor('/fish', 'file-id', FileType.directory, FileMimeType.directory, 0).serialize()
         response_body = RestResult(0, 'OK', payload)
