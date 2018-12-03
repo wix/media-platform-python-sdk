@@ -6,6 +6,7 @@ from hamcrest import assert_that, instance_of, is_
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.upload_url import UploadUrl
@@ -107,3 +108,47 @@ class TestFileService(unittest.TestCase):
 
         assert_that(file_descriptor, instance_of(FileDescriptor))
         assert_that(file_descriptor.path, is_('/fish.txt'))
+
+    @httpretty.activate
+    def test_import_file_request(self):
+        payload = {
+            'status': 'pending',
+            'specification': {
+                'sourceUrl': 'http://source.url/filename.txt',
+                'destination': {
+                    'directory': '/fish',
+                    'acl': 'public'
+                }
+            },
+            'dateCreated': '2017-05-23T08:34:43Z',
+            'sources': [],
+            'result': None,
+            'id': '71f0d3fde7f348ea89aa1173299146f8_19e137e8221b4a709220280b432f947f',
+            'dateUpdated': '2017-05-23T08:34:43Z',
+            'type': 'urn:job:import.file',
+            'groupId': '71f0d3fde7f348ea89aa1173299146f8',
+            'issuer': 'urn:app:app-id-1'
+        }
+        response_body = RestResult(0, 'OK', payload)
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/import/file',
+            body=json.dumps(response_body.serialize())
+        )
+
+        import_file_job = self.file_service.import_file_request().set_destination(
+            Destination('/img.png')
+        ).set_source_url('source-url').execute()
+
+        assert_that(import_file_job.id, is_('71f0d3fde7f348ea89aa1173299146f8_19e137e8221b4a709220280b432f947f'))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'sourceUrl': 'source-url',
+                        'destination': {
+                            'directory': None,
+                            'path': '/img.png',
+                            'lifecycle': None,
+                            'acl': 'public'
+                        },
+                        'externalAuthorization': None
+                    }))

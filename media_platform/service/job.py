@@ -3,7 +3,9 @@ from datetime import datetime
 from media_platform.lang import datetime_serialization
 from media_platform.lang.serialization import Deserializable
 from media_platform.service.callback import Callback
+from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
+from media_platform.service.specification import Specification
 
 
 class JobStatus(object):
@@ -29,7 +31,7 @@ class JobID(Deserializable):
 class Job(Deserializable):
     def __init__(self, job_id, job_type, issuer, status, specification, sources=None, callback=None, flow_id=None,
                  result=None, date_created=None, date_updated=None):
-        # type: (str, str, str, str, dict, [Source], Callback, str, dict, datetime, datetime) -> None
+        # type: (str, str, str, str, Specification, [Source], Callback, str, RestResult, datetime, datetime) -> None
 
         _id = JobID.deserialize(job_id)  # type: JobID
 
