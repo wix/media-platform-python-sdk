@@ -48,7 +48,7 @@ class UploadFileRequest(MediaPlatformRequest):
         self.validate()
 
         upload_url = UploadUrlRequest(self.authenticated_http_client, self.url).set_path(self.path).set_acl(self.acl) \
-            .set_mime_type(self.mime_type).execute()  # type: UploadUrl
+            .set_mime_type(self.mime_type).execute()
 
         params = self._params()
         params.update({

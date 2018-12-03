@@ -1,4 +1,4 @@
-from media_platform.lang.serializable_deserializable import Serializable, Deserializable
+from media_platform.lang.serialization import Serializable, Deserializable
 
 
 class DummyPayload(Serializable, Deserializable):

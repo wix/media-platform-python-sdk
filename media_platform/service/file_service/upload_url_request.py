@@ -28,6 +28,10 @@ class UploadUrlRequest(MediaPlatformRequest):
         self.acl = acl
         return self
 
+    def execute(self):
+        # type: () -> UploadUrl
+        return super(UploadUrlRequest, self).execute()
+
     def validate(self):
         FileDescriptor.path_validator(self.path)
         FileDescriptor.acl_validator(self.acl)
