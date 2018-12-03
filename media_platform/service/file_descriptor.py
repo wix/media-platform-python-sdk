@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from media_platform.lang import datetime_serializer
-from media_platform.lang.serializable_deserializable import Serializable, Deserializable
+from media_platform.lang import datetime_serialization
+from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.service.lifecycle import Lifecycle
 
 
@@ -55,8 +55,8 @@ class FileDescriptor(Serializable, Deserializable):
 
         return FileDescriptor(data['path'], data['id'], data['type'], data['mimeType'], data['size'], data['acl'],
                               lifecycle, data.get('hash'),
-                              datetime_serializer.deserialize(data.get('dateCreated')),
-                              datetime_serializer.deserialize(data.get('dateUpdated')))
+                              datetime_serialization.deserialize(data.get('dateCreated')),
+                              datetime_serialization.deserialize(data.get('dateUpdated')))
 
     def serialize(self):
         # type: () -> dict
@@ -69,8 +69,8 @@ class FileDescriptor(Serializable, Deserializable):
             'hash': self.hash,
             'acl': self.acl,
             'lifecycle': self.lifecycle.serialize() if self.lifecycle else None,
-            'dateUpdated': datetime_serializer.serialize(self.date_updated),
-            'dateCreated': datetime_serializer.serialize(self.date_created)
+            'dateUpdated': datetime_serialization.serialize(self.date_updated),
+            'dateCreated': datetime_serialization.serialize(self.date_created)
         }
 
     @staticmethod

@@ -6,7 +6,7 @@ from requests.structures import CaseInsensitiveDict
 from requests_toolbelt import MultipartEncoder
 from typing import Type
 
-from media_platform.lang.serializable_deserializable import Deserializable
+from media_platform.lang.serialization import Deserializable
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.exception.media_platform_exception import MediaPlatformException
 from media_platform.http.response_processor import ResponseProcessor

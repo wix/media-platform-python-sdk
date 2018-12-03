@@ -1,7 +1,7 @@
 import requests
 from typing import Type
 
-from media_platform.lang.serializable_deserializable import Deserializable
+from media_platform.lang.serialization import Deserializable
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
 from media_platform.exception.not_found_exception import NotFoundException

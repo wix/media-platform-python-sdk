@@ -1,7 +1,7 @@
 from typing import Type
 
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
-from media_platform.lang.serializable_deserializable import Deserializable
+from media_platform.lang.serialization import Deserializable
 
 
 class MediaPlatformRequest(object):

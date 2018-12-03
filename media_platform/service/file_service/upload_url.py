@@ -1,4 +1,4 @@
-from media_platform.lang.serializable_deserializable import Deserializable
+from media_platform.lang.serialization import Deserializable
 
 
 class UploadUrl(Deserializable):
