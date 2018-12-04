@@ -36,7 +36,7 @@ class AuthenticatedHTTPClient(object):
         return self._send_request('GET', url, params=params, payload_type=payload_type)
 
     def post(self, url, data=None, payload_type=None):
-        # type: (str, dict, Type[Deserializable]) -> object or None
+        # type: (str, dict, Type[Deserializable]) -> Deserializable or None
 
         return self._send_request('POST', url, json=data, payload_type=payload_type)
 
@@ -63,7 +63,7 @@ class AuthenticatedHTTPClient(object):
         return ResponseProcessor.process(response, payload_type)
 
     def _send_request(self, verb, url, json=None, params=None, payload_type=None):
-        # type: (str, str, dict, dict, Type[Deserializable]) -> object or None
+        # type: (str, str, dict, dict, Type[Deserializable]) -> Deserializable or None
 
         try:
             response = self._session.request(verb, url, params=params, json=json, headers=self._headers())

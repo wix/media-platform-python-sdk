@@ -10,4 +10,4 @@ class MediaPlatformClient(object):
         app_authenticator = AppAuthenticator(app_id, shared_secret)
         authenticated_http_client = AuthenticatedHTTPClient(app_authenticator)
 
-        self.file_service = FileService(domain, authenticated_http_client)
+        self.file_service = FileService(domain, authenticated_http_client, app_id, app_authenticator)

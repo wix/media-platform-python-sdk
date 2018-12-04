@@ -7,7 +7,7 @@ class AppAuthenticator(object):
         # type: (str, str) -> None
 
         self._shared_secret = shared_secret
-        self._app_urn = "urn:app:" + app_id
+        self._app_urn = 'urn:app:' + app_id
 
     def default_signed_token(self):
         # type: () -> str

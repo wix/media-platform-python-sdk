@@ -2,7 +2,7 @@ import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_
+from hamcrest import assert_that, instance_of, is_, starts_with
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
@@ -11,13 +11,14 @@ from media_platform.service.file_descriptor import FileDescriptor, FileType, Fil
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.upload_url import UploadUrl
 from media_platform.service.rest_result import RestResult
+from media_platform.service.source import Source
 
 
 class TestFileService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 
-    file_service = FileService('fish.barrel', authenticated_http_client)
+    file_service = FileService('fish.barrel', authenticated_http_client, 'app', authenticator)
 
     @httpretty.activate
     def test_get_file_request(self):
@@ -167,3 +168,53 @@ class TestFileService(unittest.TestCase):
                         },
                         'externalAuthorization': None
                     }))
+
+    @httpretty.activate
+    def test_copy_file_request(self):
+        response_body = RestResult(0, 'OK', FileDescriptor('/file.copy.txt', 'file-new-id', FileType.file, 'text/plain',
+                                                           123).serialize())
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/copy/file',
+            body=json.dumps(response_body.serialize())
+        )
+
+        file_descriptor = self.file_service.copy_file_request().set_source(
+            Source('/file.txt')
+        ).set_destination(
+            Destination('/file.copy.txt')
+        ).execute()
+
+        assert_that(file_descriptor, instance_of(FileDescriptor))
+        assert_that(file_descriptor.path, is_('/file.copy.txt'))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'source': {
+                            'path': '/file.txt',
+                            'fileId': None
+                        },
+                        'destination': {
+                            'directory': None,
+                            'path': '/file.copy.txt',
+                            'lifecycle': None,
+                            'acl': 'public'
+                        }
+                    }))
+
+    def test_download_file_request_url(self):
+        signed_url = self.file_service.download_file_request().set_path('/file.txt').url()
+
+        assert_that(signed_url, starts_with('https://fish.barrel/_api/download/file?downloadToken='))
+
+    @httpretty.activate
+    def test_download_file_request(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/download/file',
+            body='barks!'
+        )
+
+        with self.file_service.download_file_request().set_path('/file.txt').execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
