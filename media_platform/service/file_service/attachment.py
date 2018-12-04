@@ -10,7 +10,7 @@ class Attachment(Serializable):
 
     def set_file_name(self, file_name):
         # type: (str) -> Attachment
-        self.file_name =file_name
+        self.file_name = file_name
         return self
 
     def serialize(self):

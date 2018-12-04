@@ -3,15 +3,15 @@ from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
-class GetFileRequest(MediaPlatformRequest):
+class FileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client, base_url):
         # type: (AuthenticatedHTTPClient, str) -> None
-        super(GetFileRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/files', FileDescriptor)
+        super(FileRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/files', FileDescriptor)
 
         self.path = None
 
     def set_path(self, path):
-        # type: (str) -> GetFileRequest
+        # type: (str) -> FileRequest
         self.path = path
         return self
 

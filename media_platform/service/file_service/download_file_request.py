@@ -42,7 +42,6 @@ class DownloadFileRequest(object):
 
     def url(self):
         # type: () -> str
-        (int(time.time()) - 10)
 
         payload = {'path': self.path}
         if self.on_expired_redirect_to:

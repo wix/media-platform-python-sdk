@@ -7,6 +7,7 @@ from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
+from media_platform.service.file_service.file_list_request import OrderBy
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.upload_url import UploadUrl
 from media_platform.service.lifecycle import Lifecycle, Action
@@ -30,7 +31,7 @@ class TestFileService(unittest.TestCase):
             body=json.dumps(response_body.serialize())
         )
 
-        file_descriptor = self.file_service.get_file_request().set_path('/fish.txt').execute()
+        file_descriptor = self.file_service.file_request().set_path('/fish.txt').execute()
 
         assert_that(file_descriptor.serialize(), is_(payload))
         assert_that(file_descriptor, instance_of(FileDescriptor))
@@ -93,11 +94,11 @@ class TestFileService(unittest.TestCase):
         assert_that(upload_url, instance_of(UploadUrl))
         assert_that(upload_url.upload_token, is_('token'))
         assert_that(upload_url.upload_url, is_('url'))
-        assert_that(httpretty.last_request().querystring), is_({
-            'path': '/fish.txt',
-            'acl': 'public',
-            'mimeType': 'application/octet-stream',
-        })
+        assert_that(httpretty.last_request().querystring, is_({
+            'path': ['/fish.txt'],
+            'acl': ['public'],
+            'mimeType': ['application/octet-stream']
+        }))
 
     @httpretty.activate
     def test_upload_file_request(self):
@@ -243,3 +244,91 @@ class TestFileService(unittest.TestCase):
             dogs = next(response.iter_lines())
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))
+
+    @httpretty.activate
+    def test_file_list_request(self):
+        response_body = RestResult(0, 'OK', {
+            'nextPageToken': 'next page',
+            'files': [FileDescriptor('/fish.txt', 'file-id', FileType.file, 'text/plain', 123).serialize()]
+        })
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/files/ls_dir',
+            body=json.dumps(response_body.serialize())
+        )
+
+        file_list = self.file_service.file_list_request().set_path('/files').set_next_page_token('next')\
+            .set_order_by(OrderBy.name).set_page_size(12).set_recursive(True).set_type(FileType.file).execute()
+
+        assert_that(file_list.next_page_token, is_('next page'))
+        assert_that(httpretty.last_request().querystring, is_({
+            'nextPageToken': ['next'],
+            'orderBy': ['name'],
+            'pageSize': ['12'],
+            'r': ['True'],
+            'path': ['/files'],
+            'type': ['-'],
+            'orderDirection': ['des']
+        }))
+
+    @httpretty.activate
+    def test_file_metadata_request(self):
+        response_body = RestResult(0, 'OK', {
+            'mediaType': 'video',
+            'fileDescriptor': {
+                'acl': 'private',
+                'hash': None,
+                'id': '2de4305552004e0b9076183651030646',
+                'mimeType': 'video/mp4',
+                'path': '/videos/animals/cat.mp4',
+                'size': 15431333,
+                'type': '-'
+            },
+            'basic': {
+                'interlaced': False,
+                'videoStreams': [
+                    {
+                        'codecLongName': 'MPEG-4 part 2',
+                        'height': 720,
+                        'duration': 59351,
+                        'bitrate': 1950467,
+                        'index': 0,
+                        'rFrameRate': '3000/100',
+                        'codecTag': 'mp4v',
+                        'avgFrameRate': '2997/100',
+                        'codecName': 'mpeg4',
+                        'width': 1280,
+                        'sampleAspectRatio': '1:1',
+                        'displayAspectRatio': '16:9'
+                    }
+                ],
+                'audioStreams': [
+                    {
+                        'codecLongName': 'AAC (Advanced Audio Coding)',
+                        'index': 1,
+                        'codecTag': 'mp4a',
+                        'codecName': 'aac',
+                        'duration': 59351,
+                        'bitrate': 128322
+                    }
+                ],
+                'format': {
+                    'duration': 59351,
+                    'formatLongName': 'QuickTime / MOV',
+                    'bitrate': 2085272,
+                    'size': 15476893
+                }
+            }
+        })
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/files/metadata',
+            body=json.dumps(response_body.serialize())
+        )
+
+        file_metadata = self.file_service.file_metadata_request().set_path('/videos/animals/cat.mp4').execute()
+
+        assert_that(file_metadata.file_descriptor.id, is_('2de4305552004e0b9076183651030646'))
+        assert_that(httpretty.last_request().querystring), is_({
+            'path': ['/videos/animals/cat.mp4'],
+        })
