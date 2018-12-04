@@ -1,3 +1,5 @@
+import json
+
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileMimeType
 from media_platform.service.file_service.upload_file_response import _UploadFileResponse
@@ -39,6 +41,10 @@ class UploadFileRequest(MediaPlatformRequest):
         self.lifecycle = lifecycle
         return self
 
+    def set_content(self, content):
+        self.content = content
+        return self
+
     def validate(self):
         FileDescriptor.path_validator(self.path)
         FileDescriptor.acl_validator(self.acl)
@@ -66,5 +72,5 @@ class UploadFileRequest(MediaPlatformRequest):
             'path': self.path,
             'mimeType': self.mime_type,
             'acl': self.acl,
-            'lifecycle': self.lifecycle.serialize() if self.lifecycle else None
+            'lifecycle': json.dumps(self.lifecycle.serialize()) if self.lifecycle else None
         }

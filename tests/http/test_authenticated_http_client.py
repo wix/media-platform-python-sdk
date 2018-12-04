@@ -74,8 +74,7 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
         )
 
         with self.assertRaises(UnauthorizedException):
-            payload = self.authenticated_http_client.get(self.test_endpoint)
-            assert_that(payload, is_(None))
+            self.authenticated_http_client.get(self.test_endpoint)
 
     @httpretty.activate
     def test_get_403(self):
@@ -86,8 +85,7 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
         )
 
         with self.assertRaises(ForbiddenException):
-            payload = self.authenticated_http_client.get(self.test_endpoint)
-            assert_that(payload, is_(None))
+            self.authenticated_http_client.get(self.test_endpoint)
 
     @httpretty.activate
     def test_get_404(self):
@@ -98,8 +96,7 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
         )
 
         with self.assertRaises(NotFoundException):
-            payload = self.authenticated_http_client.get(self.test_endpoint)
-            assert_that(payload, is_(None))
+            self.authenticated_http_client.get(self.test_endpoint)
 
     @httpretty.activate
     def test_get_some_other_error_status(self):
@@ -110,8 +107,7 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
         )
 
         with self.assertRaises(MediaPlatformException):
-            payload = self.authenticated_http_client.get(self.test_endpoint)
-            assert_that(payload, is_(None))
+            self.authenticated_http_client.get(self.test_endpoint)
 
     @httpretty.activate
     def test_get_500_retry(self):
