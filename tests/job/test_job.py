@@ -3,7 +3,7 @@ from hamcrest import *
 
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
-from media_platform.service.job import Job
+from media_platform.job.job import Job
 from media_platform.service.source import Source
 
 

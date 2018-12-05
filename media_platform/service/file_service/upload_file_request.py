@@ -3,7 +3,6 @@ import json
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileMimeType
 from media_platform.service.file_service.upload_file_response import _UploadFileResponse
-from media_platform.service.file_service.upload_url import UploadUrl
 from media_platform.service.file_service.upload_url_request import UploadUrlRequest
 from media_platform.service.lifecycle import Lifecycle
 from media_platform.service.media_platform_request import MediaPlatformRequest

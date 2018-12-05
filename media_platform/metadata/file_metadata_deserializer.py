@@ -5,7 +5,7 @@ from media_platform.metadata.image_file_metadata import ImageFileMetadata
 from media_platform.metadata.video_file_metadata import VideoFileMetadata
 
 
-class FileMetadataDeserializer(Deserializable):
+class _FileMetadataDeserializer(Deserializable):
 
     @classmethod
     def deserialize(cls, data):

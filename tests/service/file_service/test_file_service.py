@@ -3,14 +3,15 @@ import unittest
 
 import httpretty
 from hamcrest import assert_that, instance_of, is_, contains_string, starts_with
+
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
-from media_platform.service.file_service.file_list_request import OrderBy
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.upload_url import UploadUrl
 from media_platform.service.lifecycle import Lifecycle, Action
+from media_platform.service.list_request import OrderBy
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
 
@@ -22,7 +23,7 @@ class TestFileService(unittest.TestCase):
     file_service = FileService('fish.barrel', authenticated_http_client, 'app', authenticator)
 
     @httpretty.activate
-    def test_get_file_request(self):
+    def test_file_request(self):
         payload = FileDescriptor('/fish.txt', 'file-id', FileType.file, 'text/plain', 123).serialize()
         response_body = RestResult(0, 'OK', payload)
         httpretty.register_uri(

@@ -1,10 +1,10 @@
+from media_platform.job.specification import Specification
 from media_platform.lang import datetime_serialization
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
-from media_platform.service.job import Job
+from media_platform.job.job import Job
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
-from media_platform.service.specification import Specification
 
 
 class ImportFileSpecification(Specification):
@@ -31,9 +31,12 @@ class ImportFileSpecification(Specification):
 
 
 class ImportFileJob(Job):
+
+    type = 'urn:job:import.file'
+
     def __init__(self, job_id, issuer, status, specification, sources=None, callback=None, flow_id=None,
                  result=None, date_created=None, date_updated=None):
-        super(ImportFileJob, self).__init__(job_id, 'urn:job:import.file', issuer, status, specification, sources,
+        super(ImportFileJob, self).__init__(job_id, self.type, issuer, status, specification, sources,
                                             callback, flow_id, result, date_created, date_updated)
 
     @classmethod

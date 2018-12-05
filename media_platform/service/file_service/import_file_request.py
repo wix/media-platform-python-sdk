@@ -1,7 +1,8 @@
+
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.job.import_file_job import ImportFileJob
 from media_platform.lang.serialization import Serializable
 from media_platform.service.destination import Destination
-from media_platform.service.file_service.import_file_job import ImportFileJob
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 

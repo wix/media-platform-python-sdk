@@ -1,4 +1,4 @@
-from media_platform.service.job import Job
+from media_platform.job.job import Job
 from media_platform.lang.serialization import Deserializable
 
 

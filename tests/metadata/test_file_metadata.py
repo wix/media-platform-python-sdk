@@ -1,7 +1,7 @@
 from unittest import TestCase
 from hamcrest import assert_that, is_
 
-from media_platform.metadata.file_metadata_deserializer import FileMetadataDeserializer
+from media_platform.metadata.file_metadata_deserializer import _FileMetadataDeserializer
 
 
 class TestAudioFileMetadata(TestCase):
@@ -23,6 +23,6 @@ class TestAudioFileMetadata(TestCase):
                 'type': '-'
             }}
 
-        file_metadata = FileMetadataDeserializer.deserialize(data)
+        file_metadata = _FileMetadataDeserializer.deserialize(data)
 
         assert_that(file_metadata.media_type, is_(''))

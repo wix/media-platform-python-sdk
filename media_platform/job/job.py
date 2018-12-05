@@ -1,11 +1,11 @@
 from datetime import datetime
 
+from media_platform.job.specification import Specification
 from media_platform.lang import datetime_serialization
 from media_platform.lang.serialization import Deserializable
 from media_platform.service.callback import Callback
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
-from media_platform.service.specification import Specification
 
 
 class JobStatus(object):
