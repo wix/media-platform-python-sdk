@@ -9,3 +9,7 @@ class Specification(Serializable, Deserializable):
     @classmethod
     def deserialize(cls, data):
         raise NotImplementedError()
+
+    # override for request pre-flight check
+    def validate(self):
+        pass
