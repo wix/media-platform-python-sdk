@@ -32,7 +32,7 @@ class TestJobService(unittest.TestCase):
             'dateCreated': '2017-05-23T08:34:43Z',
             'sources': [],
             'result': None,
-            'id': '1_g',
+            'id': 'g_1',
             'dateUpdated': '2017-05-23T08:34:43Z',
             'type': 'urn:job:import.file',
             'groupId': '71f0d3fde7f348ea89aa1173299146f8',
@@ -41,7 +41,7 @@ class TestJobService(unittest.TestCase):
         response_1 = RestResult(0, 'OK', payload)
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/_api/jobs/1_g',
+            'https://fish.barrel/_api/jobs/g_1',
             body=json.dumps(response_1.serialize())
         )
         payload = {
@@ -56,7 +56,7 @@ class TestJobService(unittest.TestCase):
             'dateCreated': '2017-05-23T08:34:43Z',
             'sources': [],
             'result': None,
-            'id': '2_g',
+            'id': 'g_2',
             'dateUpdated': '2017-05-23T08:34:43Z',
             'type': 'urn:job:import.file',
             'groupId': '71f0d3fde7f348ea89aa1173299146f8',
@@ -65,18 +65,18 @@ class TestJobService(unittest.TestCase):
         response_2 = RestResult(0, 'OK', payload)
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/_api/jobs/2_g',
+            'https://fish.barrel/_api/jobs/g_2',
             body=json.dumps(response_2.serialize())
         )
 
-        request = self.job_service.job_request().set_id('1_g')
+        request = self.job_service.job_request().set_id('g_1')
         job_1 = request.execute()
         # verify that url rewrite works as intended
-        job_2 = request.set_id('2_g').execute()
+        job_2 = request.set_id('g_2').execute()
 
         assert_that(job_1, instance_of(ImportFileJob))
-        assert_that(job_1.id, is_('1_g'))
-        assert_that(job_2.id, is_('2_g'))
+        assert_that(job_1.id, is_('g_1'))
+        assert_that(job_2.id, is_('g_2'))
 
     @httpretty.activate
     def test_job_request_base_job(self):
@@ -86,7 +86,7 @@ class TestJobService(unittest.TestCase):
             'dateCreated': '2017-05-23T08:34:43Z',
             'sources': [],
             'result': None,
-            'id': '1_g',
+            'id': 'g_1',
             'dateUpdated': '2017-05-23T08:34:43Z',
             'type': 'urn:job:something.fresh',
             'groupId': '71f0d3fde7f348ea89aa1173299146f8',
@@ -111,7 +111,7 @@ class TestJobService(unittest.TestCase):
             'dateCreated': '2017-05-23T08:34:43Z',
             'sources': [],
             'result': None,
-            'id': '1_g',
+            'id': 'g_1',
             'dateUpdated': '2017-05-23T08:34:43Z',
             'type': 'urn:job:something.fresh',
             'groupId': '71f0d3fde7f348ea89aa1173299146f8',
@@ -127,7 +127,7 @@ class TestJobService(unittest.TestCase):
         jobs = self.job_service.job_group_request().set_group_id('g').execute()
 
         assert_that(jobs[0], instance_of(Job))
-        assert_that(jobs[0].id, is_('1_g'))
+        assert_that(jobs[0].id, is_('g_1'))
 
     @httpretty.activate
     def test_job_list_request(self):
@@ -139,7 +139,7 @@ class TestJobService(unittest.TestCase):
                 'dateCreated': '2017-05-23T08:34:43Z',
                 'sources': [],
                 'result': None,
-                'id': '1_g',
+                'id': 'g_1',
                 'dateUpdated': '2017-05-23T08:34:43Z',
                 'type': 'urn:job:something.fresh',
                 'groupId': '71f0d3fde7f348ea89aa1173299146f8',
@@ -159,7 +159,7 @@ class TestJobService(unittest.TestCase):
         ).set_status(JobStatus.pending).execute()
 
         assert_that(list.jobs[0], instance_of(Job))
-        assert_that(list.jobs[0].id, is_('1_g'))
+        assert_that(list.jobs[0].id, is_('g_1'))
         assert_that(httpretty.last_request().querystring, is_({
             'nextPageToken': ['nnn'],
             'orderBy': ['dateUpdated'],

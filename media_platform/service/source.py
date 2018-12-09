@@ -6,7 +6,7 @@ class Source(Serializable, Deserializable):
     def __init__(self, path=None, file_id=None):
         # type: (str, str) -> None
 
-        self._validate_values(path, file_id)
+        self._validate(path, file_id)
 
         self.path = path
         self.file_id = file_id
@@ -25,7 +25,7 @@ class Source(Serializable, Deserializable):
         }
 
     @staticmethod
-    def _validate_values(path, file_id):
+    def _validate(path, file_id):
         # type: (str, str) -> None
 
         if not (path or file_id):

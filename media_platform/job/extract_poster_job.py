@@ -7,6 +7,7 @@ from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
 
 
+# todo: proper class
 SUPPORTED_IMAGE_FORMATS = ['jpg', 'png']
 
 

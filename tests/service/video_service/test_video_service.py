@@ -24,7 +24,7 @@ class TestVideoService(unittest.TestCase):
         payload = {
             'groupId': 'g',
             'jobs': [{
-                'id': '1_g',
+                'id': 'g_1',
                 'type': 'urn:job:av.poster',
                 'groupId': 'g',
                 'status': 'pending',
@@ -87,7 +87,7 @@ class TestVideoService(unittest.TestCase):
         payload = {
             'groupId': 'g',
             'jobs': [{
-                'id': '1_g',
+                'id': 'g_1',
                 'type': 'urn:job:av.storyboard',
                 'groupId': 'g',
                 'status': 'pending',

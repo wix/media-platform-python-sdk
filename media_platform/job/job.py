@@ -18,8 +18,8 @@ class JobStatus(object):
 class JobID(Deserializable):
     def __init__(self, group_id, job_key):
         # type: (str, str) -> None
-        self.job_key = job_key
         self.group_id = group_id
+        self.job_key = job_key
 
     @classmethod
     def deserialize(cls, data):

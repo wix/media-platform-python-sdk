@@ -1,3 +1,5 @@
+from media_platform.job.create_archive_job import CreateArchiveJob
+from media_platform.job.extract_archive_job import ExtractArchiveJob
 from media_platform.job.extract_poster_job import ExtractPosterJob
 from media_platform.job.extract_storyboard_job import ExtractStoryboardJob
 from media_platform.job.import_file_job import ImportFileJob
@@ -18,5 +20,9 @@ class _JobDeserializer(Deserializable):
             return ExtractPosterJob.deserialize(data)
         if job_type == ExtractStoryboardJob.type:
             return ExtractStoryboardJob.deserialize(data)
+        if job_type == CreateArchiveJob.type:
+            return CreateArchiveJob.deserialize(data)
+        if job_type == ExtractArchiveJob.type:
+            return ExtractArchiveJob.deserialize(data)
         else:
             return Job.deserialize(data)
