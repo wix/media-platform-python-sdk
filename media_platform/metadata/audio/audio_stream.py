@@ -16,6 +16,7 @@ class AudioStream(Deserializable):
 
     @classmethod
     def deserialize(cls, data):
+        # type: (dict) -> AudioStream
         return AudioStream(data.get('index'), data.get('duration'), data.get('bitrate'),
                            data.get('codecTag'), data.get('codecName'), data.get('codecLongName'),
                            data.get('sampleRate'), data.get('channels'), data.get('channelLayout'))

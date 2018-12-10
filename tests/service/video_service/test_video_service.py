@@ -48,7 +48,6 @@ class TestVideoService(unittest.TestCase):
                 'dateUpdated': '2017-05-23T08:34:43Z',
                 'dateCreated': '2017-05-23T08:34:43Z',
             }]}
-
         response = RestResult(0, 'OK', payload)
         httpretty.register_uri(
             httpretty.POST,
