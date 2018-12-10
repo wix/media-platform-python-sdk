@@ -1,5 +1,3 @@
-import copy
-
 from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.service.flow_control_service.component import Component
 
@@ -16,25 +14,32 @@ class Flow(Serializable, Deserializable):
         return self
 
     def validate(self):
-        # don't mess with the original
-        remaining_components = copy.copy(self.components)
+        graph = self.components
 
-        while remaining_components:
-            acyclic = False
+        path = set()
+        visited = set()
 
-            for key, component in remaining_components.items():
-                for successor in component.successors:
-                    if successor not in self.components:
-                        raise ValueError('undefined dependency detected: %s' % successor)
+        def visit(key):
 
-                    if successor in remaining_components:
-                        break
-                else:
-                    acyclic = True
-                    del remaining_components[key]
+            if key in visited:
+                return False
 
-            if not acyclic:
-                raise ValueError('cyclic dependency detected')
+            visited.add(key)
+            path.add(key)
+
+            if graph.get(key):
+                successors = graph.get(key).successors
+                for successor in successors:
+                    if successor in path or visit(successor):
+                        return True
+
+            path.remove(key)
+            return False
+
+        cyclic = any(visit(v) for v in graph)
+
+        if cyclic:
+            raise ValueError('cyclic dependency detected')
 
     @classmethod
     def deserialize(cls, data):
