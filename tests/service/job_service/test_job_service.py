@@ -152,14 +152,14 @@ class TestJobService(unittest.TestCase):
             body=json.dumps(response.serialize())
         )
 
-        list = self.job_service.job_list_request().set_type('urn:job:fish').set_page_size(3).set_order_by(
+        job_list = self.job_service.job_list_request().set_type('urn:job:fish').set_page_size(3).set_order_by(
             OrderBy.date_updated
         ).set_next_page_token('nnn').set_path('/mmm').set_issuer('urn:me').set_order_direction(
             OrderDirection.descending
         ).set_status(JobStatus.pending).execute()
 
-        assert_that(list.jobs[0], instance_of(Job))
-        assert_that(list.jobs[0].id, is_('g_1'))
+        assert_that(job_list.jobs[0], instance_of(Job))
+        assert_that(job_list.jobs[0].id, is_('g_1'))
         assert_that(httpretty.last_request().querystring, is_({
             'nextPageToken': ['nnn'],
             'orderBy': ['dateUpdated'],

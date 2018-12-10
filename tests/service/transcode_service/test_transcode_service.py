@@ -5,7 +5,7 @@ import httpretty
 from hamcrest import assert_that, instance_of, is_
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
-from media_platform.job.transcode.video_qualities import VideoQualities, VideoQualityRange
+from media_platform.job.transcode.video_qualities import VideoQuality, VideoQualityRange
 from media_platform.job.transcode_job import TranscodeSpecification, TranscodeJob
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType
@@ -146,8 +146,8 @@ class TestTranscodeService(unittest.TestCase):
             TranscodeSpecification(
                 Destination(directory='/'),
                 quality_range=VideoQualityRange(
-                    minimum=VideoQualities.res_480p,
-                    maximum=VideoQualities.res_1080p,
+                    minimum=VideoQuality.res_480p,
+                    maximum=VideoQuality.res_1080p,
                 )
             )
         ).execute()

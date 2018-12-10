@@ -2,7 +2,7 @@ from media_platform.job.job import Job
 from media_platform.job.specification import Specification
 from media_platform.job.transcode.audio_qualities import AudioQualities
 from media_platform.job.transcode.stream_specification import StreamSpecification
-from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQualities
+from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
 from media_platform.lang import datetime_serialization
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
@@ -12,7 +12,7 @@ from media_platform.service.source import Source
 
 class TranscodeSpecification(Specification):
     def __init__(self, destination, video=None, audio=None, quality_range=None, quality=None):
-        # type: (Destination, StreamSpecification, StreamSpecification, VideoQualityRange, AudioQualities or VideoQualities) -> None
+        # type: (Destination, StreamSpecification, StreamSpecification, VideoQualityRange, AudioQualities or VideoQuality) -> None
         super(Specification, self).__init__()
 
         self.destination = destination
@@ -55,7 +55,7 @@ class TranscodeSpecification(Specification):
         elif self.quality_range and self.quality:
             raise ValueError('Multiple transcode specifications')
 
-        if self.quality and not VideoQualities.has_value(self.quality) and not AudioQualities.has_value(self.quality):
+        if self.quality and not VideoQuality.has_value(self.quality) and not AudioQualities.has_value(self.quality):
             raise ValueError('Quality %s not supported' % self.quality)
 
 

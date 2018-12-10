@@ -1,7 +1,7 @@
 from media_platform.job.specification import Specification
 
 
-class VideoQualities(object):
+class VideoQuality(object):
     res_2160p = '2160p'
     res_1440p = '1440p'
     res_1080p = '1080p'
@@ -43,11 +43,11 @@ class VideoQualityRange(Specification):
         if not (self.maximum and self.minimum):
             raise ValueError('must define minimum and maximum')
 
-        if not VideoQualities.has_value(self.minimum):
+        if not VideoQuality.has_value(self.minimum):
             raise ValueError('minimum value %s not supported' % self.minimum)
 
-        if not VideoQualities.has_value(self.maximum):
+        if not VideoQuality.has_value(self.maximum):
             raise ValueError('maximum value %s not supported' % self.maximum)
 
-        if VideoQualities.values.index(self.maximum) < VideoQualities.values.index(self.minimum):
+        if VideoQuality.values.index(self.maximum) < VideoQuality.values.index(self.minimum):
             raise ValueError('maximum %s is greater than minimum %s' % (self.maximum, self.minimum))
