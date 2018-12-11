@@ -45,16 +45,10 @@ class Flow(Serializable, Deserializable):
     def deserialize(cls, data):
         # type: (dict) -> Flow
 
-        components = {k: Component.deserialize(v) for k,v in data.items()}
-        for key, value in data.items():
-            components[key] = Component.deserialize(value)
+        components = {k: Component.deserialize(v) for k, v in data.items()}
 
         return Flow(components)
 
     def serialize(self):
         # type: () -> dict
-        data = dict()
-        for key, value in self.components.items():
-            data[key] = value.serialize()
-
-        return data
+        return {k: v.serialize() for k, v in self.components.items()}
