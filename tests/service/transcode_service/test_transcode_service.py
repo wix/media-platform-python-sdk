@@ -183,4 +183,4 @@ class TestTranscodeService(unittest.TestCase):
             FileDescriptor('/movie.720.mp4', 'file-id', FileType.file, 'video/mp4', 123)
         ).add_paths('/movie.1080p.mp4').execute()
 
-        assert_that(url, is_('https://packager-fish.wixmp.com/movie.,720,1080p,.mp4.urlset/master.m3u8'))
+        assert_that(url, is_('//packager-fish.wixmp.com/movie.,720,1080p,.mp4.urlset/master.m3u8'))

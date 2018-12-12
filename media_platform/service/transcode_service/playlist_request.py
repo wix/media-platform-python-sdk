@@ -10,7 +10,7 @@ class PlaylistRequest(object):
     def __init__(self, domain):
         # type: (str) -> None
 
-        self._url = 'https://packager-' + domain.replace('.appspot.com', '.wixmp.com')
+        self._url = '//packager-' + domain.replace('.appspot.com', '.wixmp.com')
 
         self.file_descriptors = []
         self.paths = []
