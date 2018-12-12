@@ -1,6 +1,7 @@
 import json
 
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.service.callback import Callback
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileMimeType
 from media_platform.service.file_service.upload_file_response import _UploadFileResponse
 from media_platform.service.file_service.upload_url_request import UploadUrlRequest
@@ -17,6 +18,7 @@ class UploadFileRequest(MediaPlatformRequest):
         self.mime_type = FileMimeType.defualt
         self.acl = ACL.public
         self.lifecycle = None
+        self.callback = None
 
         self.content = None
 
@@ -38,6 +40,11 @@ class UploadFileRequest(MediaPlatformRequest):
     def set_lifecycle(self, lifecycle):
         # type: (Lifecycle) -> UploadFileRequest
         self.lifecycle = lifecycle
+        return self
+
+    def set_callback(self, callback):
+        # type: (Callback) -> UploadFileRequest
+        self.callback = callback
         return self
 
     def set_content(self, content):
@@ -71,5 +78,6 @@ class UploadFileRequest(MediaPlatformRequest):
             'path': self.path,
             'mimeType': self.mime_type,
             'acl': self.acl,
-            'lifecycle': json.dumps(self.lifecycle.serialize()) if self.lifecycle else None
+            'lifecycle': json.dumps(self.lifecycle.serialize()) if self.lifecycle else None,
+            'callback': json.dumps(self.callback.serialize()) if self.callback else None,
         }

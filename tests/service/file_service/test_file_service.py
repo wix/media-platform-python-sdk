@@ -6,6 +6,7 @@ from hamcrest import assert_that, instance_of, is_, contains_string, starts_with
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
 from media_platform.service.file_service.file_service import FileService
@@ -125,13 +126,13 @@ class TestFileService(unittest.TestCase):
 
         upload_content = 'some content'
         upload_lifecycle = Lifecycle(age=30, action=Action.delete)
-        file_descriptor = self.file_service.upload_file_request()\
-            .set_acl(ACL.private).set_path('/fish.txt').set_content(upload_content).set_mime_type(upload_mime_type)\
+        file_descriptor = self.file_service.upload_file_request() \
+            .set_acl(ACL.private).set_path('/fish.txt').set_content(upload_content).set_mime_type(upload_mime_type) \
             .set_lifecycle(upload_lifecycle).execute()
 
         assert_that(file_descriptor, instance_of(FileDescriptor))
         assert_that(file_descriptor.path, is_('/fish.txt'))
-        
+
         request_body = httpretty.last_request().body.decode('utf-8')
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="acl"\r\n\r\n%s'
@@ -151,6 +152,56 @@ class TestFileService(unittest.TestCase):
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="file"; filename="file-name"\r\n'
                                     'Content-Type: %s\r\n\r\n%s' % (upload_mime_type, upload_content)))
+
+    @httpretty.activate
+    def test_upload_file_request_with_callback(self):
+        url_response_body = RestResult(0, 'OK', {
+            'uploadToken': 'token',
+            'uploadUrl': 'https://fish.barrel/cryptic-path'
+        })
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/upload/url',
+            body=json.dumps(url_response_body.serialize())
+        )
+
+        upload_response_body = RestResult(0, 'OK', [
+            FileDescriptor('/fish.txt', 'file-id', FileType.file, FileMimeType.defualt, 123).serialize()
+        ])
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/cryptic-path',
+            body=json.dumps(upload_response_body.serialize())
+        )
+
+        self.file_service.upload_file_request().set_path(
+            '/fish.txt'
+        ).set_content(
+            'some content'
+        ).set_callback(
+            Callback('https://valid.url/', {'attach': 'fish'}, {'head': 'dog'})
+        ).execute()
+
+        request_body = httpretty.last_request().body.decode('utf-8')
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="acl"\r\n\r\n%s'
+                                    % ACL.public))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="path"\r\n\r\n%s'
+                                    % '/fish.txt'))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="uploadToken"\r\n\r\n%s'
+                                    % 'token'))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="mimeType"\r\n\r\n%s'
+                                    % FileMimeType.defualt))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="callback"\r\n\r\n%s' %
+                                    '{"url": "https://valid.url/", "headers": {"head": "dog"}, "attachment": {'
+                                    '"attach": "fish"}}'))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="file"; filename="file-name"\r\n'
+                                    'Content-Type: %s\r\n\r\n%s' % (FileMimeType.defualt, 'some content')))
 
     @httpretty.activate
     def test_import_file_request(self):
@@ -258,7 +309,7 @@ class TestFileService(unittest.TestCase):
             body=json.dumps(response_body.serialize())
         )
 
-        file_list = self.file_service.file_list_request().set_path('/files').set_next_page_token('next')\
+        file_list = self.file_service.file_list_request().set_path('/files').set_next_page_token('next') \
             .set_order_by(OrderBy.name).set_page_size(12).set_recursive(True).set_type(FileType.file).execute()
 
         assert_that(file_list.next_page_token, is_('next page'))
