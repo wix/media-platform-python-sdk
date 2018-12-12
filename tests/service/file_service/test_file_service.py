@@ -174,12 +174,13 @@ class TestFileService(unittest.TestCase):
             body=json.dumps(upload_response_body.serialize())
         )
 
+        callback = Callback('https://valid.url/', {'attach': 'fish'}, {'head': 'dog'})
         self.file_service.upload_file_request().set_path(
             '/fish.txt'
         ).set_content(
             'some content'
         ).set_callback(
-            Callback('https://valid.url/', {'attach': 'fish'}, {'head': 'dog'})
+            callback
         ).execute()
 
         request_body = httpretty.last_request().body.decode('utf-8')
@@ -197,8 +198,7 @@ class TestFileService(unittest.TestCase):
                                     % FileMimeType.defualt))
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="callback"\r\n\r\n%s' %
-                                    '{"url": "https://valid.url/", "headers": {"head": "dog"}, "attachment": {'
-                                    '"attach": "fish"}}'))
+                                    json.dumps(callback.serialize())))
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="file"; filename="file-name"\r\n'
                                     'Content-Type: %s\r\n\r\n%s' % (FileMimeType.defualt, 'some content')))
