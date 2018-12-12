@@ -1,13 +1,13 @@
 from unittest import TestCase
 from hamcrest import *
 
-from media_platform.service.callback_payload import CallbackPayload
+from media_platform.job.job_callback_payload import JobCallbackPayload
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
 from media_platform.service.source import Source
 
 
-class TestCallbackPayload(TestCase):
+class TestJobCallbackPayload(TestCase):
 
     def test_deserialize(self):
         source = Source('/source.jpg')
@@ -37,7 +37,7 @@ class TestCallbackPayload(TestCase):
             'attachment': {'dog': 'bull'}
         }
 
-        payload = CallbackPayload.deserialize(data)
+        payload = JobCallbackPayload.deserialize(data)
 
         assert_that(payload.attachment, is_({'dog': 'bull'}))
         assert_that(payload.job.id, is_('group-id_job-key'))

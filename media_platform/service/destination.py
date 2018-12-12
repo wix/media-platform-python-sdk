@@ -5,7 +5,7 @@ from media_platform.service.lifecycle import Lifecycle
 
 class Destination(Serializable, Deserializable):
     def __init__(self, path=None, directory=None, acl=ACL.public, lifecycle=None):
-        # type: (str, str, str, Lifecycle) -> None
+        # type: (str, str or None, str, Lifecycle) -> None
         super(Destination, self).__init__()
 
         self._validate_values(path, directory, acl)
