@@ -2,6 +2,7 @@ from media_platform.http.authenticated_http_client import AuthenticatedHTTPClien
 from media_platform.job.job import Job
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
+# noinspection PyProtectedMember
 from media_platform.job.job_deserializer import _JobDeserializer
 
 

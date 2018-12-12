@@ -1,4 +1,4 @@
-class AudioQualities(object):
+class AudioQuality(object):
     mp3_128 = 'mp3_128'
     mp3_256 = 'mp3_256'
     mp3_320 = 'mp3_320'
