@@ -424,3 +424,14 @@ class TestFlowControlService(unittest.TestCase):
         flow_state = self.flow_control_service.flow_state_request().set_id('state-id').execute()
 
         assert_that(flow_state, instance_of(FlowState))
+
+    @httpretty.activate
+    def test_flow_state_request(self):
+        response = RestResult(0, 'OK', None)
+        httpretty.register_uri(
+            httpretty.DELETE,
+            'https://fish.barrel/_api/flow_control/flow/state-id',
+            body=json.dumps(response.serialize())
+        )
+
+        self.flow_control_service.abort_flow_request().set_id('state-id').execute()

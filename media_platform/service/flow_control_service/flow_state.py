@@ -13,10 +13,10 @@ class FlowStatus(object):
 
 
 class FlowState(Deserializable):
-    def __init__(self, state_id, status, invocation, operations, flow_error=None):
+    def __init__(self, flow_id, status, invocation, operations, flow_error=None):
         # type: (str, FlowStatus, Invocation, [str, Operation], FlowError) -> None
         super(FlowState, self).__init__()
-        self.id = state_id
+        self.id = flow_id
         self.invocation = invocation
         self.operations = operations
         self.status = status
