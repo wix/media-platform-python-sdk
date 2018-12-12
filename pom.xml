@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.wix</groupId>
+    <artifactId>media-platform-python-sdk</artifactId>
+    <name>Media Platform Python SDK</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <description>Media Platform Python SDK</description>
+    <url>http://console.wixmp.com</url>
+
+    <parent>
+        <groupId>com.wixpress.common</groupId>
+        <artifactId>wix-master-parent</artifactId>
+        <version>100.0.0-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <organization>
+        <name>Media Cloud</name>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Golan Parashi</name>
+            <email>golanp@wix.com</email>
+            <roles>
+                <role>owner</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Elad Laufer</name>
+            <email>elad@wix.com</email>
+            <roles>
+                <role>owner</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>BSD-3-Clause</name>
+            <url>https://github.com/wix/media-platform-python-sdk/blob/master/LICENSE.md</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/wix/media-platform-python-sdk</url>
+        <connection>scm:git:git://github.com/wix/media-platform-python-sdk.git</connection>
+        <developerConnection>scm:git:git@github.com:wix/media-platform-python-sdk.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/wix/media-platform-python-sdk/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>test-media-platform-python-sdk</id>
+                        <phase>test</phase>
+                        <configuration>
+                            <executable>tests.sh</executable>
+                            <environmentVariables>
+                                <WIX_RUN_TC_AGENT>${env.IS_BUILD_AGENT}</WIX_RUN_TC_AGENT>
+                            </environmentVariables>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>maven/assembly/tar.gz.xml</descriptor>
+                    </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>media-platform-python-sdk-${project.version}</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-site-plugin</artifactId>-->
+            <!--<version>2.1.1</version>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+            <!--<version>2.7</version>-->
+            <!--</plugin>-->
+
+
+        </plugins>
+    </build>
+
+</project>
