@@ -8,10 +8,10 @@ from media_platform.metadata.features.rectangle import Rectangle
 class ImageFeatures(Deserializable):
     def __init__(self, labels=None, faces=None, colors=None, explicit_content=None):
         # type: ([Label], [Rectangle], [Color], [ExplicitContent]) -> None
-        self.labels = labels or list()
-        self.faces = faces or list()
-        self.colors = colors or list()
-        self.explicit_content = explicit_content or list()
+        self.labels = labels or []
+        self.faces = faces or []
+        self.colors = colors or []
+        self.explicit_content = explicit_content or []
 
     @classmethod
     def deserialize(cls, data):
