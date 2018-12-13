@@ -5,10 +5,14 @@ import httpretty
 from hamcrest import assert_that, instance_of, is_
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.job.image_operation_job import ImageOperationSpecification
 from media_platform.metadata.image.image_features import ImageFeatures
+from media_platform.service.destination import Destination
+from media_platform.service.file_descriptor import FileDescriptor, FileType
 from media_platform.service.image_service.extract_features_request import Feature
 from media_platform.service.image_service.image_service import ImageService
 from media_platform.service.rest_result import RestResult
+from media_platform.service.source import Source
 
 
 class TestImageService(unittest.TestCase):
@@ -54,4 +58,38 @@ class TestImageService(unittest.TestCase):
                     is_({
                         'path': ['/image.png'],
                         'features': ['explicit_content,faces,colors,labels']
+                    }))
+
+    @httpretty.activate
+    def test_image_operation_request(self):
+        payload = FileDescriptor('/pony.png', 'file-id', FileType.file, 'image/png', 123).serialize()
+        response = RestResult(0, 'OK', payload)
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/images/operations',
+            body=json.dumps(response.serialize())
+        )
+
+        features = self.image_service.image_operation_request().set_source(
+            Source('/omg.png')
+        ).set_specification(ImageOperationSpecification(
+            '/v1/fit/w_200,h_100', Destination('/pony.png'))
+        ).execute()
+
+        assert_that(features, instance_of(FileDescriptor))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'source': {
+                            'path': '/omg.png',
+                            'fileId': None
+                        },
+                        'specification': {
+                            'destination': {
+                                'directory': None,
+                                'path': '/pony.png',
+                                'lifecycle': None,
+                                'acl': 'public'
+                            },
+                            'command': '/v1/fit/w_200,h_100'
+                        }
                     }))
