@@ -12,7 +12,7 @@
 ## Installation
 
 ```bash
-pip install media-platform-python-sdk
+pip install wix_media_platform
 ```
 
 ## Reporting Issues
