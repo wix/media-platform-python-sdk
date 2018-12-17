@@ -20,7 +20,7 @@ class TestArchiveService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 
-    archive_service = ArchiveService('fish.barrel', authenticated_http_client)
+    archive_service = ArchiveService('fish.appspot.com', authenticated_http_client)
 
     @httpretty.activate
     def test_create_archive_request(self):
@@ -53,7 +53,7 @@ class TestArchiveService(unittest.TestCase):
         response = RestResult(0, 'OK', payload)
         httpretty.register_uri(
             httpretty.POST,
-            'https://fish.barrel/_api/archive/create',
+            'https://fish.appspot.com/_api/archive/create',
             body=json.dumps(response.serialize())
         )
 
@@ -92,7 +92,7 @@ class TestArchiveService(unittest.TestCase):
         response_body = RestResult(0, 'OK', payload)
         httpretty.register_uri(
             httpretty.POST,
-            'https://fish.barrel/_api/archive/create/manifest',
+            'https://fish.appspot.com/_api/archive/create/manifest',
             body=json.dumps(response_body.serialize())
         )
 
@@ -179,7 +179,7 @@ class TestArchiveService(unittest.TestCase):
         response = RestResult(0, 'OK', payload)
         httpretty.register_uri(
             httpretty.POST,
-            'https://fish.barrel/_api/archive/extract',
+            'https://fish.appspot.com/_api/archive/extract',
             body=json.dumps(response.serialize())
         )
 
@@ -219,3 +219,8 @@ class TestArchiveService(unittest.TestCase):
                         },
                         'jobCallback': None
                     }))
+
+    def test_archive_manifest_url_request(self):
+        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute()
+
+        assert_that(url, is_('//archive-fish.wixmp.com/path/to/manifest.zip'))

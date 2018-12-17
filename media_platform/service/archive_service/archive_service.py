@@ -1,4 +1,5 @@
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.service.archive_service.archive_manifest_url_request import ArchiveManifestUrlRequest
 from media_platform.service.archive_service.create_archive_manifest_request import CreateArchiveManifestRequest
 from media_platform.service.archive_service.create_archive_request import CreateArchiveRequest
 from media_platform.service.archive_service.extract_archive_request import ExtractArchiveRequest
@@ -17,6 +18,10 @@ class ArchiveService(MediaPlatformService):
     def create_archive_manifest_request(self):
         # type: () -> CreateArchiveManifestRequest
         return CreateArchiveManifestRequest(self._authenticated_http_client, self._base_url)
+
+    def archive_manifest_url_request(self):
+        # type: () -> ArchiveManifestUrlRequest
+        return ArchiveManifestUrlRequest(self._domain)
 
     def extract_archive_request(self):
         # type: () -> ExtractArchiveRequest
