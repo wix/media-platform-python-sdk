@@ -35,6 +35,7 @@ audio_file_descriptor = FileDescriptor(destination_path, file_id, FileType.file,
 
 
 class TestAudioService(TestCase):
+
     @classmethod
     def setUpClass(cls):
         authenticator = AppAuthenticator('app', 'secret')
@@ -51,8 +52,8 @@ class TestAudioService(TestCase):
             body=json.dumps(response_body.serialize())
         )
 
-        got_file_descriptor = self.audio_service.replace_extra_metadata_request().set_specification(specification).\
-            execute()
+        got_file_descriptor = self.audio_service.replace_extra_metadata_request().set_specification(
+            specification
+        ).execute()
 
         assert_that(got_file_descriptor.serialize(), is_(audio_file_descriptor.serialize()))
-
