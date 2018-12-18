@@ -30,12 +30,12 @@ _SPECIFICATIONS = {
 
 
 class Component(Serializable, Deserializable):
-    def __init__(self, component_type, successors, specification=None, delete_sources=False):
+    def __init__(self, component_type, successors=None, specification=None, delete_sources=False):
         # type: (ComponentType, [str], Specification, bool) -> None
         super(Component, self).__init__()
 
         self.type = component_type
-        self.successors = successors
+        self.successors = successors or []
         self.specification = specification
         self.delete_sources = delete_sources
 
@@ -60,5 +60,5 @@ class Component(Serializable, Deserializable):
 
         return Component(component_type,
                          specification,
-                         data.get('successors'),
+                         data.get('successors', []),
                          data.get('deleteSources', False))
