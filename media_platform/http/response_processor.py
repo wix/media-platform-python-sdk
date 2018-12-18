@@ -1,6 +1,7 @@
 import requests
 from typing import Type
 
+from media_platform.exception.bad_gateway_exception import BadGatewayException
 from media_platform.exception.conflict_exception import ConflictException
 from media_platform.lang.serialization import Deserializable
 from media_platform.exception.forbidden_exception import ForbiddenException
@@ -55,6 +56,9 @@ class ResponseProcessor(object):
 
         if status_code == 409:
             raise ConflictException()
+
+        if status_code == 502:
+            raise BadGatewayException()
 
         if status_code < 200 or status_code > 299:
             raise MediaPlatformException()

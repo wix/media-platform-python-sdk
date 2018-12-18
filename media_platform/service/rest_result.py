@@ -14,7 +14,7 @@ class RestResult(Serializable, Deserializable):
     @classmethod
     def deserialize(cls, data):
         # type: (dict) -> RestResult
-        return RestResult(data['code'], data['message'], data['payload'])
+        return RestResult(data['code'], data['message'], data.get('payload'))
 
     def serialize(self):
         return {
