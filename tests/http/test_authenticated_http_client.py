@@ -6,6 +6,7 @@ from hamcrest import assert_that, instance_of, is_, equal_to, not_none
 from requests.exceptions import RetryError
 
 from media_platform.auth.app_authenticator import AppAuthenticator
+from media_platform.exception.conflict_exception import ConflictException
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
 from media_platform.exception.not_found_exception import NotFoundException
@@ -96,6 +97,17 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
         )
 
         with self.assertRaises(NotFoundException):
+            self.authenticated_http_client.get(self.test_endpoint)
+
+    @httpretty.activate
+    def test_get_409(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            self.test_endpoint,
+            status=409
+        )
+
+        with self.assertRaises(ConflictException):
             self.authenticated_http_client.get(self.test_endpoint)
 
     @httpretty.activate

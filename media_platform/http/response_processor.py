@@ -1,6 +1,7 @@
 import requests
 from typing import Type
 
+from media_platform.exception.conflict_exception import ConflictException
 from media_platform.lang.serialization import Deserializable
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
@@ -51,6 +52,9 @@ class ResponseProcessor(object):
 
         if status_code == 404:
             raise NotFoundException()
+
+        if status_code == 409:
+            raise ConflictException()
 
         if status_code < 200 or status_code > 299:
             raise MediaPlatformException()
