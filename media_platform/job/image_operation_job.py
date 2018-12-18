@@ -1,10 +1,6 @@
 from media_platform.job.specification import Specification
-from media_platform.lang import datetime_serialization
-from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.job.job import Job
-from media_platform.service.rest_result import RestResult
-from media_platform.service.source import Source
 
 
 class ImageOperationSpecification(Specification):
