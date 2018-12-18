@@ -29,3 +29,7 @@ class ImageOperationRequest(MediaPlatformRequest):
             'source': self.source.serialize(),
             'specification': self.specification.serialize(),
         }
+
+    def execute(self):
+        # type: () -> FileDescriptor
+        return super(ImageOperationRequest, self).execute()
