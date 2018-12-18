@@ -29,9 +29,11 @@ class JobID(Deserializable):
 
 
 class Job(Deserializable):
+    specification_type = None
+
     def __init__(self, job_id, job_type, issuer, status, specification, sources=None, callback=None, flow_id=None,
                  result=None, date_created=None, date_updated=None):
-        # type: (str, str, str, str, Specification, [Source], Callback, str, RestResult, datetime, datetime) -> None
+        # type: (str, str, str, str, Specification or dict, [Source], Callback, str, RestResult, datetime, datetime) -> None
 
         _id = JobID.deserialize(job_id)  # type: JobID
 
@@ -57,6 +59,16 @@ class Job(Deserializable):
         date_updated = datetime_serialization.deserialize(data['dateUpdated'])
         callback_data = data.get('callback')
         callback = Callback.deserialize(callback_data) if callback_data else None
+        specification = data['specification']
+        if cls.specification_type:
+            specification = cls.specification_type.deserialize(specification)
 
-        return cls(data['id'], data['type'], data['issuer'], data['status'], data['specification'], sources, callback,
-                   data.get('flowId'), data.get('result'), date_created, date_updated)
+        result_data = data.get('result')
+        if result_data:
+            # todo: deserialize result payload as specific type
+            result = RestResult.deserialize(result_data)
+        else:
+            result = None
+
+        return cls(data['id'], data['type'], data['issuer'], data['status'], specification, sources, callback,
+                   data.get('flowId'), result, date_created, date_updated)

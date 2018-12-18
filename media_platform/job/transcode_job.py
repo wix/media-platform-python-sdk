@@ -3,11 +3,7 @@ from media_platform.job.specification import Specification
 from media_platform.job.transcode.audio_qualities import AudioQuality
 from media_platform.job.transcode.stream_specification import StreamSpecification
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
-from media_platform.lang import datetime_serialization
-from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
-from media_platform.service.rest_result import RestResult
-from media_platform.service.source import Source
 
 
 class TranscodeSpecification(Specification):
@@ -61,26 +57,4 @@ class TranscodeSpecification(Specification):
 
 class TranscodeJob(Job):
     type = 'urn:job:av.transcode'
-
-    def __init__(self, job_id, issuer, status, specification, sources=None, callback=None, flow_id=None,
-                 result=None, date_created=None, date_updated=None):
-        super(TranscodeJob, self).__init__(job_id, self.type, issuer, status, specification, sources,
-                                           callback, flow_id, result, date_created, date_updated)
-
-    @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> TranscodeJob
-
-        sources = [Source.deserialize(source) for source in data['sources']]
-        date_created = datetime_serialization.deserialize(data['dateCreated'])
-        date_updated = datetime_serialization.deserialize(data['dateUpdated'])
-        callback_data = data.get('callback')
-        callback = Callback.deserialize(callback_data) if callback_data else None
-        specification = TranscodeSpecification.deserialize(data['specification'])
-        if data.get('result'):
-            result = RestResult.deserialize(data['result'])
-        else:
-            result = None
-
-        return cls(data['id'], data['issuer'], data['status'], specification, sources, callback,
-                   data.get('flowId'), result, date_created, date_updated)
+    specification_type = TranscodeSpecification

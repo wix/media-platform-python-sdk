@@ -30,7 +30,7 @@ class FileMimeType(object):
 class FileDescriptor(Serializable, Deserializable):
     def __init__(self, path, file_id, file_type, mime_type, size, acl=ACL.public, lifecycle=None, file_hash=None,
                  date_created=None, date_updated=None):
-        # type: (str, str, str, str, int, str, Lifecycle, str, datetime, datetime) -> None
+        # type: (str, str, str, str, int, ACL, Lifecycle, str, datetime, datetime) -> None
         super(FileDescriptor, self).__init__()
 
         self._validate_values(acl, path)

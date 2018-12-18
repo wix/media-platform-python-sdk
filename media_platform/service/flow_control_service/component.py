@@ -1,3 +1,4 @@
+from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.create_archive_job import CreateArchiveSpecification
 from media_platform.job.extract_archive_job import ExtractArchiveSpecification
 from media_platform.job.extract_poster_job import ExtractPosterSpecification
@@ -16,6 +17,7 @@ class ComponentType(object):
     extract_storyboard = 'av.storyboard'
     playlist = 'av.create_urlset'
     import_file = 'file.import'
+    replace_extra_metadata = 'av.replace_extra_metadata'
 
 
 _SPECIFICATIONS = {
@@ -26,6 +28,7 @@ _SPECIFICATIONS = {
     ComponentType.extract_storyboard: ExtractStoryboardSpecification,
     ComponentType.playlist: None,
     ComponentType.import_file: ImportFileSpecification,
+    ComponentType.replace_extra_metadata: ReplaceAudioExtraMetadataSpecification
 }
 
 

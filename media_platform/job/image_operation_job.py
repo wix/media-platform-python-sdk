@@ -31,29 +31,5 @@ class ImageOperationSpecification(Specification):
 
 
 class ImageOperationJob(Job):
-
     type = 'urn:job:image.operation'
-
-    def __init__(self, job_id, issuer, status, specification, sources=None, callback=None, flow_id=None,
-                 result=None, date_created=None, date_updated=None):
-        super(ImageOperationJob, self).__init__(job_id, self.type, issuer, status, specification, sources,
-                                            callback, flow_id, result, date_created, date_updated)
-
-    @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ImageOperationJob
-
-        sources = [Source.deserialize(source) for source in data['sources']]
-        date_created = datetime_serialization.deserialize(data['dateCreated'])
-        date_updated = datetime_serialization.deserialize(data['dateUpdated'])
-        callback_data = data.get('callback')
-        callback = Callback.deserialize(callback_data) if callback_data else None
-        specification = ImageOperationSpecification.deserialize(data['specification'])
-        if data.get('result'):
-            # todo: result payload is FileDescriptor
-            result = RestResult.deserialize(data['result'])
-        else:
-            result = None
-
-        return cls(data['id'], data['issuer'], data['status'], specification, sources, callback,
-                   data.get('flowId'), result, date_created, date_updated)
+    specification_type = ImageOperationSpecification
