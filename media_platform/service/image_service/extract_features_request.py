@@ -47,3 +47,7 @@ class ExtractFeaturesRequest(MediaPlatformRequest):
             'path': self.path,
             'features': ','.join(self.features)
         }
+
+    def execute(self):
+        # type: () -> ImageFeatures
+        return super(ExtractFeaturesRequest, self).execute()
