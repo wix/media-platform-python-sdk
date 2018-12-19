@@ -22,10 +22,12 @@ class MediaPlatformRequest(object):
             return self.authenticated_http_client.get(self.url, self._params(), self.response_payload_type)
         elif self.method == 'POST':
             return self.authenticated_http_client.post(self.url, self._params(), self.response_payload_type)
+        elif self.method == 'PUT':
+            return self.authenticated_http_client.put(self.url, self._params(), self.response_payload_type)
         elif self.method == 'DELETE':
             return self.authenticated_http_client.delete(self.url, self._params(), self.response_payload_type)
         else:
-            raise NotImplementedError('method not supported')
+            raise ValueError('method not supported %s' % self.method)
 
     # override for request pre-flight check
     def validate(self):

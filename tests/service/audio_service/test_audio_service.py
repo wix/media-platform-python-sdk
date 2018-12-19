@@ -47,7 +47,7 @@ class TestAudioService(TestCase):
         response_body = RestResult(0, 'OK', audio_file_descriptor.serialize())
 
         httpretty.register_uri(
-            httpretty.POST,
+            httpretty.PUT,
             'https://domain/_api/av/extra-metadata',
             body=json.dumps(response_body.serialize())
         )

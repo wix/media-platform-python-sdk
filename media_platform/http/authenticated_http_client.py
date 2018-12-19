@@ -40,6 +40,11 @@ class AuthenticatedHTTPClient(object):
 
         return self._send_request('POST', url, json=data, payload_type=payload_type)
 
+    def put(self, url, data=None, payload_type=None):
+        # type: (str, dict, Type[Deserializable]) -> Deserializable or None
+
+        return self._send_request('PUT', url, json=data, payload_type=payload_type)
+
     def delete(self, url, params=None, payload_type=None):
         # type: (str, dict, Type[Deserializable]) -> Deserializable or None
 
