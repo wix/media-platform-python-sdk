@@ -9,4 +9,5 @@ class AudioService(MediaPlatformService):
         super(AudioService, self).__init__(domain, authenticated_http_client)
 
     def replace_extra_metadata_request(self):
+        # type: () -> ReplaceExtraMetadataRequest
         return ReplaceExtraMetadataRequest(self._authenticated_http_client, self._base_url)
