@@ -12,14 +12,16 @@ class TestCallback(TestCase):
         assert_that(callback.serialize(), is_({
             'url': 'url',
             'headers': {'Me': 'You'},
-            'attachment': {'fish': 'dog'}
+            'attachment': {'fish': 'dog'},
+            'passthrough': False
         }))
 
     def test_deserialize(self):
         data = {
             'url': 'url',
             'headers': {'Me': 'You'},
-            'attachment': {'fish': 'dog'}
+            'attachment': {'fish': 'dog'},
+            'passthrough': False
         }
 
         callback = Callback.deserialize(data)

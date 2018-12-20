@@ -10,6 +10,7 @@ from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
 from media_platform.service.file_service.file_service import FileService
+from media_platform.service.file_service.upload_configuration import UploadConfiguration
 from media_platform.service.file_service.upload_url import UploadUrl
 from media_platform.service.lifecycle import Lifecycle, Action
 from media_platform.service.list_request import OrderBy
@@ -202,6 +203,32 @@ class TestFileService(unittest.TestCase):
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="file"; filename="file-name"\r\n'
                                     'Content-Type: %s\r\n\r\n%s' % (FileMimeType.defualt, 'some content')))
+
+    @httpretty.activate
+    def test_upload_configuration_request(self):
+        response_body = RestResult(0, 'OK', {
+            'uploadToken': 'token',
+            'uploadUrl': 'url'
+        })
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/v2/upload/configuration',
+            body=json.dumps(response_body.serialize())
+        )
+
+        upload_url = self.file_service.upload_configuration_request().set_path('/fish.txt').execute()
+
+        assert_that(upload_url, instance_of(UploadConfiguration))
+        assert_that(upload_url.upload_token, is_('token'))
+        assert_that(upload_url.upload_url, is_('url'))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'mimeType': None,
+                        'path': '/fish.txt',
+                        'size': None,
+                        'acl': None,
+                        'callback': None
+                    }))
 
     @httpretty.activate
     def test_import_file_request(self):

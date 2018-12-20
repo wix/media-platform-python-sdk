@@ -82,7 +82,8 @@ class TestArchiveService(unittest.TestCase):
                         'jobCallback': {
                             'url': 'https://call.me.back/',
                             'headers': None,
-                            'attachment': None
+                            'attachment': None,
+                            'passthrough': False
                         }
                     }))
 
