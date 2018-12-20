@@ -6,7 +6,7 @@
     <groupId>com.wixpress</groupId>
     <artifactId>media-platform-python-sdk</artifactId>
     <name>Media Platform Python SDK</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <description>Media Platform Python SDK</description>
     <url>http://console.wixmp.com</url>
 

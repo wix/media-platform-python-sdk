@@ -20,6 +20,8 @@ class UploadFileV2Request(MediaPlatformRequest):
         self.lifecycle = None
         self.callback = None
 
+        self.callback_response_handler = None
+
         self.filename = 'filename'
         self.content = None
 
@@ -51,6 +53,12 @@ class UploadFileV2Request(MediaPlatformRequest):
     def set_callback(self, callback):
         # type: (Callback) -> UploadFileV2Request
         self.callback = callback
+        return self
+
+    # todo: in case of callback passthrough support custom response handler injection
+    def set_callback_response_handler(self, callback_response_handler):
+        # type: (callable) -> UploadFileV2Request
+        self.callback_response_handler = callback_response_handler
         return self
 
     def set_filename(self, filename):
