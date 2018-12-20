@@ -1,9 +1,11 @@
 from setuptools import setup
 
+PACKAGE_NAME = 'wix_media_platform'
+PACKAGE_VERSION = '1.0.0'
 
 setup(
-    name='wix_media_platform',
-    version='1.0.0',
+    name=PACKAGE_NAME,
+    version=PACKAGE_VERSION,
     description='Wix Media Platform python SDK',
     author='Elad Laufer',
     author_email='elad@wix.com',

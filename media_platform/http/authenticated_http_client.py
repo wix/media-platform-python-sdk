@@ -50,18 +50,20 @@ class AuthenticatedHTTPClient(object):
 
         return self._send_request('DELETE', url, params=params, payload_type=payload_type)
 
-    def post_data(self, url, content, mime_type, params=None, payload_type=None):
-        # type: (str, str, str, dict, Type[Deserializable]) -> Deserializable or None
+    def post_data(self, url, content, mime_type, params=None, payload_type=None, filename=None):
+        # type: (str, str, str, dict, Type[Deserializable], str) -> Deserializable or None
 
         fields = {
-            'file': ('file-name', content, mime_type)
+            'file': (filename or 'file-name', content, mime_type)
         }
         fields.update(params)
 
         encoder = MultipartEncoder(fields)
 
         try:
-            response = self._session.post(url, data=encoder, headers={'Content-Type': encoder.content_type})
+            headers = self._base_headers()
+            headers['Content-Type'] = encoder.content_type
+            response = self._session.post(url, data=encoder, headers=headers)
         except RetryError as e:
             raise MediaPlatformException(e)
 
@@ -80,10 +82,17 @@ class AuthenticatedHTTPClient(object):
     def _headers(self):
         # type: () -> CaseInsensitiveDict
 
+        headers = self._base_headers()
+
         signed_token = self._app_authenticator.default_signed_token()
+        headers['Authorization'] = signed_token
+
+        return headers
+
+    def _base_headers(self):
+        # type: () -> CaseInsensitiveDict
 
         headers = requests.utils.default_headers()
-        headers['Authorization'] = signed_token
         headers['User-Agent'] = self.USER_AGENT
         headers['Accept'] = self.APPLICATION_JSON
 
