@@ -50,8 +50,9 @@ class AuthenticatedHTTPClient(object):
 
         return self._send_request('DELETE', url, params=params, payload_type=payload_type)
 
-    def post_data(self, url, content, mime_type, params=None, payload_type=None, filename=None):
-        # type: (str, str, str, dict, Type[Deserializable], str) -> Deserializable or None
+    def post_data(self, url, content, mime_type, params=None, payload_type=None, filename=None,
+                  response_processor=None):
+        # type: (str, str, str, dict, Type[Deserializable], str, callable or None) -> Deserializable or None
 
         fields = {
             'file': (filename or 'file-name', content, mime_type)
@@ -67,7 +68,10 @@ class AuthenticatedHTTPClient(object):
         except RetryError as e:
             raise MediaPlatformException(e)
 
-        return ResponseProcessor.process(response, payload_type)
+        if response_processor:
+            return response_processor(response)
+        else:
+            return ResponseProcessor.process(response, payload_type)
 
     def _send_request(self, verb, url, json=None, params=None, payload_type=None):
         # type: (str, str, dict, dict, Type[Deserializable]) -> Deserializable or None
