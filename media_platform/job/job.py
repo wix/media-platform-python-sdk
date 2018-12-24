@@ -2,7 +2,7 @@ from datetime import datetime
 
 from media_platform.job.specification import Specification
 from media_platform.lang import datetime_serialization
-from media_platform.lang.serialization import Deserializable
+from media_platform.lang.serialization import Deserializable, Serializable
 from media_platform.service.callback import Callback
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
@@ -28,18 +28,18 @@ class JobID(Deserializable):
         return JobID(parts[0], parts[1])
 
 
-class Job(Deserializable):
+class Job(Deserializable, Serializable):
     specification_type = None
+    type = None
 
-    def __init__(self, job_id, job_type, issuer, status, specification, sources=None, callback=None, flow_id=None,
+    def __init__(self, job_id, issuer, status, specification, sources=None, callback=None, flow_id=None,
                  result=None, date_created=None, date_updated=None):
-        # type: (str, str, str, str, Specification or dict, [Source], Callback, str, RestResult, datetime, datetime) -> None
+        # type: (str, str, str, Specification or dict, [Source], Callback, str, RestResult, datetime, datetime) -> None
 
         _id = JobID.deserialize(job_id)  # type: JobID
 
         self.id = job_id
         self.group_id = _id.group_id
-        self.type = job_type
         self.issuer = issuer
         self.status = status
         self.specification = specification
@@ -70,5 +70,24 @@ class Job(Deserializable):
         else:
             result = None
 
-        return cls(data['id'], data['type'], data['issuer'], data['status'], specification, sources, callback,
-                   data.get('flowId'), result, date_created, date_updated)
+        job = cls(data['id'], data['issuer'], data['status'], specification, sources, callback,
+                  data.get('flowId'), result, date_created, date_updated)
+        job.type = data['type']
+        return job
+
+    def serialize(self):
+        return {
+            'type': self.type,
+            'groupId': self.group_id,
+            'id': self.id,
+            'issuer': self.issuer,
+            'status': self.status,
+            'specification': (self.specification.serialize() if isinstance(self.specification, Serializable)
+                              else self.specification),
+            'sources': [s.serialize() for s in self.sources],
+            'callback': self.callback.serialize() if self.callback else None,
+            'flowId': self.flow_id,
+            'result': self.result.serialize() if self.result else None,
+            'dateCreated': datetime_serialization.serialize(self.date_created),
+            'dateUpdated': datetime_serialization.serialize(self.date_updated),
+        }

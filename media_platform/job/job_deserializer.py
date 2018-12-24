@@ -4,28 +4,27 @@ from media_platform.job.extract_poster_job import ExtractPosterJob
 from media_platform.job.extract_storyboard_job import ExtractStoryboardJob
 from media_platform.job.import_file_job import ImportFileJob
 from media_platform.job.job import Job
+from media_platform.job.replace_extra_metadata_job import ReplaceExtraMetadataJob
 from media_platform.job.transcode_job import TranscodeJob
 from media_platform.lang.serialization import Deserializable
 
 
 class _JobDeserializer(Deserializable):
+    _job_classes = [
+        ImportFileJob,
+        ExtractPosterJob,
+        ExtractStoryboardJob,
+        CreateArchiveJob,
+        ExtractArchiveJob,
+        TranscodeJob,
+        ReplaceExtraMetadataJob
+    ]
+
+    _type_to_class = {c.type: c for c in _job_classes}
 
     @classmethod
     def deserialize(cls, data):
         # type: (dict) -> Job
         job_type = data['type']
-
-        if job_type == ImportFileJob.type:
-            return ImportFileJob.deserialize(data)
-        if job_type == ExtractPosterJob.type:
-            return ExtractPosterJob.deserialize(data)
-        if job_type == ExtractStoryboardJob.type:
-            return ExtractStoryboardJob.deserialize(data)
-        if job_type == CreateArchiveJob.type:
-            return CreateArchiveJob.deserialize(data)
-        if job_type == ExtractArchiveJob.type:
-            return ExtractArchiveJob.deserialize(data)
-        if job_type == TranscodeJob.type:
-            return TranscodeJob.deserialize(data)
-        else:
-            return Job.deserialize(data)
+        job_class = cls._type_to_class.get(job_type, Job)
+        return job_class.deserialize(data)
