@@ -1,5 +1,4 @@
 from unittest import TestCase
-from hamcrest import *
 
 from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality

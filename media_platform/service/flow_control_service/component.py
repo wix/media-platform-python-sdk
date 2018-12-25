@@ -17,7 +17,7 @@ class ComponentType(object):
     extract_storyboard = 'av.storyboard'
     playlist = 'av.create_urlset'
     import_file = 'file.import'
-    replace_extra_metadata = 'av.replace_extra_metadata'
+    replace_extra_metadata = 'av.extra_metadata.replace'
 
 
 _SPECIFICATIONS = {

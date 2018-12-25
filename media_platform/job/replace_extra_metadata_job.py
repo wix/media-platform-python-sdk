@@ -1,11 +1,11 @@
 from media_platform.job.job import Job
-from media_platform.lang.serialization import Serializable
+from media_platform.job.specification import Specification
 from media_platform.metadata.audio.audio_extra_metadata import AudioExtraMetadata
 from media_platform.service.destination import Destination
 from media_platform.service.source import Source
 
 
-class ReplaceAudioExtraMetadataSpecification(Serializable):
+class ReplaceAudioExtraMetadataSpecification(Specification):
     def __init__(self, source, destination, audio_extra_metadata):
         # type: (Source, Destination, AudioExtraMetadata) -> None
         self.source = source
