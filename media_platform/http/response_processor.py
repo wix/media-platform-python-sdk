@@ -17,48 +17,52 @@ class ResponseProcessor(object):
     def process(response, payload_type=None):
         # type: (requests.Response, Type[Deserializable]) -> object or None
 
-        ResponseProcessor._raise_for_status(response)
-        return ResponseProcessor._handle_response(response, payload_type)
+        if 200 <= response.status_code <= 299:
+            return ResponseProcessor._handle_success(response, payload_type)
+        else:
+            ResponseProcessor._handle_error(response)
 
-    @staticmethod
-    def _handle_response(response, payload_type=None):
+    @classmethod
+    def _handle_success(cls, response, payload_type):
         # type: (requests.Response, Type[Deserializable] or [Type[Deserializable]]) -> object or None
-
         try:
             rest_result = RestResult.deserialize(response.json())
-        except ValueError as e:
-            raise MediaPlatformException(e)
+            rest_result.raise_for_code()
 
-        rest_result.raise_for_code()
+            if rest_result.payload is None:
+                return None
 
-        if rest_result.payload is None:
-            return None
+            if payload_type is None:
+                raise MediaPlatformException('Unexpected payload (expected None)')
 
-        if payload_type is None:
-            raise MediaPlatformException(Exception('must supply payload type?'))
+            return payload_type.deserialize(rest_result.payload)
 
-        return payload_type.deserialize(rest_result.payload)
+        except (ValueError, KeyError) as e:
+            raise MediaPlatformException('Bad response format', e)
 
-    @staticmethod
-    def _raise_for_status(response):
-        # type: (requests.Response) -> None
+    @classmethod
+    def _handle_error(cls, response):
+        try:
+            rest_result = RestResult.deserialize(response.json())
+            message = rest_result.message
+        except (ValueError, KeyError):
+            message = response.content
 
         status_code = response.status_code
 
         if status_code == 401:
-            raise UnauthorizedException()
+            raise UnauthorizedException(message)
 
         if status_code == 403:
-            raise ForbiddenException()
+            raise ForbiddenException(message)
 
         if status_code == 404:
-            raise NotFoundException()
+            raise NotFoundException(message)
 
         if status_code == 409:
-            raise ConflictException()
+            raise ConflictException(message)
 
         if status_code == 502:
-            raise BadGatewayException()
+            raise BadGatewayException(message)
 
-        if status_code < 200 or status_code > 299:
-            raise MediaPlatformException()
+        raise MediaPlatformException(message)

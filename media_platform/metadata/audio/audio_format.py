@@ -3,7 +3,7 @@ from media_platform.lang.serialization import Deserializable
 
 class AudioFormat(Deserializable):
     def __init__(self, long_name=None, bitrate=None, duration=None, size=None):
-        # type: (str, int, int, int) -> None
+        # type: (str, int or None, int or None, int or None) -> None
         super(AudioFormat, self).__init__()
         self.long_name = long_name
         self.duration = duration

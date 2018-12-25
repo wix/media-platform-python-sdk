@@ -66,7 +66,7 @@ class AuthenticatedHTTPClient(object):
             headers['Content-Type'] = encoder.content_type
             response = self._session.post(url, data=encoder, headers=headers)
         except RetryError as e:
-            raise MediaPlatformException(e)
+            raise MediaPlatformException(cause=e)
 
         if response_processor:
             return response_processor(response)
@@ -79,7 +79,7 @@ class AuthenticatedHTTPClient(object):
         try:
             response = self._session.request(verb, url, params=params, json=json, headers=self._headers())
         except RetryError as e:
-            raise MediaPlatformException(e)
+            raise MediaPlatformException(cause=e)
 
         return ResponseProcessor.process(response, payload_type)
 

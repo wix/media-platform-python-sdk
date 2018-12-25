@@ -3,7 +3,7 @@ from media_platform.lang.serialization import Deserializable
 
 class ImageBasic(Deserializable):
     def __init__(self, width, height, image_format, color_space=None):
-        # type: (int, int, str, str) -> None
+        # type: (int or None, int or None, str, str) -> None
         super(ImageBasic, self).__init__()
         self.width = int(width) if width else None
         self.height = int(height) if height else None
