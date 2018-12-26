@@ -45,14 +45,16 @@ class TranscodeSpecification(Specification):
         }
 
     def validate(self):
-        if self.video or self.audio:
-            if self.quality_range or self.quality:
-                raise ValueError('Multiple transcode specifications')
-        elif self.quality_range and self.quality:
-            raise ValueError('Multiple transcode specifications')
+        stream_specification = (self.video or self.audio)
+        quality_specification = (self.quality_range or self.quality)
+        if stream_specification and quality_specification:
+            raise ValueError('Either stream specification or quality may be used, not both')
+
+        if self.quality_range and self.quality:
+            raise ValueError('Either quality range or quality may be used, not both')
 
         if self.quality and not VideoQuality.has_value(self.quality) and not AudioQuality.has_value(self.quality):
-            raise ValueError('Quality %s not supported' % self.quality)
+            raise ValueError('Quality %s is not supported' % self.quality)
 
 
 class TranscodeJob(Job):

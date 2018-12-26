@@ -12,6 +12,8 @@ from media_platform.service.file_descriptor import FileDescriptor, FileType
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
 from media_platform.service.transcode_service.transcode_service import TranscodeService
+from tests.service.transcode_service.test_files.transcode1_request import transcode1_request
+from tests.service.transcode_service.test_files.transcode1_response import transcode1_response
 
 
 class TestTranscodeService(unittest.TestCase):
@@ -22,118 +24,7 @@ class TestTranscodeService(unittest.TestCase):
 
     @httpretty.activate
     def test_transcode_request(self):
-        payload = {
-            'jobs': [
-                {
-                    'issuer': 'urn:app:app-id',
-                    'type': 'urn:job:av.transcode',
-                    'id': 'g_1',
-                    'groupId': 'g',
-                    'status': 'pending',
-                    'sources': [
-                        {
-                            'path': '/video.mp4',
-                            'fileId': 'source-id'
-                        }
-                    ],
-                    'specification': {
-                        'quality': '480p',
-                        'destination': {
-                            'directory': None,
-                            'path': '/video.480p.mp4',
-                            'acl': 'public'
-                        },
-                        'video': {
-                            'type': 'video',
-                            'specification': {
-                                'filter': 'scale=768:480,setsar=1/1',
-                                'frameRate': '25.0',
-                                'codec': {
-                                    'profile': 'main',
-                                    'maxRate': 6000000,
-                                    'crf': 20,
-                                    'name': 'h.264',
-                                    'level': '3.1'
-                                },
-                                'resolution': {
-                                    'width': 768,
-                                    'height': 480
-                                },
-                                'keyFrame': 50
-                            }
-                        },
-                        'audio': {
-                            'type': 'audio',
-                            'specification': {
-                                'channels': 'stereo',
-                                'codec': {
-                                    'cbr': 3112,
-                                    'name': 'aac'
-                                }
-                            }
-                        }
-                    },
-                    'result': None,
-                    'dateUpdated': '2017-06-25T12:13:32Z',
-                    'dateCreated': '2017-06-25T12:13:32Z',
-                },
-                {
-                    'issuer': 'urn:app:app-id',
-                    'type': 'urn:job:av.transcode',
-                    'id': 'g_2',
-                    'groupId': 'g',
-                    'status': 'pending',
-                    'sources': [
-                        {
-                            'path': '/video.mp4',
-                            'fileId': 'source-id'
-                        }
-                    ],
-                    'specification': {
-                        'quality': '720p',
-                        'destination': {
-                            'directory': None,
-                            'path': '/video.720p.mp4',
-                            'acl': 'public'
-                        },
-                        'video': {
-                            'type': 'video',
-                            'specification': {
-                                'filter': 'scale=1152:720,setsar=1/1',
-                                'frameRate': '25.0',
-                                'codec': {
-                                    'profile': 'high',
-                                    'maxRate': 6000000,
-                                    'crf': 20,
-                                    'name': 'h.264',
-                                    'level': '4.1'
-                                },
-                                'resolution': {
-                                    'width': 1152,
-                                    'height': 720
-                                },
-                                'keyFrame': 50
-                            }
-                        },
-                        'audio': {
-                            'type': 'audio',
-                            'specification': {
-                                'channels': 'stereo',
-                                'codec': {
-                                    'cbr': 3112,
-                                    'name': 'aac'
-                                }
-                            }
-                        }
-                    },
-                    'result': None,
-                    'dateUpdated': '2017-06-25T12:13:33Z',
-                    'dateCreated': '2017-06-25T12:13:33Z',
-                },
-            ],
-            'groupId': 'g'
-        }
-        response = RestResult(0, 'OK', payload)
+        response = RestResult(0, 'OK', transcode1_response)
         httpretty.register_uri(
             httpretty.POST,
             'https://fish.appspot.com/_api/av/transcode',
@@ -154,29 +45,7 @@ class TestTranscodeService(unittest.TestCase):
 
         assert_that(group.jobs[0], instance_of(TranscodeJob))
         assert_that(group.group_id, is_('g'))
-        assert_that(json.loads(httpretty.last_request().body),
-                    is_({
-                        'specifications': [{
-                            'video': None,
-                            'destination': {
-                                'directory': '/',
-                                'path': None,
-                                'lifecycle': None,
-                                'acl': 'public'
-                            },
-                            'quality': None,
-                            'qualityRange': {
-                                'minimum': '480p',
-                                'maximum': '1080p'
-                            },
-                            'audio': None
-                        }],
-                        'sources': [{
-                            'path': '/video.mp4',
-                            'fileId': None
-                        }],
-                        'jobCallback': None
-                    }))
+        assert_that(json.loads(httpretty.last_request().body), is_(transcode1_request))
 
     def test_playlist_request(self):
         url = self.transcode_service.playlist_request().add_files(
