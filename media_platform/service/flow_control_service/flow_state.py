@@ -33,3 +33,12 @@ class FlowState(Deserializable):
         flow_error = FlowError.deserialize(flow_error_data) if flow_error_data else None
 
         return FlowState(data['id'], data['status'], invocation, operations, flow_error)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'invocation': self.invocation.serialize(),
+            'operations': [o.serialize() for o in self.operations],
+            'status': self.status,
+            'error': self.flow_error.serialize() if self.flow_error else None
+        }

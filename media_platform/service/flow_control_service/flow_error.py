@@ -15,3 +15,10 @@ class FlowError(Deserializable):
         # type: (dict) -> FlowError
 
         return FlowError(data['componentType'], data['componentKey'], data.get('message'))
+
+    def serialize(self):
+        return {
+            'componentType': self.component_type,
+            'componentKey': self.component_key,
+            'message': self.message
+        }
