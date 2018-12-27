@@ -57,7 +57,8 @@ invoke_flow1_response = {
                             'minimum': '720p',
                             'maximum': '1080p'
                         },
-                        'audio': None
+                        'audio': None,
+                        'clipping': None
                     },
                     'results': [
                         {

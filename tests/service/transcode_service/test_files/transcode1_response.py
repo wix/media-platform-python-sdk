@@ -47,7 +47,8 @@ transcode1_response = {
                                     'name': 'aac'
                                 }
                             }
-                        }
+                        },
+                        'clipping': None
                     },
                     'result': None,
                     'dateUpdated': '2017-06-25T12:13:32Z',

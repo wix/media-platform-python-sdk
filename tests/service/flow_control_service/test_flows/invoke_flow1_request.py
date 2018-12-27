@@ -39,7 +39,8 @@ invoke_flow1_request = {
                     'minimum': '720p',
                     'maximum': '1080p'
                 },
-                'audio': None
+                'audio': None,
+                'clipping': None
             },
             'successors': ['playlist'],
             'type': 'av.transcode'

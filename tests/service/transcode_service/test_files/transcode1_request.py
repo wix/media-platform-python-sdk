@@ -12,7 +12,8 @@ transcode1_request = {
             'minimum': '480p',
             'maximum': '1080p'
         },
-        'audio': None
+        'audio': None,
+        'clipping': None
     }],
     'sources': [{
         'path': '/video.mp4',

@@ -64,7 +64,8 @@ flow_state_response = {
                     'minimum': '480p',
                     'maximum': '1440p'
                 },
-                'audio': None
+                'audio': None,
+                'clipping': None
             },
             'results': [
                 {
