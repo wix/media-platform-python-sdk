@@ -24,8 +24,8 @@ transcode_clip_response = {
                 'qualityRange': None,
                 'audio': None,
                 'clipping': {
-                    'clipStart': 3,
-                    'clipEnd': 6,
+                    'start': 3,
+                    'duration': 6,
                     'fadeInDuration': 1,
                     'fadeOutDuration': 2,
                     'fadeInOffset': 4,

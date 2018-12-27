@@ -56,8 +56,8 @@ class TestTranscodeService(unittest.TestCase):
             TranscodeSpecification(
                 Destination(directory='/'),
                 quality=AudioQuality.aac_128,
-                clipping=Clipping(clip_start=3,
-                                  clip_end=6,
+                clipping=Clipping(start=3,
+                                  duration=6,
                                   fade_in_duration=1,
                                   fade_out_duration=2,
                                   fade_in_offset=4,
