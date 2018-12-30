@@ -8,7 +8,7 @@ setup(
     version=PACKAGE_VERSION,
     description='Wix Media Platform python SDK',
     author='Elad Laufer',
-    author_email='elad@wix.com',
+    author_email='mcloud@wix.com',
     url='https://console.wixmp.com/',
     classifiers=[
         'Development Status :: 3 - ALPHA',
