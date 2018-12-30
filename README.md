@@ -12,7 +12,7 @@
 ## Installation
 
 ```bash
-pip install wix_media_platform
+pip install wix-media-platform
 ```
 
 ## Reporting Issues
