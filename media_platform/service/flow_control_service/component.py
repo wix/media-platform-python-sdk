@@ -7,6 +7,7 @@ from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.specification import Specification
 from media_platform.job.transcode_job import TranscodeSpecification
 from media_platform.lang.serialization import Deserializable, Serializable
+from media_platform.service.flow_control_service.callback_specification import CallbackSpecification
 
 
 class ComponentType(object):
@@ -18,6 +19,7 @@ class ComponentType(object):
     playlist = 'av.create_urlset'
     import_file = 'file.import'
     replace_extra_metadata = 'av.extra_metadata.replace'
+    callback = 'flow.callback'
 
 
 _SPECIFICATIONS = {
@@ -28,7 +30,8 @@ _SPECIFICATIONS = {
     ComponentType.extract_storyboard: ExtractStoryboardSpecification,
     ComponentType.playlist: None,
     ComponentType.import_file: ImportFileSpecification,
-    ComponentType.replace_extra_metadata: ReplaceAudioExtraMetadataSpecification
+    ComponentType.replace_extra_metadata: ReplaceAudioExtraMetadataSpecification,
+    ComponentType.callback: CallbackSpecification
 }
 
 

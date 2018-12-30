@@ -11,8 +11,8 @@ class FlowInvocationRequest(MediaPlatformRequest):
         super(FlowInvocationRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/flow_control/flow',
                                                     FlowState)
 
-        self.invocation = None
-        self.flow = None
+        self.invocation = None  # type: Invocation
+        self.flow = None  # type: Flow
 
     def set_invocation(self, invocation):
         # type: (Invocation) -> FlowInvocationRequest
