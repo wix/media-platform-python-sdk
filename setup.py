@@ -1,7 +1,7 @@
 from setuptools import setup
 
 PACKAGE_NAME = 'wix_media_platform'
-PACKAGE_VERSION = '1.0.1'
+PACKAGE_VERSION = 'MEDIA_PLATFORM_SDK_VERSION'
 
 setup(
     name=PACKAGE_NAME,
