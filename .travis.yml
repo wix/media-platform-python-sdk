@@ -4,6 +4,7 @@ python:
 - '3.6'
 install:
 - sed -i "s/MEDIA_PLATFORM_SDK_VERSION/$(git describe --abbrev=0 --tags)/g" setup.py
+- cat setup.py
 - pip install .
 script:
 - python setup.py test
@@ -16,6 +17,5 @@ deploy:
   on:
     tags: true
 branches:
-  only:
-  - master
-  - /^release-/
+  except:
+    - /^RC;/
