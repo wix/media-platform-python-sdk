@@ -17,4 +17,5 @@ deploy:
     tags: true
 branches:
   only:
+  - master
   - /^release-/
