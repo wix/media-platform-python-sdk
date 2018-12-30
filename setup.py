@@ -11,7 +11,7 @@ setup(
     author_email='mcloud@wix.com',
     url='https://console.wixmp.com/',
     classifiers=[
-        'Development Status :: 3 - ALPHA',
+        'Development Status :: 5 - PRODUCTION/STABLE',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python',
