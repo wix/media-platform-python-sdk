@@ -17,5 +17,5 @@ deploy:
 #    tags: true
 #    condition: tag =~ /^release-/
 on:
-  all_branches: true
+  tags: true
   condition: $TRAVIS_TAG =~ ^release-
