@@ -62,6 +62,9 @@ class TranscodeSpecification(Specification):
         if self.quality_range and self.quality:
             raise ValueError('Either quality range or quality may be specified, not both')
 
+        if self.quality_range:
+            self.quality_range.validate()
+
         if self.quality and not VideoQuality.has_value(self.quality) and not AudioQuality.has_value(self.quality):
             raise ValueError('Quality %s is not supported' % self.quality)
 
