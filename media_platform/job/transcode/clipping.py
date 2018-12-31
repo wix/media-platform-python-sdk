@@ -28,3 +28,5 @@ class Clipping(Serializable, Deserializable):
             'fadeInOffset': self.fade_in_offset,
             'fadeOutOffset': self.fade_out_offset
         }
+
+    # todo: Add validate()
