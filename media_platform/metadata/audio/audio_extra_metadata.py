@@ -23,7 +23,7 @@ class Lyrics(Serializable, Deserializable):
 
 
 class Image(Serializable, Deserializable):
-    def __init__(self, url, mime_type, description):
+    def __init__(self, url, mime_type=None, description=None):
         self.url = url
         self.mime_type = mime_type
         self.description = description
