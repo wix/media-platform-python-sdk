@@ -65,6 +65,9 @@ class TranscodeSpecification(Specification):
         if self.quality and not VideoQuality.has_value(self.quality) and not AudioQuality.has_value(self.quality):
             raise ValueError('Quality %s is not supported' % self.quality)
 
+        if not stream_specified and not quality_specified and not self.clipping:
+            raise ValueError('Either video, audio, quality range, quality or clipping must be specified')
+
 
 class TranscodeJob(Job):
     type = 'urn:job:av.transcode'

@@ -127,7 +127,8 @@ class TestFlowControlService(unittest.TestCase):
                 Invocation('import1')
             ).set_flow(
                 Flow().add_component('import1',
-                                     Component(ComponentType.import_file, ['missing-successor-name']))
+                                     Component(ComponentType.import_file, ['missing-successor-name'],
+                                               import_file_specification))
             ).execute()
 
         self.assertEqual(str(context.exception), 'Missing successor components: [\'missing-successor-name\']')
