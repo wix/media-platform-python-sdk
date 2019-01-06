@@ -15,19 +15,14 @@ invoke_flow_callback_request = {
                     'acl': 'public'
                 }
             },
-            'successors': ['callback1'],
-            'type': 'file.import'
-        },
-        'callback1': {
-            'deleteSources': False,
-            'specification': {
+            'successors': [],
+            'callback': {
                 'url': 'http://requestbin.fullcontact.com/sc9kxnsc',
                 'attachment': {'attachment-key': 'attachment-value'},
                 'headers': {'header': 'value'},
                 'passthrough': False,
             },
-            'successors': [],
-            'type': 'flow.callback'
-        }
+            'type': 'file.import'
+        },
     }
 }

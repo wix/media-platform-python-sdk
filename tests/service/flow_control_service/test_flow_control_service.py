@@ -2,7 +2,7 @@ import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_
+from hamcrest import assert_that, instance_of
 
 from media_platform import Source
 from media_platform.auth.app_authenticator import AppAuthenticator
@@ -12,9 +12,9 @@ from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetad
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
 from media_platform.job.transcode_job import TranscodeSpecification
 from media_platform.metadata.audio.audio_extra_metadata import Image, Lyrics, AudioExtraMetadata
+from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
-from media_platform.service.flow_control_service.callback_specification import CallbackSpecification
 from media_platform.service.flow_control_service.component import Component, ComponentType
 from media_platform.service.flow_control_service.flow import Flow
 from media_platform.service.flow_control_service.flow_control_service import FlowControlService
@@ -100,21 +100,17 @@ class TestFlowControlService(unittest.TestCase):
         self._assert_flow(flow_state, invoke_flow_replace_extra_metadata_request)
 
     @httpretty.activate
-    def test_invoke_flow_callback(self):
+    def test_invoke_flow_with_callback(self):
         self._register_invoke_request(invoke_flow_callback_response)
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import1'])
         ).set_flow(
             Flow().add_component(
                 'import1',
-                Component(ComponentType.import_file, ['callback1'], import_file_specification)
-            ).add_component(
-                'callback1',
-                Component(ComponentType.callback,
-                          [],
-                          CallbackSpecification('http://requestbin.fullcontact.com/sc9kxnsc',
-                                                {'attachment-key': 'attachment-value'},
-                                                {'header': 'value'}))
+                Component(ComponentType.import_file, [], import_file_specification,
+                          callback=Callback('http://requestbin.fullcontact.com/sc9kxnsc',
+                                            {'attachment-key': 'attachment-value'},
+                                            {'header': 'value'}))
             )
         ).execute()
 

@@ -7,6 +7,7 @@ from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.specification import Specification
 from media_platform.job.transcode_job import TranscodeSpecification
 from media_platform.lang.serialization import Deserializable, Serializable
+from media_platform.service.callback import Callback
 from media_platform.service.flow_control_service.callback_specification import CallbackSpecification
 
 
@@ -36,14 +37,15 @@ _SPECIFICATIONS = {
 
 
 class Component(Serializable, Deserializable):
-    def __init__(self, component_type, successors=None, specification=None, delete_sources=False):
-        # type: (ComponentType, [str], Specification, bool) -> None
+    def __init__(self, component_type, successors=None, specification=None, delete_sources=False, callback=None):
+        # type: (ComponentType, [str], Specification, bool, Callback) -> None
         super(Component, self).__init__()
 
         self.type = component_type
         self.successors = successors or []
         self.specification = specification
         self.delete_sources = delete_sources
+        self.callback = callback
 
     def serialize(self):
         # type: () -> dict
@@ -51,20 +53,21 @@ class Component(Serializable, Deserializable):
             'type': self.type,
             'successors': self.successors,
             'specification': self.specification.serialize() if self.specification else None,
-            'deleteSources': self.delete_sources
+            'deleteSources': self.delete_sources,
+            'callback': self.callback.serialize() if self.callback else None
         }
 
     @classmethod
     def deserialize(cls, data):
         # type: (dict) -> Component
-        component_type = data['type']
-        specification_type = _SPECIFICATIONS[component_type]
+        specification_type = _SPECIFICATIONS[data['type']]
+        specification = specification_type.deserialize(data['specification']) if specification_type else None
 
-        specification = None
-        if specification_type:
-            specification = specification_type.deserialize(data['specification'])
+        callback_data = data.get('callback')
+        callback = Callback.deserialize(callback_data) if callback_data else None
 
-        return Component(component_type,
-                         specification,
-                         data.get('successors', []),
-                         data.get('deleteSources', False))
+        return cls(data['type'],
+                   specification,
+                   data.get('successors', []),
+                   data.get('deleteSources', False),
+                   callback)

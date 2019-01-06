@@ -18,6 +18,12 @@ invoke_flow_callback_response = {
                 },
                 'sourceUrl': 'https://fish.com/dag.gadol'
             },
+            'callback': {
+                'url': 'http://requestbin.fullcontact.com/sc9kxnsc',
+                'attachment': {'attachment-key': 'attachment-value'},
+                'headers': {'header': 'value'},
+                'passthrough': False,
+            },
             'results': [
                 {
                     'mimeType': 'video/mp4',
@@ -35,25 +41,9 @@ invoke_flow_callback_response = {
             ],
             'extraResults': {},
             'sources': [],
-            'successors': ['callback1'],
+            'successors': [],
             'type': 'file.import'
         },
-        'callback1': {
-            'status': 'success',
-            'deleteSource': False,
-            'specification': {
-                'url': 'http://requestbin.fullcontact.com/sc9kxnsc',
-                'attachment': {'attachment-key': 'attachment-value'},
-                'headers': {'header': 'value'},
-                'type': 'flow.callback',
-                'passthrough': False,
-            },
-            'results': [],
-            'extraResults': {},
-            'sources': [],
-            'successors': [],
-            'type': 'flow.callback'
-        }
     },
     'id': '12342134',
     'status': 'success',
