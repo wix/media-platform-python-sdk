@@ -15,12 +15,14 @@ invoke_flow1_request = {
                     'acl': 'public'
                 }
             },
+            'callback': None,
             'successors': ['transcode'],
             'type': 'file.import'
         },
         'playlist': {
             'deleteSources': False,
             'specification': None,
+            'callback': None,
             'successors': [],
             'type': 'av.create_urlset'
         },
@@ -42,6 +44,7 @@ invoke_flow1_request = {
                 'audio': None,
                 'clipping': None
             },
+            'callback': None,
             'successors': ['playlist'],
             'type': 'av.transcode'
         }

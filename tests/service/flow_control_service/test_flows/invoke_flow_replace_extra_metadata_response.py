@@ -40,6 +40,7 @@ invoke_flow_replace_extra_metadata_response = {
                     'trackNumber': 'track_number'
                 }
             },
+            'callback': None,
             'results': [
                 {
                     'mimeType': 'audio/mp3',

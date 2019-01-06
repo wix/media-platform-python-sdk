@@ -37,6 +37,7 @@ invoke_flow_replace_extra_metadata_request = {
                     'trackNumber': 'track_number'
                 }
             },
+            'callback': None,
             'successors': [],
             'type': 'av.extra_metadata.replace'
         }
