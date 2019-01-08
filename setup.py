@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 PACKAGE_NAME = 'wix_media_platform'
 PACKAGE_VERSION = 'MEDIA_PLATFORM_SDK_VERSION'
@@ -19,7 +19,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    packages=['media_platform'],
+    packages=find_packages(include=('media_platform', 'media_platform.*',)),
     install_requires=[
         'python-jose==3.0.1',
         'requests==2.20.1',
