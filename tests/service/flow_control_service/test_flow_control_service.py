@@ -89,7 +89,7 @@ class TestFlowControlService(unittest.TestCase):
         self._register_invoke_request(invoke_flow_replace_extra_metadata_response)
 
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
-            Invocation(['metadata1'])
+            Invocation(['metadata1'], [Source('/audio-file.mp3')])
         ).set_flow(
             Flow().add_component(
                 'metadata1',
