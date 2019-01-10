@@ -12,10 +12,6 @@ invoke_flow_replace_extra_metadata_request = {
         'metadata1': {
             'deleteSources': False,
             'specification': {
-                'source': {
-                    'path': '/source/path.mp3',
-                    'fileId': None
-                },
                 'destination': {
                     'directory': None,
                     'path': '/destination/path.mp3',

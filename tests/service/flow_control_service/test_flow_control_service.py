@@ -48,8 +48,7 @@ lyrics = Lyrics('text', 'eng', 'lyrics_description')
 extra_metadata = AudioExtraMetadata('track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer',
                                     'year', image, lyrics)
 
-replace_extra_metadata_specification = ReplaceAudioExtraMetadataSpecification(audio_source, audio_destination,
-                                                                              extra_metadata)
+replace_extra_metadata_specification = ReplaceAudioExtraMetadataSpecification(audio_destination, extra_metadata)
 
 
 class TestFlowControlService(unittest.TestCase):

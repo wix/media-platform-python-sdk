@@ -1,4 +1,6 @@
 from typing import Type
+
+from media_platform.service.source import Source
 from media_platform.lang.serialization import Deserializable
 from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
@@ -12,6 +14,7 @@ class ReplaceExtraMetadataBaseRequest(MediaPlatformRequest):
         # type: (AuthenticatedHTTPClient, str, str, Type[Deserializable]) -> None
         super(ReplaceExtraMetadataBaseRequest, self).__init__(
             authenticated_http_client, verb, base_url + '/av/extra-metadata', response_type)
+        self.source = None  # type: Source
         self.specification = None  # type: ReplaceAudioExtraMetadataSpecification
 
     def set_specification(self, specification):
@@ -19,8 +22,14 @@ class ReplaceExtraMetadataBaseRequest(MediaPlatformRequest):
         self.specification = specification
         return self
 
+    def set_source(self, source):
+        # type: (Source) -> ReplaceExtraMetadataBaseRequest
+        self.source = source
+        return self
+
     def _params(self):
         return {
+            'source': self.source.serialize(),
             'specification': self.specification.serialize()
         }
 
@@ -35,4 +44,3 @@ class ReplaceExtraMetadataAsyncRequest(ReplaceExtraMetadataBaseRequest):
     def __init__(self, authenticated_http_client, base_url):
         super(ReplaceExtraMetadataAsyncRequest, self).__init__(
             authenticated_http_client, base_url, 'POST', ReplaceExtraMetadataJob)
-

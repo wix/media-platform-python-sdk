@@ -27,7 +27,7 @@ lyrics = Lyrics('text', 'lang', 'lyrics_description')
 extra_metadata = AudioExtraMetadata('track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer', 'year',
                                     image, lyrics)
 
-specification = ReplaceAudioExtraMetadataSpecification(source, destination, extra_metadata)
+specification = ReplaceAudioExtraMetadataSpecification(destination, extra_metadata)
 
 file_id = 'file_id'
 audio_mime_type = 'audio/mp3'
@@ -59,7 +59,7 @@ class TestAudioService(TestCase):
 
         got_file_descriptor = self.audio_service.replace_extra_metadata_sync_request().set_specification(
             specification
-        ).execute()
+        ).set_source(source).execute()
 
         assert_that(got_file_descriptor.serialize(), is_(audio_file_descriptor.serialize()))
 
@@ -75,6 +75,6 @@ class TestAudioService(TestCase):
 
         got_job = self.audio_service.replace_extra_metadata_async_request().set_specification(
             specification
-        ).execute()
+        ).set_source(source).execute()
 
         assert_that(got_job.serialize(), is_(job.serialize()))
