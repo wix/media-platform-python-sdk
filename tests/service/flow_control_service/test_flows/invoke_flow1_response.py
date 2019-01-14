@@ -2,7 +2,7 @@ invoke_flow1_response = {
     'invocation': {
         'sources': [],
         'entryPoints': ['import'],
-        'notification': None
+        'callback': None
     },
     'operations': {
         'import': {

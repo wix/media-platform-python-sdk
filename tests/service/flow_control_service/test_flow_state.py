@@ -4,14 +4,14 @@ from media_platform.service.flow_control_service.flow_state import FlowState
 
 
 class TestFlowState(TestCase):
-
     maxDiff = None
 
     def test_serialization(self):
         state_data = {
             'invocation': {
                 'sources': [],
-                'entryPoints': ['import']
+                'entryPoints': ['import'],
+                'callback': None
             },
             'operations': {
                 'import': {

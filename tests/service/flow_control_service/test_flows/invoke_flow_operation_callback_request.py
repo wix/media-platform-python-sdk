@@ -1,7 +1,8 @@
 invoke_flow_operation_callback_request = {
     'invocation': {
         'sources': [],
-        'entryPoints': ['import1']
+        'entryPoints': ['import1'],
+        'callback': None
     },
     'flow': {
         'import1': {

@@ -6,7 +6,8 @@ invoke_flow_replace_extra_metadata_request = {
                 'path': '/audio-file.mp3'
             }
         ],
-        'entryPoints': ['metadata1']
+        'entryPoints': ['metadata1'],
+        'callback': None
     },
     'flow': {
         'metadata1': {

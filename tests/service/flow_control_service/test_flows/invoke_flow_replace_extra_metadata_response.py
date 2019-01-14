@@ -7,7 +7,7 @@ invoke_flow_replace_extra_metadata_response = {
             }
         ],
         'entryPoints': ['metadata1'],
-        'notification': None
+        'callback': None
     },
     'operations': {
         'metadata1': {
