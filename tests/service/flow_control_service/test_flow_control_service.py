@@ -26,6 +26,10 @@ from tests.service.flow_control_service.test_flows.invoke_flow1_request import i
 from tests.service.flow_control_service.test_flows.invoke_flow1_response import invoke_flow1_response
 from tests.service.flow_control_service.test_flows.invoke_flow_callback_request import invoke_flow_callback_request
 from tests.service.flow_control_service.test_flows.invoke_flow_callback_response import invoke_flow_callback_response
+from tests.service.flow_control_service.test_flows.invoke_flow_operation_callback_request import \
+    invoke_flow_operation_callback_request
+from tests.service.flow_control_service.test_flows.invoke_flow_operation_callback_response import \
+    invoke_flow_operation_callback_response
 from tests.service.flow_control_service.test_flows.invoke_flow_replace_extra_metadata_request import \
     invoke_flow_replace_extra_metadata_request
 from tests.service.flow_control_service.test_flows.invoke_flow_replace_extra_metadata_response import \
@@ -99,8 +103,8 @@ class TestFlowControlService(unittest.TestCase):
         self._assert_flow(flow_state, invoke_flow_replace_extra_metadata_request)
 
     @httpretty.activate
-    def test_invoke_flow_with_callback(self):
-        self._register_invoke_request(invoke_flow_callback_response)
+    def test_invoke_flow_with_component_callback(self):
+        self._register_invoke_request(invoke_flow_operation_callback_response)
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import1'])
         ).set_flow(
@@ -110,6 +114,23 @@ class TestFlowControlService(unittest.TestCase):
                           callback=Callback('http://requestbin.fullcontact.com/sc9kxnsc',
                                             {'attachment-key': 'attachment-value'},
                                             {'header': 'value'}))
+            )
+        ).execute()
+
+        self._assert_flow(flow_state, invoke_flow_operation_callback_request)
+
+    @httpretty.activate
+    def test_invoke_flow_with_callback(self):
+        self._register_invoke_request(invoke_flow_callback_response)
+        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+            Invocation(['import1'],
+                       callback=Callback('http://requestbin.fullcontact.com/sc9kxnsc',
+                                         {'attachment-key': 'attachment-value'},
+                                         {'header': 'value'}))
+        ).set_flow(
+            Flow().add_component(
+                'import1',
+                Component(ComponentType.import_file, [], import_file_specification)
             )
         ).execute()
 

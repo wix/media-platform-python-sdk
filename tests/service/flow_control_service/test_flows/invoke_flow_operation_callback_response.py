@@ -1,13 +1,7 @@
-invoke_flow_callback_response = {
+invoke_flow_operation_callback_response = {
     'invocation': {
         'sources': [],
         'entryPoints': ['import1'],
-        'callback': {
-            'url': 'http://requestbin.fullcontact.com/sc9kxnsc',
-            'attachment': {'attachment-key': 'attachment-value'},
-            'headers': {'header': 'value'},
-            'passthrough': False,
-        },
     },
     'operations': {
         'import1': {
@@ -42,7 +36,12 @@ invoke_flow_callback_response = {
             'extraResults': {},
             'sources': [],
             'successors': [],
-            'callback': None,
+            'callback': {
+                'url': 'http://requestbin.fullcontact.com/sc9kxnsc',
+                'attachment': {'attachment-key': 'attachment-value'},
+                'headers': {'header': 'value'},
+                'passthrough': False,
+            },
             'type': 'file.import'
         },
     },
