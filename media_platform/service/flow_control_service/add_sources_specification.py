@@ -14,4 +14,4 @@ class AddSourcesSpecification(Specification):
 
     @classmethod
     def deserialize(cls, data):
-        return cls(Source.deserialize(s) for s in data['sources'])
+        return cls([Source.deserialize(s) for s in data['sources']])
