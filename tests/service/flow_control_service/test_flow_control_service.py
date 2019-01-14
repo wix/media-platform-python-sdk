@@ -51,9 +51,6 @@ audio_source_path2 = '/source/path2.mp3'
 audio_destination_path1 = '/destination/path.mp3'
 audio_destination_path2 = '/destination/path2.mp3'
 
-audio_destination1 = Destination(audio_destination_path1, None, ACL.private)
-audio_destination2 = Destination(audio_destination_path2, None, ACL.private)
-
 image = Image('image_url', 'mime_type', 'image_description')
 lyrics = Lyrics('text', 'eng', 'lyrics_description')
 
@@ -102,7 +99,8 @@ class TestFlowControlService(unittest.TestCase):
             Flow().add_component(
                 'metadata1',
                 Component(ComponentType.replace_extra_metadata, [],
-                          ReplaceAudioExtraMetadataSpecification(audio_destination1, extra_metadata))
+                          ReplaceAudioExtraMetadataSpecification(
+                              Destination(audio_destination_path1, None, ACL.private), extra_metadata))
             )
         ).execute()
 
@@ -126,11 +124,13 @@ class TestFlowControlService(unittest.TestCase):
             ).add_component(
                 'metadata1',
                 Component(ComponentType.replace_extra_metadata, [],
-                          ReplaceAudioExtraMetadataSpecification(audio_destination1, extra_metadata))
+                          ReplaceAudioExtraMetadataSpecification(
+                              Destination(audio_destination_path1, None, ACL.private), extra_metadata))
             ).add_component(
                 'metadata2',
                 Component(ComponentType.replace_extra_metadata, [],
-                          ReplaceAudioExtraMetadataSpecification(audio_destination2, extra_metadata))
+                          ReplaceAudioExtraMetadataSpecification(
+                              Destination(audio_destination_path2, None, ACL.private), extra_metadata))
             )
         ).execute()
 
