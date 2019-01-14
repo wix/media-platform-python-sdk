@@ -1,24 +1,28 @@
-invoke_flow_replace_extra_metadata_response = {
+invoke_flow_with_add_sources_response = {
     'invocation': {
-        'sources': [
-            {
-                'fileId': None,
-                'path': '/source/path.mp3'
-            }
-        ],
-        'entryPoints': ['metadata1'],
+        'sources': [],
+        'entryPoints': ['addSources1'],
         'callback': None
     },
     'operations': {
-        'metadata1': {
+        'addSources1': {
             'status': 'success',
+            'deleteSources': False,
+            'specification': {
+                'sources': [{
+                    'path': '/source/path.mp3',
+                    'fileId': None
+                }]
+            },
+            'callback': None,
+            'successors': ['metadata1'],
+            'type': 'flow.add_sources'
+        },
+        'metadata1': {
+            'status': 'waiting',
             'deleteSources': False,
             'jobs': ['g_1'],
             'specification': {
-                'source': {
-                    'path': '/source/path.mp3',
-                    'fileId': None
-                },
                 'destination': {
                     'directory': None,
                     'path': '/destination/path.mp3',

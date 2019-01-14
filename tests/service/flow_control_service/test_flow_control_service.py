@@ -15,6 +15,7 @@ from media_platform.metadata.audio.audio_extra_metadata import Image, Lyrics, Au
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
+from media_platform.service.flow_control_service.add_sources_specification import AddSourcesSpecification
 from media_platform.service.flow_control_service.component import Component, ComponentType
 from media_platform.service.flow_control_service.flow import Flow
 from media_platform.service.flow_control_service.flow_control_service import FlowControlService
@@ -34,6 +35,10 @@ from tests.service.flow_control_service.test_flows.invoke_flow_replace_extra_met
     invoke_flow_replace_extra_metadata_request
 from tests.service.flow_control_service.test_flows.invoke_flow_replace_extra_metadata_response import \
     invoke_flow_replace_extra_metadata_response
+from tests.service.flow_control_service.test_flows.invoke_flow_with_add_sources_request import \
+    invoke_flow_with_add_sources_request
+from tests.service.flow_control_service.test_flows.invoke_flow_with_add_sources_response import \
+    invoke_flow_with_add_sources_response
 
 transcode_specification = TranscodeSpecification(
     Destination(directory='/deliverables/'),
@@ -41,19 +46,19 @@ transcode_specification = TranscodeSpecification(
 
 import_file_specification = ImportFileSpecification('http://movs.me/video.mp4', Destination('/imports/video.mp4'))
 
-audio_source_path = '/source/path.mp3'
-audio_destination_path = '/destination/path.mp3'
-audio_source = Source(audio_source_path)
-audio_destination = Destination(audio_destination_path, None, ACL.private)
+audio_source_path1 = '/source/path.mp3'
+audio_source_path2 = '/source/path2.mp3'
+audio_destination_path1 = '/destination/path.mp3'
+audio_destination_path2 = '/destination/path2.mp3'
+
+audio_destination1 = Destination(audio_destination_path1, None, ACL.private)
+audio_destination2 = Destination(audio_destination_path2, None, ACL.private)
 
 image = Image('image_url', 'mime_type', 'image_description')
 lyrics = Lyrics('text', 'eng', 'lyrics_description')
 
 extra_metadata = AudioExtraMetadata('track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer',
                                     'year', image, lyrics)
-
-replace_extra_metadata_specification = ReplaceAudioExtraMetadataSpecification(audio_destination, extra_metadata)
-
 
 class TestFlowControlService(unittest.TestCase):
     authenticator = None  # type: AppAuthenticator
@@ -92,15 +97,44 @@ class TestFlowControlService(unittest.TestCase):
         self._register_invoke_request(invoke_flow_replace_extra_metadata_response)
 
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
-            Invocation(['metadata1'], [Source('/audio-file.mp3')])
+            Invocation(['metadata1'], [Source(audio_source_path1)])
         ).set_flow(
             Flow().add_component(
                 'metadata1',
-                Component(ComponentType.replace_extra_metadata, [], replace_extra_metadata_specification)
+                Component(ComponentType.replace_extra_metadata, [],
+                          ReplaceAudioExtraMetadataSpecification(audio_destination1, extra_metadata))
             )
         ).execute()
 
         self._assert_flow(flow_state, invoke_flow_replace_extra_metadata_request)
+
+    @httpretty.activate
+    def test_invoke_flow_with_add_sources(self):
+        self._register_invoke_request(invoke_flow_with_add_sources_response)
+
+        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+            Invocation(['addSources1', 'addSources2'], [])
+        ).set_flow(
+            Flow().add_component(
+                'addSources1',
+                Component(ComponentType.add_sources, ['metadata1'],
+                          AddSourcesSpecification([Source(audio_source_path1)]))
+            ).add_component(
+                'addSources2',
+                Component(ComponentType.add_sources, ['metadata2'],
+                          AddSourcesSpecification([Source(audio_source_path2)]))
+            ).add_component(
+                'metadata1',
+                Component(ComponentType.replace_extra_metadata, [],
+                          ReplaceAudioExtraMetadataSpecification(audio_destination1, extra_metadata))
+            ).add_component(
+                'metadata2',
+                Component(ComponentType.replace_extra_metadata, [],
+                          ReplaceAudioExtraMetadataSpecification(audio_destination2, extra_metadata))
+            )
+        ).execute()
+
+        self._assert_flow(flow_state, invoke_flow_with_add_sources_request)
 
     @httpretty.activate
     def test_invoke_flow_with_component_callback(self):
@@ -182,6 +216,6 @@ class TestFlowControlService(unittest.TestCase):
             body=json.dumps(response.serialize())
         )
 
-    def _assert_flow(self, flow_state, request_payload):
-        assert_that(flow_state, instance_of(FlowState))
-        self.assertEqual(json.loads(httpretty.last_request().body), request_payload)
+    def _assert_flow(self, response_flow_state, expected_request_payload):
+        assert_that(response_flow_state, instance_of(FlowState))
+        self.assertEqual(expected_request_payload, json.loads(httpretty.last_request().body))

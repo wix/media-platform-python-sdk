@@ -3,7 +3,7 @@ invoke_flow_replace_extra_metadata_request = {
         'sources': [
             {
                 'fileId': None,
-                'path': '/audio-file.mp3'
+                'path': '/source/path.mp3'
             }
         ],
         'entryPoints': ['metadata1'],
