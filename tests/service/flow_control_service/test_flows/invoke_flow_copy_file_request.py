@@ -1,0 +1,28 @@
+invoke_flow_copy_file_request = {
+    'invocation': {
+        'sources': [
+            {
+                'path': '/source/path.txt',
+                'fileId': None
+            }
+        ],
+        'entryPoints': ['copyfile1'],
+        'callback': None
+    },
+    'flow': {
+        'copyfile1': {
+            'deleteSources': False,
+            'specification': {
+                'destination': {
+                    'directory': None,
+                    'path': '/destination/path.txt',
+                    'lifecycle': None,
+                    'acl': 'public'
+                }
+            },
+            'successors': [],
+            'callback': None,
+            'type': 'file.copy'
+        },
+    }
+}

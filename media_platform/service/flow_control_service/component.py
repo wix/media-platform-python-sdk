@@ -8,7 +8,8 @@ from media_platform.job.specification import Specification
 from media_platform.job.transcode_job import TranscodeSpecification
 from media_platform.lang.serialization import Deserializable, Serializable
 from media_platform.service.callback import Callback
-from media_platform.service.flow_control_service.add_sources_specification import AddSourcesSpecification
+from media_platform.service.flow_control_service.specifications.add_sources_specification import AddSourcesSpecification
+from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
 
 
 class ComponentType(object):
@@ -19,6 +20,7 @@ class ComponentType(object):
     extract_storyboard = 'av.storyboard'
     playlist = 'av.create_urlset'
     import_file = 'file.import'
+    copy_file = 'file.copy'
     replace_extra_metadata = 'av.extra_metadata.replace'
     add_sources = 'flow.add_sources'
 
@@ -31,6 +33,7 @@ _SPECIFICATIONS = {
     ComponentType.extract_storyboard: ExtractStoryboardSpecification,
     ComponentType.playlist: None,
     ComponentType.import_file: ImportFileSpecification,
+    ComponentType.copy_file: CopyFileSpecification,
     ComponentType.replace_extra_metadata: ReplaceAudioExtraMetadataSpecification,
     ComponentType.add_sources: AddSourcesSpecification
 }
