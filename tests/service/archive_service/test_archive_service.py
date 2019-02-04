@@ -77,7 +77,8 @@ class TestArchiveService(unittest.TestCase):
                             'directory': None,
                             'path': '/video.tar',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'jobCallback': {
                             'url': 'https://call.me.back/',
@@ -117,7 +118,8 @@ class TestArchiveService(unittest.TestCase):
                             'directory': None,
                             'path': '/m.zip',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'name': 'archive.zip',
                         'algorithm': 'store'
@@ -145,7 +147,8 @@ class TestArchiveService(unittest.TestCase):
                 'destination': {
                     'directory': '/video',
                     'path': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 },
                 'extractedFilesReport': {
                     'destination': {
@@ -207,14 +210,16 @@ class TestArchiveService(unittest.TestCase):
                             'directory': '/video',
                             'path': None,
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'extractedFilesReport': {
                             'destination': {
                                 'directory': None,
                                 'path': '/video.report.json',
                                 'lifecycle': None,
-                                'acl': 'public'
+                                'acl': 'public',
+                                'bucket': None
                             },
                             'format': 'json'
                         },

@@ -88,7 +88,8 @@ class TestImageService(unittest.TestCase):
                                 'directory': None,
                                 'path': '/pony.png',
                                 'lifecycle': None,
-                                'acl': 'public'
+                                'acl': 'public',
+                                'bucket': None
                             },
                             'command': '/v1/fit/w_200,h_100'
                         }

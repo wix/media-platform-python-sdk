@@ -17,7 +17,8 @@ transcode1_response = {
                         'destination': {
                             'directory': None,
                             'path': '/video.480p.mp4',
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'video': {
                             'type': 'video',

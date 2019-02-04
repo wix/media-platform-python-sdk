@@ -17,7 +17,8 @@ invoke_flow_copy_file_request = {
                     'directory': None,
                     'path': '/destination/path.txt',
                     'lifecycle': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 }
             },
             'successors': [],

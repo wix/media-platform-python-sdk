@@ -19,7 +19,8 @@ invoke_flow_copy_file_response = {
                     'directory': None,
                     'path': '/destination/path.txt',
                     'lifecycle': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 }
             },
             'results': [

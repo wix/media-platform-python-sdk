@@ -36,7 +36,8 @@ invoke_flow_with_add_sources_request = {
                     'directory': None,
                     'path': '/destination/path.mp3',
                     'lifecycle': None,
-                    'acl': 'private'
+                    'acl': 'private',
+                    'bucket': None
                 },
                 'audioExtraMetadata': {
                     'trackName': 'track_name',
@@ -69,7 +70,8 @@ invoke_flow_with_add_sources_request = {
                     'directory': None,
                     'path': '/destination/path2.mp3',
                     'lifecycle': None,
-                    'acl': 'private'
+                    'acl': 'private',
+                    'bucket': None
                 },
                 'audioExtraMetadata': {
                     'trackName': 'track_name',

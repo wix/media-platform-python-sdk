@@ -71,7 +71,8 @@ class TestVideoService(unittest.TestCase):
                                 'directory': None,
                                 'path': '/video.poster.jpg',
                                 'lifecycle': None,
-                                'acl': 'public'
+                                'acl': 'public',
+                                'bucket': None
                             },
                             'format': 'jpg'
                         }],
@@ -138,7 +139,8 @@ class TestVideoService(unittest.TestCase):
                                 'directory': None,
                                 'path': '/video.story.jpg',
                                 'lifecycle': None,
-                                'acl': 'public'
+                                'acl': 'public',
+                                'bucket': None
                             },
                             'segmentDuration': 12.25,
                             'columns': 5

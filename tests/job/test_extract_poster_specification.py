@@ -15,7 +15,8 @@ class TestExtractPosterSpecification(TestCase):
                 'path': '/poster.png',
                 'acl': 'public',
                 'directory': None,
-                'lifecycle': None
+                'lifecycle': None,
+                'bucket': None
             },
             'format': 'png'
         }
@@ -30,7 +31,8 @@ class TestExtractPosterSpecification(TestCase):
                 'path': '/poster.png',
                 'acl': 'public',
                 'directory': None,
-                'lifecycle': None
+                'lifecycle': None,
+                'bucket': None
             },
             'format': 'png'
         }
@@ -45,7 +47,8 @@ class TestExtractPosterSpecification(TestCase):
                 'path': '/poster.bmp',
                 'acl': 'public',
                 'directory': None,
-                'lifecycle': None
+                'lifecycle': None,
+                'bucket': None
             },
             'format': 'bmp'
         }

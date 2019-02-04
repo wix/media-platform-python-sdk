@@ -13,7 +13,8 @@ class TestDestination(TestCase):
             'directory': None,
             'path': '/fish.jpg',
             'lifecycle': None,
-            'acl': 'public'
+            'acl': 'public',
+            'bucket': None
         }))
 
     def test_deserialize(self):
@@ -21,7 +22,8 @@ class TestDestination(TestCase):
             'directory': None,
             'path': '/fish.jpg',
             'lifecycle': None,
-            'acl': 'public'
+            'acl': 'public',
+            'bucket': None
         }
 
         destination = Destination.deserialize(data)

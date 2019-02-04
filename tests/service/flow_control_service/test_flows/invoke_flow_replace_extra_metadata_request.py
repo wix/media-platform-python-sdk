@@ -17,7 +17,8 @@ invoke_flow_replace_extra_metadata_request = {
                     'directory': None,
                     'path': '/destination/path.mp3',
                     'lifecycle': None,
-                    'acl': 'private'
+                    'acl': 'private',
+                    'bucket': None
                 },
                 'audioExtraMetadata': {
                     'trackName': 'track_name',

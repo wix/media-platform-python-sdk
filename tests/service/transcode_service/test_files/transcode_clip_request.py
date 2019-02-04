@@ -5,7 +5,8 @@ transcode_clip_request = {
             'directory': '/',
             'path': None,
             'lifecycle': None,
-            'acl': 'public'
+            'acl': 'public',
+            'bucket': None
         },
         'quality': 'aac_128',
         'qualityRange': None,

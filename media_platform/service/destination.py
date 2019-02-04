@@ -4,7 +4,7 @@ from media_platform.service.lifecycle import Lifecycle
 
 
 class Destination(Serializable, Deserializable):
-    def __init__(self, path=None, directory=None, acl=ACL.public, lifecycle=None):
+    def __init__(self, path=None, directory=None, acl=ACL.public, lifecycle=None, bucket=None):
         # type: (str, str or None, str, Lifecycle) -> None
         super(Destination, self).__init__()
 
@@ -14,6 +14,7 @@ class Destination(Serializable, Deserializable):
         self.directory = directory
         self.acl = acl or ACL.public
         self.lifecycle = lifecycle
+        self.bucket = bucket
 
     @classmethod
     def deserialize(cls, data):
@@ -22,7 +23,7 @@ class Destination(Serializable, Deserializable):
         lifecycle_data = data.get('lifecycle')
         lifecycle = Lifecycle.deserialize(lifecycle_data) if lifecycle_data else None
 
-        return cls(data.get('path'), data.get('directory'), data['acl'], lifecycle)
+        return cls(data.get('path'), data.get('directory'), data['acl'], lifecycle, data.get('bucket'))
 
     def serialize(self):
         # type: () -> dict
@@ -30,7 +31,8 @@ class Destination(Serializable, Deserializable):
             'path': self.path,
             'directory': self.directory,
             'acl': self.acl,
-            'lifecycle': self.lifecycle.serialize() if self.lifecycle else None
+            'lifecycle': self.lifecycle.serialize() if self.lifecycle else None,
+            'bucket': self.bucket
         }
 
     @staticmethod

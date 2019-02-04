@@ -313,7 +313,8 @@ class TestFileService(unittest.TestCase):
                             'directory': None,
                             'path': '/img.png',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'externalAuthorization': None
                     }))
@@ -346,7 +347,8 @@ class TestFileService(unittest.TestCase):
                             'directory': None,
                             'path': '/file.copy.txt',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         }
                     }))
 

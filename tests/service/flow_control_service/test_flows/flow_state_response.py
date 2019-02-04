@@ -18,7 +18,8 @@ flow_state_response = {
                     'directory': None,
                     'path': '/imports/video.mp4',
                     'acl': 'public',
-                    'lifecycle': None
+                    'lifecycle': None,
+                    'bucket': None
                 },
                 'sourceUrl': 'https://fish.com/dag.gadol'
             },

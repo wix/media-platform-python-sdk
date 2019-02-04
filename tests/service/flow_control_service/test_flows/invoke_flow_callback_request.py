@@ -18,7 +18,8 @@ invoke_flow_callback_request = {
                     'directory': None,
                     'path': '/imports/video.mp4',
                     'lifecycle': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 }
             },
             'successors': [],

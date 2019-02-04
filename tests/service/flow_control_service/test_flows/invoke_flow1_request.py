@@ -13,7 +13,8 @@ invoke_flow1_request = {
                     'directory': None,
                     'path': '/imports/video.mp4',
                     'lifecycle': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 }
             },
             'callback': None,
@@ -35,7 +36,8 @@ invoke_flow1_request = {
                     'directory': '/deliverables/',
                     'path': None,
                     'lifecycle': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 },
                 'quality': None,
                 'qualityRange': {
