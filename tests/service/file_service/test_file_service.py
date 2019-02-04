@@ -225,6 +225,7 @@ class TestFileService(unittest.TestCase):
                     is_({
                         'mimeType': None,
                         'path': '/fish.txt',
+                        'bucket': None,
                         'size': None,
                         'acl': None,
                         'callback': None
