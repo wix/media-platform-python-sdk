@@ -14,4 +14,3 @@ class AudioService(MediaPlatformService):
 
     def replace_extra_metadata_async_request(self):
         return ReplaceExtraMetadataAsyncRequest(self._authenticated_http_client, self._base_url)
-
