@@ -5,7 +5,7 @@ from media_platform.service.lifecycle import Lifecycle
 
 class Destination(Serializable, Deserializable):
     def __init__(self, path=None, directory=None, acl=ACL.public, lifecycle=None, bucket=None):
-        # type: (str, str or None, str, Lifecycle) -> None
+        # type: (str, str, ACL, Lifecycle, str) -> None
         super(Destination, self).__init__()
 
         self._validate_values(path, directory, acl)
@@ -37,7 +37,7 @@ class Destination(Serializable, Deserializable):
 
     @staticmethod
     def _validate_values(path, directory, acl):
-        # type: (str, str, str) -> None
+        # type: (str, str, ACL) -> None
 
         if not (path or directory):
             raise ValueError('path or directory must be specified')
