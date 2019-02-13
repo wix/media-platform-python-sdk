@@ -77,7 +77,9 @@ class TestFileService(unittest.TestCase):
                         'path': '/fish',
                         'size': 0,
                         'type': FileType.directory,
-                        'acl': ACL.public
+                        'acl': ACL.public,
+                        'id': None,
+                        'bucket': None
                     }))
 
     @httpretty.activate
@@ -106,7 +108,9 @@ class TestFileService(unittest.TestCase):
                         'path': '/fish',
                         'size': 0,
                         'type': FileType.directory,
-                        'acl': ACL.public
+                        'acl': ACL.public,
+                        'id': None,
+                        'bucket': None
                     }))
 
     @httpretty.activate
