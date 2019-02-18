@@ -60,9 +60,11 @@ class ArchiveManifestUrlRequest(object):
 
     def _get_token(self):
         # type: () -> str
-        objects = [{
-            'path': self.path
-        }]
+        objects = [
+            [{
+                'path': self.path
+            }]
+        ]
 
         # payload = {}
         # if self.on_expired_redirect_to:
