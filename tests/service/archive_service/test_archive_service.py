@@ -2,7 +2,7 @@ import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_
+from hamcrest import assert_that, instance_of, is_, starts_with
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.create_archive_job import ArchiveType, CreateArchiveJob
@@ -20,7 +20,7 @@ class TestArchiveService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 
-    archive_service = ArchiveService('fish.appspot.com', authenticated_http_client)
+    archive_service = ArchiveService('fish.appspot.com', authenticated_http_client, 'app', authenticator)
 
     @httpretty.activate
     def test_create_archive_request(self):
@@ -226,7 +226,25 @@ class TestArchiveService(unittest.TestCase):
                         'jobCallback': None
                     }))
 
-    def test_archive_manifest_url_request(self):
-        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute()
+    def test_archive_manifest_url_request__url(self):
+        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').url()
 
         assert_that(url, is_('//archive-fish.wixmp.com/path/to/manifest.zip'))
+
+    def test_archive_manifest_url_request__url_with_auth(self):
+        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').set_ttl(600).url()
+
+        assert_that(url, starts_with('//archive-fish.wixmp.com/path/to/manifest.zip?auth='))
+
+    @httpretty.activate
+    def test_archive_manifest_url_request__execute(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://archive-fish.wixmp.com/path/to/manifest.zip',
+            body='barks!'
+        )
+
+        with self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
