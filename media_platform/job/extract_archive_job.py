@@ -55,14 +55,16 @@ class ExtractArchiveSpecification(Specification):
         else:
             extraction_report = None
 
-        return ExtractArchiveSpecification(Source.deserialize(data['source']),
+        source_data = data.get('source')
+        source = Source.deserialize(source_data) if source_data else None
+        return ExtractArchiveSpecification(source,
                                            Destination.deserialize(data['destination']),
                                            extraction_report)
 
     def serialize(self):
         # type: () -> dict
         return {
-            'source': self.source.serialize(),
+            'source': self.source.serialize() if self.source else None,
             'destination': self.destination.serialize(),
             'extractedFilesReport': self.extraction_report.serialize() if self.extraction_report else None
         }
