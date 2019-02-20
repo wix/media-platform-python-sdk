@@ -6,7 +6,10 @@ from hamcrest import assert_that, instance_of, is_
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.transcode.audio_qualities import AudioQuality
+from media_platform.job.transcode.stream_specification import StreamSpecification, StreamType
 from media_platform.job.transcode.video_qualities import VideoQuality, VideoQualityRange
+from media_platform.job.transcode.video_specification import VideoSpecification, VideoCodec, Resolution, ImageFilter, \
+    GOP, ImageScaling
 from media_platform.job.transcode_job import TranscodeSpecification, TranscodeJob
 from media_platform.job.transcode.clipping import Clipping
 from media_platform.service.destination import Destination
@@ -16,6 +19,8 @@ from media_platform.service.source import Source
 from media_platform.service.transcode_service.transcode_service import TranscodeService
 from tests.service.transcode_service.test_files.transcode1_request import transcode1_request
 from tests.service.transcode_service.test_files.transcode1_response import transcode1_response
+from tests.service.transcode_service.test_files.transcode2_request import transcode2_request
+from tests.service.transcode_service.test_files.transcode2_response import transcode2_response
 from tests.service.transcode_service.test_files.transcode_clip_request import transcode_clip_request
 from tests.service.transcode_service.test_files.transcode_clip_response import transcode_clip_response
 
@@ -47,7 +52,29 @@ class TestTranscodeService(unittest.TestCase):
         assert_that(json.loads(httpretty.last_request().body), is_(transcode1_request))
 
     @httpretty.activate
-    def test_transcode_audio_clipping(self):
+    def test_transcode_request__custom_video_settings(self):
+        self._register_transcode_request(transcode2_response)
+
+        group = self.transcode_service.transcode_request().add_sources(
+            Source('/video.mp4')
+        ).add_specifications(
+            TranscodeSpecification(
+                Destination(path='/video.720.mp4'),
+                video=StreamSpecification(StreamType.video, VideoSpecification(
+                    VideoCodec('h264', 'main', '3.1', 25, 10000, GOP(0, 30, 30, 2, 0, 0, 3), 'faster'),
+                    Resolution(256, 144, ImageScaling('lanczos'), '1:1'),
+                    30.0,
+                    [ImageFilter('unsharp', {'value': '5:5:0.5:3:3:0.0'})]
+                ))
+            )
+        ).execute()
+
+        assert_that(group.jobs[0], instance_of(TranscodeJob))
+        assert_that(group.group_id, is_('g'))
+        assert_that(json.loads(httpretty.last_request().body), is_(transcode2_request))
+
+    @httpretty.activate
+    def test_transcode__audio_clipping(self):
         self._register_transcode_request(transcode_clip_response)
 
         group = self.transcode_service.transcode_request().add_sources(
