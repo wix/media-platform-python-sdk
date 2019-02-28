@@ -2,7 +2,7 @@ import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_, contains_string, starts_with
+from hamcrest import assert_that, instance_of, is_, contains_string, starts_with, has_length
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
@@ -77,7 +77,40 @@ class TestFileService(unittest.TestCase):
                         'path': '/fish',
                         'size': 0,
                         'type': FileType.directory,
-                        'acl': ACL.public
+                        'acl': ACL.public,
+                        'id': None,
+                        'bucket': None
+                    }))
+
+    @httpretty.activate
+    def test_create_files_request(self):
+        expected_file_descriptor = FileDescriptor('/fish', 'file-id', FileType.directory, FileMimeType.directory, 0)
+        expected_response_body = RestResult(0, 'OK', expected_file_descriptor.serialize())
+
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/files',
+            body=json.dumps(expected_response_body.serialize())
+        )
+
+        response = self.file_service.create_files_request().add_file(
+            self.file_service.create_file_request().set_path('/fish')
+        ).execute()
+
+        assert_that(response.file_descriptors, instance_of(list))
+        assert_that(response.file_descriptors, has_length(1))
+        assert_that(response.file_descriptors[0], instance_of(FileDescriptor))
+        assert_that(response.file_descriptors[0].serialize(), is_(expected_file_descriptor.serialize()))
+
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'mimeType': FileMimeType.directory,
+                        'path': '/fish',
+                        'size': 0,
+                        'type': FileType.directory,
+                        'acl': ACL.public,
+                        'id': None,
+                        'bucket': None
                     }))
 
     @httpretty.activate

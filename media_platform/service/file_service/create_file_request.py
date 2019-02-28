@@ -13,6 +13,8 @@ class CreateFileRequest(MediaPlatformRequest):
         self.type = FileType.directory
         self.acl = ACL.public
         self.size = 0
+        self.id = None
+        self.bucket = None
 
     def set_path(self, path):
         # type: (str) -> CreateFileRequest
@@ -39,11 +41,23 @@ class CreateFileRequest(MediaPlatformRequest):
         self.size = size
         return self
 
+    def set_id(self, id):
+        # type: (str) -> CreateFileRequest
+        self.id = id
+        return self
+
+    def set_bucket(self, bucket):
+        # type: (str) -> CreateFileRequest
+        self.bucket = bucket
+        return self
+
     def _params(self):
         return {
             'path': self.path,
             'mimeType': self.mime_type,
             'type': self.type,
             'acl': self.acl,
-            'size': self.size
+            'size': self.size,
+            'id': self.id,
+            'bucket': self.bucket
         }
