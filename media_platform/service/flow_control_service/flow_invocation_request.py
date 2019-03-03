@@ -36,6 +36,7 @@ class FlowInvocationRequest(MediaPlatformRequest):
         return {
             'invocation': self.invocation.serialize(),
             'flow': self.flow.serialize(),
+            'errorHandlingStrategy': self.error_strategy
         }
 
     def _validate_entry_points(self):
