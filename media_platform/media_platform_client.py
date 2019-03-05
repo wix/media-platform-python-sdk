@@ -6,6 +6,7 @@ from media_platform.service.file_service.file_service import FileService
 from media_platform.service.flow_control_service.flow_control_service import FlowControlService
 from media_platform.service.image_service.image_service import ImageService
 from media_platform.service.job_service.job_service import JobService
+from media_platform.service.text_service.text_service import TextService
 from media_platform.service.transcode_service.transcode_service import TranscodeService
 from media_platform.service.video_service.video_service import VideoService
 
@@ -25,3 +26,4 @@ class MediaPlatformClient(object):
         self.flow_control_service = FlowControlService(domain, authenticated_http_client)
         self.image_service = ImageService(domain, authenticated_http_client)
         self.audio_service = AudioService(domain, authenticated_http_client)
+        self.text_service = TextService(domain, authenticated_http_client)
