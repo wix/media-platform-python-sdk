@@ -114,6 +114,27 @@ class TestFileService(unittest.TestCase):
                     }))
 
     @httpretty.activate
+    def test_update_file_request(self):
+        payload = FileDescriptor('/fish.txt', 'file-id', FileType.file, 'text/plain', 18).serialize()
+        response_body = RestResult(0, 'OK', payload)
+        httpretty.register_uri(
+            httpretty.PUT,
+            'https://fish.barrel/_api/files',
+            body=json.dumps(response_body.serialize())
+        )
+
+        file_descriptor = self.file_service.update_file_request().set_path('/fish.txt').set_acl(ACL.public).execute()
+
+        assert_that(file_descriptor.serialize(), is_(payload))
+        assert_that(file_descriptor, instance_of(FileDescriptor))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'path': '/fish.txt',
+                        'id': None,
+                        'acl': 'public'
+                    }))
+
+    @httpretty.activate
     def test_upload_url_request(self):
         response_body = RestResult(0, 'OK', {
             'uploadToken': 'token',
