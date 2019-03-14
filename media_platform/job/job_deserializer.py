@@ -6,6 +6,7 @@ from media_platform.job.extract_storyboard_job import ExtractStoryboardJob
 from media_platform.job.import_file_job import ImportFileJob
 from media_platform.job.job import Job
 from media_platform.job.replace_extra_metadata_job import ReplaceExtraMetadataJob
+from media_platform.job.subset_font_job import SubsetFontJob
 from media_platform.job.transcode_job import TranscodeJob
 from media_platform.lang.serialization import Deserializable
 
@@ -19,7 +20,8 @@ class _JobDeserializer(Deserializable):
         ExtractArchiveJob,
         TranscodeJob,
         ReplaceExtraMetadataJob,
-        ConvertFontJob
+        ConvertFontJob,
+        SubsetFontJob
     ]
 
     _type_to_class = {c.type: c for c in _job_classes}
