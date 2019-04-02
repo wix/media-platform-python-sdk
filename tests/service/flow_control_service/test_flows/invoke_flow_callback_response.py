@@ -8,6 +8,7 @@ invoke_flow_callback_response = {
             'headers': {'header': 'value'},
             'passthrough': False,
         },
+        'errorStrategy': 'stopOnError'
     },
     'operations': {
         'import1': {

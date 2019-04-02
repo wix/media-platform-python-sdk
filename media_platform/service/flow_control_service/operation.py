@@ -15,14 +15,16 @@ class OperationStatus(object):
 
 class Operation(Component):
     def __init__(self, component_type, specification, successors, status, delete_sources=False, sources=None,
-                 results=None, jobs=None, extra_results=None):
-        # type: (ComponentType, Specification, [str], OperationStatus, bool, [Source], [FileDescriptor] or [dict], [str], dict) -> None
+                 results=None, jobs=None, extra_results=None, error_message=None, error_code=None):
+        # type: (ComponentType, Specification, [str], OperationStatus, bool, [Source], [FileDescriptor] or [dict], [str], dict, str, int) -> None
         super(Operation, self).__init__(component_type, specification, successors, delete_sources)
         self.status = status
         self.sources = sources or []
         self.results = results or []
         self.jobs = jobs or []
         self.extra_results = extra_results or {}
+        self.error_message = error_message
+        self.error_code = error_code
 
     @classmethod
     def deserialize(cls, data):
@@ -38,7 +40,8 @@ class Operation(Component):
         extra_results = data.get('extraResults', {})
 
         return Operation(component.type, component.specification, component.successors, data['status'],
-                         component.delete_sources, sources, results, jobs, extra_results)
+                         component.delete_sources, sources, results, jobs, extra_results, data.get('errorMessage'),
+                         data.get('errorCode'))
 
     def serialize(self):
         data = super(Operation, self).serialize()
@@ -50,5 +53,11 @@ class Operation(Component):
             'jobs': self.jobs,
             'extraResults': self.extra_results
         })
+
+        if self.error_code:
+            data['errorCode'] = self.error_code
+
+        if self.error_message:
+            data['errorMessage'] = self.error_message
 
         return data

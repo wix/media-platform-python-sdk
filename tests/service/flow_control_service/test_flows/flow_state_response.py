@@ -4,7 +4,8 @@ flow_state_response = {
         'entryPoints': [
             'import'
         ],
-        'notification': None
+        'notification': None,
+        'errorStrategy': 'stopOnError'
     },
     'operations': {
         'import': {

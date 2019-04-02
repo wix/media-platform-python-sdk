@@ -7,7 +7,8 @@ invoke_flow_callback_request = {
             'attachment': {'attachment-key': 'attachment-value'},
             'headers': {'header': 'value'},
             'passthrough': False,
-        }
+        },
+        'errorStrategy': 'stopOnError'
     },
     'flow': {
         'import1': {
