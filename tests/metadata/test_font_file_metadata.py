@@ -10,6 +10,8 @@ class TestFontFileMetadata(TestCase):
         data = {
             'basic': {
                 'fontType': 'ttf',
+                'name': None,
+                'family': None
             },
             'mediaType': 'font',
             'fileDescriptor': {

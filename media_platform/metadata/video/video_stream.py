@@ -3,8 +3,8 @@ from media_platform.lang.serialization import Deserializable
 
 class VideoStream(Deserializable):
     def __init__(self, index, width, height, avg_frame_rate, r_frame_rate, display_aspect_ratio, sample_aspect_ratio,
-                 rotate, duration, bitrate, codec_tag, codec_name, codec_long_name, pixel_format):
-        # type: (int, int, int, str, str, str, str, int, int, int, str, str, str, str) -> None
+                 rotate, duration, bitrate, codec_tag, codec_name, codec_long_name, pixel_format, field_order=None, disposition=None):
+        # type: (int, int, int, str, str, str, str, int, int, int, str, str, str, str, str, [str]) -> None
 
         self.index = int(index)
         self.width = int(width) if width else None
@@ -20,6 +20,8 @@ class VideoStream(Deserializable):
         self.codec_name = codec_name
         self.codec_long_name = codec_long_name
         self.pixel_format = pixel_format
+        self.field_order = field_order
+        self.disposition = disposition or []
 
     @classmethod
     def deserialize(cls, data):
@@ -37,4 +39,7 @@ class VideoStream(Deserializable):
                            data.get('codecTag'),
                            data.get('codecName'),
                            data.get('codecLongName'),
-                           data.get('pixelFormat'))
+                           data.get('pixelFormat'),
+                           data.get('fieldOrder'),
+                           data.get('disposition')
+        )

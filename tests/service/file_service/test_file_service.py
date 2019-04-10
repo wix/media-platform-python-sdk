@@ -479,7 +479,9 @@ class TestFileService(unittest.TestCase):
                         'codecName': 'mpeg4',
                         'width': 1280,
                         'sampleAspectRatio': '1:1',
-                        'displayAspectRatio': '16:9'
+                        'displayAspectRatio': '16:9',
+                        'fieldOrder': None,
+                        'disposition': []
                     }
                 ],
                 'audioStreams': [
@@ -541,7 +543,9 @@ class TestFileService(unittest.TestCase):
                         'codecName': 'mpeg4',
                         'width': 1280,
                         'sampleAspectRatio': '1:1',
-                        'displayAspectRatio': '16:9'
+                        'displayAspectRatio': '16:9',
+                        'fieldOrder': None,
+                        'disposition': []
                     }
                 ],
                 'audioStreams': [
