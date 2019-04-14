@@ -4,6 +4,8 @@ import unittest
 import httpretty
 from hamcrest import assert_that, instance_of
 
+from media_platform.metadata.audio.lyrics import Lyrics
+from media_platform.service.audio_service.audio_extra_metadata import Image, AudioExtraMetadata
 from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
 from media_platform.service.source import Source
 from media_platform.auth.app_authenticator import AppAuthenticator
@@ -12,7 +14,6 @@ from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
 from media_platform.job.transcode_job import TranscodeSpecification
-from media_platform.metadata.audio.audio_extra_metadata import Image, Lyrics, AudioExtraMetadata
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
@@ -59,6 +60,7 @@ lyrics = Lyrics('text', 'eng', 'lyrics_description')
 
 extra_metadata = AudioExtraMetadata('track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer',
                                     'year', image, lyrics)
+
 
 class TestFlowControlService(unittest.TestCase):
     authenticator = None  # type: AppAuthenticator

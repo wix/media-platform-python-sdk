@@ -44,6 +44,7 @@ invoke_flow_with_add_sources_request = {
                     'trackName': 'track_name',
                     'lyrics': {
                         'lang': 'eng',
+                        'language': 'eng',
                         'text': 'text',
                         'description': 'lyrics_description'
                     },
@@ -78,6 +79,7 @@ invoke_flow_with_add_sources_request = {
                     'trackName': 'track_name',
                     'lyrics': {
                         'lang': 'eng',
+                        'language': 'eng',
                         'text': 'text',
                         'description': 'lyrics_description'
                     },

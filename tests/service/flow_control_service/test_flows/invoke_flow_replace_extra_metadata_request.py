@@ -25,6 +25,7 @@ invoke_flow_replace_extra_metadata_request = {
                     'trackName': 'track_name',
                     'lyrics': {
                         'lang': 'eng',
+                        'language': 'eng',
                         'text': 'text',
                         'description': 'lyrics_description'
                     },

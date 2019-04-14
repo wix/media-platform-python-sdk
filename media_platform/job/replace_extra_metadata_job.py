@@ -1,6 +1,6 @@
 from media_platform.job.job import Job
 from media_platform.job.specification import Specification
-from media_platform.metadata.audio.audio_extra_metadata import AudioExtraMetadata
+from media_platform.service.audio_service.audio_extra_metadata import AudioExtraMetadata
 from media_platform.service.destination import Destination
 
 

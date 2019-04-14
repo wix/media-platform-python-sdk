@@ -11,7 +11,8 @@ from media_platform.http.authenticated_http_client import AuthenticatedHTTPClien
 from media_platform.job.job import JobStatus
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification, \
     ReplaceExtraMetadataJob
-from media_platform.metadata.audio.audio_extra_metadata import Image, Lyrics, AudioExtraMetadata
+from media_platform.metadata.audio.lyrics import Lyrics
+from media_platform.service.audio_service.audio_extra_metadata import Image, AudioExtraMetadata
 from media_platform.service.file_descriptor import FileType, ACL
 from media_platform.service.rest_result import RestResult
 from media_platform.service.audio_service.audio_service import AudioService

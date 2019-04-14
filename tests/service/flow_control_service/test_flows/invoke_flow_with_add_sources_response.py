@@ -34,6 +34,7 @@ invoke_flow_with_add_sources_response = {
                     'trackName': 'track_name',
                     'lyrics': {
                         'lang': 'eng',
+                        'language': 'eng',
                         'text': 'text',
                         'description': 'lyrics_description'
                     },
