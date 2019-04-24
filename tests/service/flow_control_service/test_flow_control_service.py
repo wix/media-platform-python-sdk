@@ -4,45 +4,46 @@ import unittest
 import httpretty
 from hamcrest import assert_that, instance_of
 
-from media_platform.metadata.audio.lyrics import Lyrics
-from media_platform.service.audio_service.audio_extra_metadata import Image, AudioExtraMetadata
-from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
-from media_platform.service.source import Source
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
 from media_platform.job.transcode_job import TranscodeSpecification
+from media_platform.metadata.audio.audio_extra_metadata import Image, Lyrics, AudioExtraMetadata
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
-from media_platform.service.flow_control_service.specifications.add_sources_specification import AddSourcesSpecification
 from media_platform.service.flow_control_service.component import Component, ComponentType
 from media_platform.service.flow_control_service.flow import Flow
 from media_platform.service.flow_control_service.flow_control_service import FlowControlService
 from media_platform.service.flow_control_service.flow_state import FlowState
 from media_platform.service.flow_control_service.invocation import Invocation
+from media_platform.service.flow_control_service.specifications.add_sources_specification import AddSourcesSpecification
+from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
 from media_platform.service.rest_result import RestResult
-from tests.service.flow_control_service.test_flows.invoke_flow_copy_file_response import invoke_flow_copy_file_response
-from tests.service.flow_control_service.test_flows.flow_state_response import flow_state_response
-from tests.service.flow_control_service.test_flows.invoke_flow1_request import invoke_flow1_request
-from tests.service.flow_control_service.test_flows.invoke_flow1_response import invoke_flow1_response
-from tests.service.flow_control_service.test_flows.invoke_flow_callback_request import invoke_flow_callback_request
-from tests.service.flow_control_service.test_flows.invoke_flow_callback_response import invoke_flow_callback_response
-from tests.service.flow_control_service.test_flows.invoke_flow_copy_file_request import invoke_flow_copy_file_request
-from tests.service.flow_control_service.test_flows.invoke_flow_operation_callback_request import \
-    invoke_flow_operation_callback_request
-from tests.service.flow_control_service.test_flows.invoke_flow_operation_callback_response import \
-    invoke_flow_operation_callback_response
-from tests.service.flow_control_service.test_flows.invoke_flow_replace_extra_metadata_request import \
-    invoke_flow_replace_extra_metadata_request
-from tests.service.flow_control_service.test_flows.invoke_flow_replace_extra_metadata_response import \
-    invoke_flow_replace_extra_metadata_response
-from tests.service.flow_control_service.test_flows.invoke_flow_with_add_sources_request import \
+from media_platform.service.source import Source
+from tests.service.flow_control_service.test_flows.flow_state.response import flow_state_response
+from tests.service.flow_control_service.test_flows.invoke.add_sources.request import \
     invoke_flow_with_add_sources_request
-from tests.service.flow_control_service.test_flows.invoke_flow_with_add_sources_response import \
+from tests.service.flow_control_service.test_flows.invoke.add_sources.response import \
     invoke_flow_with_add_sources_response
+from tests.service.flow_control_service.test_flows.invoke.copy_file.request import invoke_flow_copy_file_request
+from tests.service.flow_control_service.test_flows.invoke.copy_file.response import invoke_flow_copy_file_response
+from tests.service.flow_control_service.test_flows.invoke.flow1.request import invoke_flow1_request
+from tests.service.flow_control_service.test_flows.invoke.flow1.response import invoke_flow1_response
+from tests.service.flow_control_service.test_flows.invoke.flow_callback.request import invoke_flow_callback_request
+from tests.service.flow_control_service.test_flows.invoke.flow_callback.response import invoke_flow_callback_response
+from tests.service.flow_control_service.test_flows.invoke.group_wait.request import invoke_flow_group_wait_request
+from tests.service.flow_control_service.test_flows.invoke.group_wait.response import invoke_flow_group_wait_response
+from tests.service.flow_control_service.test_flows.invoke.operation_callback.request import \
+    invoke_flow_operation_callback_request
+from tests.service.flow_control_service.test_flows.invoke.operation_callback.response import \
+    invoke_flow_operation_callback_response
+from tests.service.flow_control_service.test_flows.invoke.replace_extra_metadata.request import \
+    invoke_flow_replace_extra_metadata_request
+from tests.service.flow_control_service.test_flows.invoke.replace_extra_metadata.response import \
+    invoke_flow_replace_extra_metadata_response
 
 transcode_specification = TranscodeSpecification(
     Destination(directory='/deliverables/'),
@@ -75,7 +76,7 @@ class TestFlowControlService(unittest.TestCase):
 
     @httpretty.activate
     def test_invoke_flow1_request(self):
-        self._register_invoke_flow(invoke_flow1_response)
+        self._register_invoke_flow_response(invoke_flow1_response)
 
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import'])
@@ -92,11 +93,11 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(flow_state, invoke_flow1_request)
+        self._assert_flow(invoke_flow1_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_copy_file(self):
-        self._register_invoke_flow(invoke_flow_copy_file_response)
+        self._register_invoke_flow_response(invoke_flow_copy_file_response)
 
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['copyfile1'], [Source('/source/path.txt')])
@@ -108,11 +109,11 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(flow_state, invoke_flow_copy_file_request)
+        self._assert_flow(invoke_flow_copy_file_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_replace_extra_metadata(self):
-        self._register_invoke_flow(invoke_flow_replace_extra_metadata_response)
+        self._register_invoke_flow_response(invoke_flow_replace_extra_metadata_response)
 
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['metadata1'], [Source(audio_source_path1)])
@@ -125,11 +126,11 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(flow_state, invoke_flow_replace_extra_metadata_request)
+        self._assert_flow(invoke_flow_replace_extra_metadata_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_with_add_sources(self):
-        self._register_invoke_flow(invoke_flow_with_add_sources_response)
+        self._register_invoke_flow_response(invoke_flow_with_add_sources_response)
 
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['addSources1', 'addSources2'], [])
@@ -155,11 +156,34 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(flow_state, invoke_flow_with_add_sources_request)
+        self._assert_flow(invoke_flow_with_add_sources_request, flow_state)
+
+    @httpretty.activate
+    def test_invoke_flow_with_group_wait(self):
+        self._register_invoke_flow_response(invoke_flow_group_wait_response)
+
+        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+            Invocation(['copy1', 'copy2'], [Source('/source/path.txt')])
+        ).set_flow(
+            Flow().add_component(
+                'copy1',
+                Component(ComponentType.copy_file, ['group-wait'],
+                          CopyFileSpecification(Destination('/destination/path1.txt')))
+            ).add_component(
+                'copy2',
+                Component(ComponentType.copy_file, ['group-wait'],
+                          CopyFileSpecification(Destination('/destination/path2.txt')))
+            ).add_component(
+                'group-wait',
+                Component(ComponentType.group_wait, [])
+            )
+        ).execute()
+
+        self._assert_flow(invoke_flow_group_wait_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_with_component_callback(self):
-        self._register_invoke_flow(invoke_flow_operation_callback_response)
+        self._register_invoke_flow_response(invoke_flow_operation_callback_response)
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import1'])
         ).set_flow(
@@ -172,11 +196,11 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(flow_state, invoke_flow_operation_callback_request)
+        self._assert_flow(invoke_flow_operation_callback_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_with_callback(self):
-        self._register_invoke_flow(invoke_flow_callback_response)
+        self._register_invoke_flow_response(invoke_flow_callback_response)
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import1'],
                        callback=Callback('http://requestbin.fullcontact.com/sc9kxnsc',
@@ -189,7 +213,7 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(flow_state, invoke_flow_callback_request)
+        self._assert_flow(invoke_flow_callback_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_missing_successors(self):
@@ -229,14 +253,11 @@ class TestFlowControlService(unittest.TestCase):
         self.flow_control_service.abort_flow_request().set_id('state-id').execute()
 
     @staticmethod
-    def _register_invoke_flow(response_payload):
+    def _register_invoke_flow_response(response_payload):
         response = RestResult(0, 'OK', response_payload)
-        httpretty.register_uri(
-            httpretty.POST,
-            'https://fish.barrel/_api/flow_control/flow',
-            body=json.dumps(response.serialize())
-        )
+        httpretty.register_uri(httpretty.POST, 'https://fish.barrel/_api/flow_control/flow',
+                               body=json.dumps(response.serialize()))
 
-    def _assert_flow(self, response_flow_state, expected_request_payload):
+    def _assert_flow(self, expected_request_payload, response_flow_state):
         assert_that(response_flow_state, instance_of(FlowState))
         self.assertEqual(expected_request_payload, json.loads(httpretty.last_request().body))

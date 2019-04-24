@@ -1,3 +1,5 @@
+from typing import Optional
+
 from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.service.file_descriptor import FileDescriptor, ACL
 from media_platform.service.lifecycle import Lifecycle
@@ -5,7 +7,7 @@ from media_platform.service.lifecycle import Lifecycle
 
 class Destination(Serializable, Deserializable):
     def __init__(self, path=None, directory=None, acl=ACL.public, lifecycle=None, bucket=None):
-        # type: (str, str, ACL, Lifecycle, str) -> None
+        # type: (Optional[str], Optional[str], Optional[ACL], Optional[Lifecycle], Optional[str]) -> None
         super(Destination, self).__init__()
 
         self._validate_values(path, directory, acl)

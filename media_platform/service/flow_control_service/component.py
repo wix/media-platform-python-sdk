@@ -23,6 +23,7 @@ class ComponentType(object):
     copy_file = 'file.copy'
     replace_extra_metadata = 'av.extra_metadata.replace'
     add_sources = 'flow.add_sources'
+    group_wait = 'flow.group_wait'
 
 
 _SPECIFICATIONS = {
@@ -35,7 +36,8 @@ _SPECIFICATIONS = {
     ComponentType.import_file: ImportFileSpecification,
     ComponentType.copy_file: CopyFileSpecification,
     ComponentType.replace_extra_metadata: ReplaceAudioExtraMetadataSpecification,
-    ComponentType.add_sources: AddSourcesSpecification
+    ComponentType.add_sources: AddSourcesSpecification,
+    ComponentType.group_wait: None,
 }
 
 
