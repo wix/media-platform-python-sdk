@@ -1,3 +1,4 @@
+from media_platform.job.convert_font_job import ConvertFontSpecification
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.create_archive_job import CreateArchiveSpecification
 from media_platform.job.extract_archive_job import ExtractArchiveSpecification
@@ -22,6 +23,7 @@ class ComponentType(object):
     import_file = 'file.import'
     copy_file = 'file.copy'
     replace_extra_metadata = 'av.extra_metadata.replace'
+    convert_font = 'font.convert'
     add_sources = 'flow.add_sources'
     group_wait = 'flow.group_wait'
 
@@ -36,6 +38,7 @@ _SPECIFICATIONS = {
     ComponentType.import_file: ImportFileSpecification,
     ComponentType.copy_file: CopyFileSpecification,
     ComponentType.replace_extra_metadata: ReplaceAudioExtraMetadataSpecification,
+    ComponentType.convert_font: ConvertFontSpecification,
     ComponentType.add_sources: AddSourcesSpecification,
     ComponentType.group_wait: None,
 }

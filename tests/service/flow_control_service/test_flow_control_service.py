@@ -6,6 +6,7 @@ from hamcrest import assert_that, instance_of
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.job.convert_font_job import ConvertFontSpecification, FontType
 from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
@@ -28,6 +29,8 @@ from tests.service.flow_control_service.test_flows.invoke.add_sources.request im
     invoke_flow_with_add_sources_request
 from tests.service.flow_control_service.test_flows.invoke.add_sources.response import \
     invoke_flow_with_add_sources_response
+from tests.service.flow_control_service.test_flows.invoke.convert_font.request import invoke_flow_convert_font_request
+from tests.service.flow_control_service.test_flows.invoke.convert_font.response import invoke_flow_convert_font_response
 from tests.service.flow_control_service.test_flows.invoke.copy_file.request import invoke_flow_copy_file_request
 from tests.service.flow_control_service.test_flows.invoke.copy_file.response import invoke_flow_copy_file_response
 from tests.service.flow_control_service.test_flows.invoke.flow1.request import invoke_flow1_request
@@ -82,6 +85,23 @@ class TestFlowControlService(unittest.TestCase):
         ).execute()
 
         self._assert_flow(invoke_flow1_request, flow_state)
+
+    @httpretty.activate
+    def test_invoke_flow_convert_font(self):
+        self._register_invoke_flow_response(invoke_flow_convert_font_response)
+
+        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+            Invocation(['convert-font'], [Source('/source/font.ttf')])
+        ).set_flow(
+            Flow().add_component(
+                'convert-font',
+                Component(ComponentType.convert_font, [],
+                          ConvertFontSpecification(
+                              Destination('/destination/font.woff', None, ACL.private), FontType.woff))
+            )
+        ).execute()
+
+        self._assert_flow(invoke_flow_convert_font_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_copy_file(self):
