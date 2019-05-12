@@ -77,7 +77,7 @@ class AuthenticatedHTTPClient(object):
         # type: (str, str, dict, dict, Type[Deserializable]) -> Deserializable or None
 
         try:
-            response = self._session.request(verb, url, params=params, json=json, headers=self._headers())
+            response = self._session.request(verb, url, params=params, json=json, headers=self._headers(), timeout=30)
         except RetryError as e:
             raise MediaPlatformException(cause=e)
 
