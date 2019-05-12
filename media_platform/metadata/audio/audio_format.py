@@ -17,3 +17,12 @@ class AudioFormat(Deserializable):
                            data.get('bitrate'),
                            data.get('duration'),
                            data.get('size'))
+
+    def serialize(self):
+        # type: () -> dict
+        return {
+            'formatLongName': self.long_name,
+            'duration': self.duration,
+            'bitrate': self.bitrate,
+            'size': self.size,
+        }

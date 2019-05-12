@@ -20,3 +20,16 @@ class AudioStream(Deserializable):
         return AudioStream(data.get('index'), data.get('duration'), data.get('bitrate'),
                            data.get('codecTag'), data.get('codecName'), data.get('codecLongName'),
                            data.get('sampleRate'), data.get('channels'), data.get('channelLayout'))
+
+    def serialize(self):
+        return {
+            'index': self.index,
+            'duration': self.duration,
+            'bitrate': self.bitrate,
+            'codecTag': self.codec_tag,
+            'codecName': self.codec_name,
+            'codecLongName': self.codec_long_name,
+            'sampleRate': self.sample_rate,
+            'channelLayout': self.channel_layout,
+            'channels': self.channels
+        }

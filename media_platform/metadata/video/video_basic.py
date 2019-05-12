@@ -1,10 +1,10 @@
-from media_platform.lang.serialization import Deserializable
+from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.metadata.audio.audio_stream import AudioStream
 from media_platform.metadata.video.video_format import VideoFormat
 from media_platform.metadata.video.video_stream import VideoStream
 
 
-class VideoBasic(Deserializable):
+class VideoBasic(Serializable, Deserializable):
     def __init__(self, video_streams, audio_streams, video_format=None, video_interlaced=False, video_tbr=None):
         # type: ([VideoStream], [AudioStream], VideoFormat, bool, dict) -> None
 
@@ -23,3 +23,12 @@ class VideoBasic(Deserializable):
 
         return VideoBasic(video_streams, audio_streams, video_format, data.get('interlaced'),
                           data.get('tbr'))
+
+    def serialize(self):
+        return {
+            'videoStreams': [video_stream.serialize() for video_stream in self.video_streams],
+            'audioStreams': [audio_stream.serialize() for audio_stream in self.audio_streams],
+            'format': self.video_format.serialize() if self.video_format else None,
+            'interlaced': self.video_interlaced,
+            'tbr': self.video_tbr
+        }

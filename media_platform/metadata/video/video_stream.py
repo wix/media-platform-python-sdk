@@ -43,3 +43,24 @@ class VideoStream(Deserializable):
                            data.get('fieldOrder'),
                            data.get('disposition')
         )
+
+    def serialize(self):
+        # type: () -> dict
+        return {
+            'index': self.index,
+            'width': self.width,
+            'height': self.height,
+            'avgFrameRate': self.avg_frame_rate,
+            'rFrameRate': self.r_frame_rate,
+            'displayAspectRatio': self.display_aspect_ratio,
+            'sampleAspectRatio': self.sample_aspect_ratio,
+            'rotate': self.rotate,
+            'duration': self.duration,
+            'bitrate': self.bitrate,
+            'codecTag': self.codec_tag,
+            'codecName': self.codec_name,
+            'codecLongName': self.codec_long_name,
+            'pixelFormat': self.pixel_format,
+            'fieldOrder': self.field_order,
+            'disposition': self.disposition
+        }
