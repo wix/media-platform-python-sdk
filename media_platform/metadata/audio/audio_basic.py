@@ -1,9 +1,9 @@
-from media_platform.lang.serialization import Deserializable
+from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.metadata.audio.audio_format import AudioFormat
 from media_platform.metadata.audio.audio_stream import AudioStream
 
 
-class AudioBasic(Deserializable):
+class AudioBasic(Serializable, Deserializable):
     def __init__(self, audio_streams, audio_format=None):
         # type: ([AudioStream], AudioFormat) -> None
 
@@ -17,3 +17,9 @@ class AudioBasic(Deserializable):
         audio_format = AudioFormat.deserialize(data['format']) if data.get('format') else None
 
         return AudioBasic(audio_streams, audio_format)
+
+    def serialize(self):
+        return {
+            'audioStreams': [audio_stream.serialize() for audio_stream in self.audio_streams],
+            'format': self.audio_format.serialize() if self.audio_format else None
+        }
