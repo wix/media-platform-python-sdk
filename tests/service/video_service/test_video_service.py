@@ -30,6 +30,7 @@ class TestVideoService(unittest.TestCase):
                 'status': 'pending',
                 'specification': {
                     'second': 20,
+                    'percentage': None,
                     'destination': {
                         'path': '/video.poster.jpg',
                         'directory': '/',
@@ -67,6 +68,7 @@ class TestVideoService(unittest.TestCase):
                     is_({
                         'specifications': [{
                             'second': 20,
+                            'percentage': None,
                             'destination': {
                                 'directory': None,
                                 'path': '/video.poster.jpg',
