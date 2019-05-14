@@ -24,7 +24,8 @@ invoke_flow_group_wait_request = {
             },
             'successors': ['group-wait'],
             'callback': None,
-            'type': 'file.copy'
+            'type': 'file.copy',
+            'sources': [],
         },
         'copy2': {
             'deleteSources': False,
@@ -39,14 +40,16 @@ invoke_flow_group_wait_request = {
             },
             'successors': ['group-wait'],
             'callback': None,
-            'type': 'file.copy'
+            'type': 'file.copy',
+            'sources': [],
         },
         'group-wait': {
             'deleteSources': False,
             'specification': None,
             'successors': [],
             'callback': None,
-            'type': 'flow.group_wait'
+            'type': 'flow.group_wait',
+            'sources': [],
         },
     }
 }

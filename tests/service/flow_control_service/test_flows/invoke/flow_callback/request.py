@@ -25,7 +25,8 @@ invoke_flow_callback_request = {
             },
             'successors': [],
             'callback': None,
-            'type': 'file.import'
+            'type': 'file.import',
+            'sources': [],
         },
     }
 }

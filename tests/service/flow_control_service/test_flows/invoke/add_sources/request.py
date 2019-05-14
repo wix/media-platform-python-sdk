@@ -16,7 +16,8 @@ invoke_flow_with_add_sources_request = {
             },
             'callback': None,
             'successors': ['metadata1'],
-            'type': 'flow.add_sources'
+            'type': 'flow.add_sources',
+            'sources': [],
         },
         'addSources2': {
             'deleteSources': False,
@@ -28,7 +29,8 @@ invoke_flow_with_add_sources_request = {
             },
             'callback': None,
             'successors': ['metadata2'],
-            'type': 'flow.add_sources'
+            'type': 'flow.add_sources',
+            'sources': [],
         },
         'metadata1': {
             'deleteSources': False,
@@ -63,7 +65,8 @@ invoke_flow_with_add_sources_request = {
             },
             'callback': None,
             'successors': [],
-            'type': 'av.extra_metadata.replace'
+            'type': 'av.extra_metadata.replace',
+            'sources': [],
         },
         'metadata2': {
             'deleteSources': False,
@@ -98,7 +101,8 @@ invoke_flow_with_add_sources_request = {
             },
             'callback': None,
             'successors': [],
-            'type': 'av.extra_metadata.replace'
+            'type': 'av.extra_metadata.replace',
+            'sources': [],
         }
     }
 }

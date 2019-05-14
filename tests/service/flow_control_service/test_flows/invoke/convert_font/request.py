@@ -26,7 +26,8 @@ invoke_flow_convert_font_request = {
             },
             'callback': None,
             'successors': [],
-            'type': 'font.convert'
+            'type': 'font.convert',
+            'sources': [],
         }
     }
 }

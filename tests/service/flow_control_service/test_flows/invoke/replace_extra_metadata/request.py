@@ -44,7 +44,8 @@ invoke_flow_replace_extra_metadata_request = {
             },
             'callback': None,
             'successors': [],
-            'type': 'av.extra_metadata.replace'
+            'type': 'av.extra_metadata.replace',
+            'sources': [],
         }
     }
 }

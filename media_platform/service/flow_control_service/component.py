@@ -1,16 +1,17 @@
 from media_platform.job.convert_font_job import ConvertFontSpecification
-from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.create_archive_job import CreateArchiveSpecification
 from media_platform.job.extract_archive_job import ExtractArchiveSpecification
 from media_platform.job.extract_poster_job import ExtractPosterSpecification
 from media_platform.job.extract_storyboard_job import ExtractStoryboardSpecification
 from media_platform.job.import_file_job import ImportFileSpecification
+from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification
 from media_platform.job.specification import Specification
 from media_platform.job.transcode_job import TranscodeSpecification
 from media_platform.lang.serialization import Deserializable, Serializable
 from media_platform.service.callback import Callback
 from media_platform.service.flow_control_service.specifications.add_sources_specification import AddSourcesSpecification
 from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
+from media_platform.service.source import Source
 
 
 class ComponentType(object):
@@ -45,8 +46,8 @@ _SPECIFICATIONS = {
 
 
 class Component(Serializable, Deserializable):
-    def __init__(self, component_type, successors=None, specification=None, delete_sources=False, callback=None):
-        # type: (ComponentType, [str], Specification, bool, Callback) -> None
+    def __init__(self, component_type, successors=None, specification=None, delete_sources=False, callback=None, sources=None):
+        # type: (ComponentType, [str], Specification, bool, Callback, [Source]) -> None
         super(Component, self).__init__()
 
         self.type = component_type
@@ -54,6 +55,7 @@ class Component(Serializable, Deserializable):
         self.specification = specification
         self.delete_sources = delete_sources
         self.callback = callback
+        self.sources = sources or []
 
     def serialize(self):
         # type: () -> dict
@@ -62,7 +64,8 @@ class Component(Serializable, Deserializable):
             'successors': self.successors,
             'specification': self.specification.serialize() if self.specification else None,
             'deleteSources': self.delete_sources,
-            'callback': self.callback.serialize() if self.callback else None
+            'callback': self.callback.serialize() if self.callback else None,
+            'sources': [s.serialize() for s in self.sources]
         }
 
     @classmethod
@@ -73,9 +76,11 @@ class Component(Serializable, Deserializable):
 
         callback_data = data.get('callback')
         callback = Callback.deserialize(callback_data) if callback_data else None
+        sources = [Source.deserialize(s) for s in data.get('sources', [])]
 
         return cls(data['type'],
                    specification,
                    data.get('successors', []),
                    data.get('deleteSources', False),
-                   callback)
+                   callback,
+                   sources)

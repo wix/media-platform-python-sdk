@@ -19,7 +19,6 @@ class Operation(Component):
         # type: (ComponentType, Specification, [str], OperationStatus, bool, [Source], [FileDescriptor] or [dict], [str], dict, str, int) -> None
         super(Operation, self).__init__(component_type, specification, successors, delete_sources)
         self.status = status
-        self.sources = sources or []
         self.results = results or []
         self.jobs = jobs or []
         self.extra_results = extra_results or {}
@@ -31,23 +30,20 @@ class Operation(Component):
         # type: (dict) -> Operation
         component = super(Operation, cls).deserialize(data)
 
-        sources_data = data.get('sources', [])
         results_data = data.get('results', [])
 
-        sources = [Source.deserialize(s) for s in sources_data]
         results = [FileDescriptor.deserialize(r) for r in results_data]
         jobs = data.get('jobs', [])
         extra_results = data.get('extraResults', {})
 
         return Operation(component.type, component.specification, component.successors, data['status'],
-                         component.delete_sources, sources, results, jobs, extra_results, data.get('errorMessage'),
-                         data.get('errorCode'))
+                         component.delete_sources, component.sources, results, jobs, extra_results,
+                         data.get('errorMessage'), data.get('errorCode'))
 
     def serialize(self):
         data = super(Operation, self).serialize()
 
         data.update({
-            'sources': [s.serialize() for s in self.sources if s],
             'status': self.status,
             'results': [r.serialize() if isinstance(r, Serializable) else r for r in self.results],
             'jobs': self.jobs,
