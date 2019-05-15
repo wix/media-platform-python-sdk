@@ -17,6 +17,7 @@ class AuthenticatedHTTPClient(object):
     APPLICATION_JSON = 'application/json'
     RETRYABLE_CODES = [500, 503, 504, 429]
     RETRYABLE_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
+    TIMEOUT = 60
 
     def __init__(self, app_authenticator, retry_count=5, retry_backoff_factor=0.2):
         # type: (AppAuthenticator, int, float) -> None
@@ -77,7 +78,7 @@ class AuthenticatedHTTPClient(object):
         # type: (str, str, dict, dict, Type[Deserializable]) -> Deserializable or None
 
         try:
-            response = self._session.request(verb, url, params=params, json=json, headers=self._headers())
+            response = self._session.request(verb, url, params=params, json=json, headers=self._headers(), timeout=self.TIMEOUT)
         except RetryError as e:
             raise MediaPlatformException(cause=e)
 
