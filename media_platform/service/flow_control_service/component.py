@@ -79,8 +79,8 @@ class Component(Serializable, Deserializable):
         sources = [Source.deserialize(s) for s in data.get('sources', [])]
 
         return cls(data['type'],
-                   specification,
                    data.get('successors', []),
+                   specification,
                    data.get('deleteSources', False),
                    callback,
                    sources)
