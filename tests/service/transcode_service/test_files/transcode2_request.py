@@ -38,12 +38,14 @@ transcode2_request = {
                     },
                     'preset': 'faster'
                 },
-                'frameRate': 30.0, 'filters': [{
+                'frameRate': 30.0,
+                'filters': [{
                     'name': 'unsharp',
                     'settings': {
                         'value': '5:5:0.5:3:3:0.0'
                     }
-                }]
+                }],
+                'frameRateFraction': '30000/1001'
             },
             'copy': False
         },
