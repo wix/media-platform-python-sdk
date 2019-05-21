@@ -23,13 +23,19 @@ class VideoSpecification(Specification):
         return VideoSpecification(codec, resolution, data.get('frameRate'), filters, data.get('frameRateFraction'))
 
     def serialize(self):
-        return {
+        data = {
             'codec': self.codec.serialize(),
             'resolution': self.resolution.serialize() if self.resolution else None,
-            'frameRate': self.frame_rate,
             'filters': [f.serialize() for f in self.filters] if self.filters else None,
-            'frameRateFraction': self.frame_rate_fraction,
         }
+
+        if self.frame_rate_fraction:
+            data['frameRateFraction'] = self.frame_rate_fraction
+        else:
+            data['frameRate'] = self.frame_rate
+
+
+        return data
 
     def validate(self):
         if self.resolution:

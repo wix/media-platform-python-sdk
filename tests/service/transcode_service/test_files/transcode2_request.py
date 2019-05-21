@@ -38,7 +38,6 @@ transcode2_request = {
                     },
                     'preset': 'faster'
                 },
-                'frameRate': 30.0,
                 'filters': [{
                     'name': 'unsharp',
                     'settings': {
