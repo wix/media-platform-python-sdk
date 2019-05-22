@@ -64,14 +64,15 @@ class TestTranscodeService(unittest.TestCase):
                     VideoCodec('h264', 'main', '3.1', 25, 10000, GOP(0, 30, 30, 2, 0, 0, 3), 'faster'),
                     Resolution(256, 144, ImageScaling('lanczos'), '1:1'),
                     30.0,
-                    [ImageFilter('unsharp', {'value': '5:5:0.5:3:3:0.0'})]
+                    [ImageFilter('unsharp', {'value': '5:5:0.5:3:3:0.0'})],
+                    '30000/1001'
                 ))
             )
         ).execute()
 
         assert_that(group.jobs[0], instance_of(TranscodeJob))
         assert_that(group.group_id, is_('g'))
-        assert_that(json.loads(httpretty.last_request().body), is_(transcode2_request))
+        self.assertEqual(transcode2_request, json.loads(httpretty.last_request().body))
 
     @httpretty.activate
     def test_transcode__audio_clipping(self):

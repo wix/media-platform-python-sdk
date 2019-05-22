@@ -3,12 +3,13 @@ from media_platform.lang.serialization import Serializable, Deserializable
 
 
 class VideoSpecification(Specification):
-    def __init__(self, codec, resolution=None, frame_rate=None, filters=None):
-        # type: (VideoCodec, Resolution or None, float, [ImageFilter] or None) -> None
+    def __init__(self, codec, resolution=None, frame_rate=None, filters=None, frame_rate_fraction=None):
+        # type: (VideoCodec, Resolution or None, float, [ImageFilter] or None, str or None) -> None
         self.codec = codec
         self.resolution = resolution
         self.frame_rate = frame_rate
         self.filters = filters
+        self.frame_rate_fraction = frame_rate_fraction
 
     @classmethod
     def deserialize(cls, data):
@@ -19,15 +20,22 @@ class VideoSpecification(Specification):
         filters_data = data.get('filters')
         filters = [ImageFilter.deserialize(f) for f in filters_data] if filters_data else None
 
-        return VideoSpecification(codec, resolution, data.get('frameRate'), filters)
+        return VideoSpecification(codec, resolution, data.get('frameRate'), filters, data.get('frameRateFraction'))
 
     def serialize(self):
-        return {
+        data = {
             'codec': self.codec.serialize(),
             'resolution': self.resolution.serialize() if self.resolution else None,
-            'frameRate': self.frame_rate,
-            'filters': [f.serialize() for f in self.filters] if self.filters else None
+            'filters': [f.serialize() for f in self.filters] if self.filters else None,
         }
+
+        if self.frame_rate_fraction:
+            data['frameRateFraction'] = self.frame_rate_fraction
+        else:
+            data['frameRate'] = self.frame_rate
+
+
+        return data
 
     def validate(self):
         if self.resolution:
