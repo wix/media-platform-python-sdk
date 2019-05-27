@@ -34,7 +34,6 @@ class VideoSpecification(Specification):
         else:
             data['frameRate'] = self.frame_rate
 
-
         return data
 
     def validate(self):
