@@ -9,10 +9,15 @@ class AppAuthenticator(object):
         self._shared_secret = shared_secret
         self._app_urn = 'urn:app:' + app_id
 
+    def default_token(self):
+        # type: () -> Token
+
+        return Token(self._app_urn, self._app_urn)
+
     def default_signed_token(self):
         # type: () -> str
+        token = self.default_token()
 
-        token = Token(self._app_urn, self._app_urn)
         return self.sign_token(token)
 
     def sign_token(self, token):
