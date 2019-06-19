@@ -1,3 +1,4 @@
+from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
 from media_platform.job.job import Job
@@ -52,5 +53,5 @@ class ExtractPosterSpecification(Specification):
 
 
 class ExtractPosterJob(Job):
-    type = 'urn:job:av.poster'
+    type = JobType.extract_poster
     specification_type = ExtractPosterSpecification

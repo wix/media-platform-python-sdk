@@ -6,7 +6,8 @@ from hamcrest import assert_that, instance_of, is_, starts_with
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.create_archive_job import ArchiveType, CreateArchiveJob
-from media_platform.job.extract_archive_job import ExtractionReport, ExtractionReportFormat, ExtractArchiveJob
+from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
+from media_platform.job.extract_archive.extraction_report import ExtractionReportFormat, ExtractionReport
 from media_platform.service.archive_service.archive_service import ArchiveService
 from media_platform.service.archive_service.create_archive_manifest_request import ZipAlgorithm
 from media_platform.service.callback import Callback

@@ -1,4 +1,5 @@
 from media_platform.job.job import Job
+from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
 
@@ -58,5 +59,5 @@ class ExtractStoryboardSpecification(Specification):
 
 
 class ExtractStoryboardJob(Job):
-    type = 'urn:job:av.storyboard'
+    type = JobType.extract_storyboard
     specification_type = ExtractStoryboardSpecification
