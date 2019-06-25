@@ -1,7 +1,6 @@
 from unittest import TestCase
-from hamcrest import *
 
-from media_platform.job.extract_poster_job import ExtractPosterSpecification
+from media_platform.job.extract_poster_job import ExtractPosterSpecification, PosterFilter
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
 
@@ -19,13 +18,14 @@ class TestExtractPosterSpecification(TestCase):
                 'lifecycle': None,
                 'bucket': None
             },
-            'format': 'png'
+            'format': 'png',
+            'filters': []
         }
 
         specification = ExtractPosterSpecification(0.12, Destination('/poster.png', acl=ACL.public), 'png')
-        assert_that(specification.serialize(), is_(data))
+        self.assertEqual(data, specification.serialize())
 
-    def test_serialize__percentage(self):
+    def test_serialize__with_percentage(self):
         data = {
             'second': None,
             'percentage': 10,
@@ -36,11 +36,31 @@ class TestExtractPosterSpecification(TestCase):
                 'lifecycle': None,
                 'bucket': None
             },
-            'format': 'png'
+            'format': 'png',
+            'filters': []
         }
 
         specification = ExtractPosterSpecification(None, Destination('/poster.png', acl=ACL.public), 'png', 10)
-        assert_that(specification.serialize(), is_(data))
+        self.assertEqual(data, specification.serialize())
+
+    def test_serialize__with_filters(self):
+        data = {
+            'second': 0.12,
+            'percentage': None,
+            'destination': {
+                'path': '/poster.png',
+                'acl': 'public',
+                'directory': None,
+                'lifecycle': None,
+                'bucket': None
+            },
+            'format': 'png',
+            'filters': ['transparentCrop']
+        }
+
+        specification = ExtractPosterSpecification(0.12, Destination('/poster.png', acl=ACL.public), 'png',
+                                                   filters=[PosterFilter.transparent_crop])
+        self.assertEqual(data, specification.serialize())
 
     def test_deserialize(self):
         data = {
@@ -53,13 +73,14 @@ class TestExtractPosterSpecification(TestCase):
                 'lifecycle': None,
                 'bucket': None
             },
-            'format': 'png'
+            'format': 'png',
+            'filters': []
         }
 
         specification = ExtractPosterSpecification.deserialize(data)
-        assert_that(specification.serialize(), is_(data))
+        self.assertEqual(data, specification.serialize())
 
-    def test_invalid_image_format(self):
+    def test_deserialize__invalid_image_format(self):
         data = {
             'second': 0.12,
             'destination': {
@@ -69,7 +90,8 @@ class TestExtractPosterSpecification(TestCase):
                 'lifecycle': None,
                 'bucket': None
             },
-            'format': 'bmp'
+            'format': 'bmp',
+            'filters': []
         }
 
         with self.assertRaises(ValueError):
