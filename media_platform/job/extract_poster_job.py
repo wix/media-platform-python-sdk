@@ -5,16 +5,19 @@ from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
 from media_platform.job.job import Job
 
+
 class PosterImageFormat(object):
     jpeg = 'jpg'
     png = 'png'
     values = [jpeg, png]
     invalid_value_message = 'Image format must be one of: %s' % ', '.join(values)
 
+
 class PosterFilter(object):
     transparent_crop = 'transparentCrop'
     values = [transparent_crop]
     invalid_value_message = 'Filters must be one of: %s' % ', '.join(values)
+
 
 class ExtractPosterSpecification(Specification):
     def __init__(self, second, destination, image_format=PosterImageFormat.jpeg, percentage=None, filters=None):
