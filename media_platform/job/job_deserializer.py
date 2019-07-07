@@ -1,6 +1,6 @@
 from media_platform.job.convert_font_job import ConvertFontJob
 from media_platform.job.create_archive_job import CreateArchiveJob
-from media_platform.job.extract_archive_job import ExtractArchiveJob
+from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
 from media_platform.job.extract_poster_job import ExtractPosterJob
 from media_platform.job.extract_storyboard_job import ExtractStoryboardJob
 from media_platform.job.import_file_job import ImportFileJob

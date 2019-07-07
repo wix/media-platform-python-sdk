@@ -24,7 +24,8 @@ invoke_flow_copy_file_request = {
             },
             'successors': [],
             'callback': None,
-            'type': 'file.copy'
+            'type': 'file.copy',
+            'sources': [],
         },
     }
 }

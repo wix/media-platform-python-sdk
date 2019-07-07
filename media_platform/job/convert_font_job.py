@@ -1,3 +1,4 @@
+from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
 from media_platform.job.job import Job
@@ -86,5 +87,5 @@ class ConvertFontSpecification(Specification):
 
 
 class ConvertFontJob(Job):
-    type = 'urn:job:text.font.convert'
+    type = JobType.convert_font
     specification_type = ConvertFontSpecification

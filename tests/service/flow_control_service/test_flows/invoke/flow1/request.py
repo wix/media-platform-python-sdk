@@ -20,14 +20,16 @@ invoke_flow1_request = {
             },
             'callback': None,
             'successors': ['transcode'],
-            'type': 'file.import'
+            'type': 'file.import',
+            'sources': [],
         },
         'playlist': {
             'deleteSources': False,
             'specification': None,
             'callback': None,
             'successors': [],
-            'type': 'av.create_urlset'
+            'type': 'av.create_urlset',
+            'sources': [],
         },
         'transcode': {
             'deleteSources': False,
@@ -50,7 +52,8 @@ invoke_flow1_request = {
             },
             'callback': None,
             'successors': ['playlist'],
-            'type': 'av.transcode'
+            'type': 'av.transcode',
+            'sources': [],
         }
     }}
 

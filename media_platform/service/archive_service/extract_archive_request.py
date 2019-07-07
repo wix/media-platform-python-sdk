@@ -1,5 +1,6 @@
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
-from media_platform.job.extract_archive_job import ExtractArchiveJob, ExtractionReport
+from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
+from media_platform.job.extract_archive.extraction_report import ExtractionReport
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.media_platform_request import MediaPlatformRequest

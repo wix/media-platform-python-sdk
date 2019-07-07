@@ -1,10 +1,11 @@
 from datetime import datetime
 
+from media_platform.job.result.job_result import JobResult
+from media_platform.job.result.job_result_deserializer import JobResultDeserializer
 from media_platform.job.specification import Specification
 from media_platform.lang import datetime_serialization
 from media_platform.lang.serialization import Deserializable, Serializable
 from media_platform.service.callback import Callback
-from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
 
 
@@ -34,9 +35,9 @@ class Job(Deserializable, Serializable):
 
     def __init__(self, job_id, issuer, status, specification, sources=None, callback=None, flow_id=None,
                  result=None, date_created=None, date_updated=None):
-        # type: (str, str, str, Specification or dict, [Source], Callback, str, RestResult, datetime, datetime) -> None
+        # type: (str, str, str, Specification or dict, [Source], Callback, str, JobResult, datetime, datetime) -> None
 
-        _id = JobID.deserialize(job_id)  # type: JobID
+        _id = JobID.deserialize(job_id)
 
         self.id = job_id
         self.group_id = _id.group_id
@@ -64,11 +65,7 @@ class Job(Deserializable, Serializable):
             specification = cls.specification_type.deserialize(specification)
 
         result_data = data.get('result')
-        if result_data:
-            # todo: deserialize result payload as specific type
-            result = RestResult.deserialize(result_data)
-        else:
-            result = None
+        result = JobResultDeserializer.deserialize(data['type'], result_data) if result_data else None
 
         job = cls(data['id'], data['issuer'], data['status'], specification, sources, callback,
                   data.get('flowId'), result, date_created, date_updated)

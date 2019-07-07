@@ -25,7 +25,8 @@ invoke_flow_operation_callback_request = {
                 'headers': {'header': 'value'},
                 'passthrough': False,
             },
-            'type': 'file.import'
+            'type': 'file.import',
+            'sources': [],
         },
     }
 }

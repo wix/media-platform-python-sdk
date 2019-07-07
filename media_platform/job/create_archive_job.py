@@ -1,4 +1,5 @@
 from media_platform.job.job import Job
+from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
 from media_platform.service.source import Source
@@ -68,5 +69,5 @@ class CreateArchiveSpecification(Specification):
 
 
 class CreateArchiveJob(Job):
-    type = 'urn:job:archive.create'
+    type = JobType.create_archive
     specification_type = CreateArchiveSpecification

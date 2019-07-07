@@ -25,6 +25,7 @@ transcode2_response = {
                     'specification': {
                         'filter': 'scale=768:480,setsar=1/1',
                         'frameRate': '25.0',
+                        'frameRateFraction': '30000/1001',
                         'codec': {
                             'profile': 'main',
                             'maxRate': 6000000,
