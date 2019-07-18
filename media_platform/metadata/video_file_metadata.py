@@ -13,7 +13,9 @@ class VideoFileMetadata(FileMetadata):
         if data['mediaType'] != MediaType.video:
             raise ValueError('not video metadata')
 
+        basic_data = data.get('basic')
+
         file_descriptor = FileDescriptor.deserialize(data['fileDescriptor'])
-        basic = VideoBasic.deserialize(data.get('basic')) if data.get('basic') else None
+        basic = VideoBasic.deserialize(basic_data) if basic_data else None
 
         return VideoFileMetadata(file_descriptor, basic)

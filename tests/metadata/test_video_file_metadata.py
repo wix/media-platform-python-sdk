@@ -9,6 +9,7 @@ class TestVideoFileMetadata(TestCase):
     def test_deserialize(self):
         data = {
             'basic': {
+                'transparency': 'not_transparent',
                 'tbr': None,
                 'interlaced': False,
                 'videoStreams': [{

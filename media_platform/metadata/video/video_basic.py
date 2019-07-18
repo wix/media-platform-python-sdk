@@ -1,18 +1,20 @@
 from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.metadata.audio.audio_stream import AudioStream
+from media_platform.metadata.video.transparency import Transparency
 from media_platform.metadata.video.video_format import VideoFormat
 from media_platform.metadata.video.video_stream import VideoStream
 
 
 class VideoBasic(Serializable, Deserializable):
-    def __init__(self, video_streams, audio_streams, video_format=None, video_interlaced=False, video_tbr=None):
-        # type: ([VideoStream], [AudioStream], VideoFormat, bool, dict) -> None
+    def __init__(self, video_streams, audio_streams, video_format=None, video_interlaced=False, video_tbr=None, transparency=None):
+        # type: ([VideoStream], [AudioStream], VideoFormat, bool, dict, Transparency) -> None
 
         self.video_streams = video_streams or []
         self.audio_streams = audio_streams or []
         self.video_format = video_format
         self.video_interlaced = video_interlaced
         self.video_tbr = video_tbr
+        self.transparency = transparency
 
     @classmethod
     def deserialize(cls, data):
@@ -22,7 +24,7 @@ class VideoBasic(Serializable, Deserializable):
         video_format = VideoFormat.deserialize(data['format']) if data.get('format') else None
 
         return VideoBasic(video_streams, audio_streams, video_format, data.get('interlaced'),
-                          data.get('tbr'))
+                          data.get('tbr'), data.get('transparency'))
 
     def serialize(self):
         return {
@@ -30,5 +32,6 @@ class VideoBasic(Serializable, Deserializable):
             'audioStreams': [audio_stream.serialize() for audio_stream in self.audio_streams],
             'format': self.video_format.serialize() if self.video_format else None,
             'interlaced': self.video_interlaced,
-            'tbr': self.video_tbr
+            'tbr': self.video_tbr,
+            'transparency': self.transparency
         }
