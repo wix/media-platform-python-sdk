@@ -2,6 +2,7 @@ from typing import Optional
 
 from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
+from media_platform.job.transcode.video_specification import Resolution
 from media_platform.service.destination import Destination
 from media_platform.job.job import Job
 
@@ -20,8 +21,9 @@ class PosterFilter(object):
 
 
 class ExtractPosterSpecification(Specification):
-    def __init__(self, second, destination, image_format=PosterImageFormat.jpeg, percentage=None, filters=None):
-        # type: (Optional[float], Destination, Optional[PosterImageFormat], Optional[float], Optional[PosterFilter]) -> None
+    def __init__(self, second, destination, image_format=PosterImageFormat.jpeg, percentage=None, filters=None,
+                 resolution=None):
+        # type: (Optional[float], Destination, Optional[PosterImageFormat], Optional[float], Optional[PosterFilter], Optional[Resolution]) -> None
         super(ExtractPosterSpecification, self).__init__()
 
         self.second = second
@@ -29,24 +31,31 @@ class ExtractPosterSpecification(Specification):
         self.image_format = image_format or PosterImageFormat.jpeg
         self.percentage = percentage
         self.filters = filters or []
+        self.resolution = resolution
 
     def serialize(self):
         # type: () -> dict
-        return {
+        data = {
             'second': self.second,
             'percentage': self.percentage,
             'destination': self.destination.serialize(),
             'format': self.image_format,
-            'filters': self.filters
+            'filters': self.filters,
         }
+        if self.resolution:
+            data['resolution'] = self.resolution.serialize()
+
+        return data
 
     @classmethod
     def deserialize(cls, data):
         # type: (dict) -> ExtractPosterSpecification
         destination = Destination.deserialize(data['destination'])
 
+        resolution_data = data.get('resolution')
+        resolution = Resolution.deserialize(resolution_data) if resolution_data else None
         return ExtractPosterSpecification(data['second'], destination, data['format'], data.get('percentage'),
-                                          data.get('filters'))
+                                          data.get('filters'), resolution)
 
     def validate(self):
         self._validate_image_format()
