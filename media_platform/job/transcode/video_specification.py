@@ -4,7 +4,7 @@ from media_platform.lang.serialization import Serializable, Deserializable
 
 class VideoSpecification(Specification):
     def __init__(self, codec, resolution=None, frame_rate=None, filters=None, frame_rate_fraction=None):
-        # type: (VideoCodec, Resolution or None, float, [ImageFilter] or None, str or None) -> None
+        # type: (VideoCodec, Resolution or None, float, [VideoFilter] or None, str or None) -> None
         self.codec = codec
         self.resolution = resolution
         self.frame_rate = frame_rate
@@ -43,7 +43,7 @@ class VideoSpecification(Specification):
 
 class Resolution(Serializable, Deserializable):
     def __init__(self, width=None, height=None, scaling=None, sample_aspect_ratio=None):
-        # type: (int, int, ImageScaling or None, str or None) -> None
+        # type: (int, int, VideoScaling or None, str or None) -> None
         self.width = width
         self.height = height
 
@@ -54,7 +54,7 @@ class Resolution(Serializable, Deserializable):
     def deserialize(cls, data):
         # type: (dict) -> Resolution
         scaling_data = data.get('scaling')
-        scaling = ImageScaling.deserialize(scaling_data) if scaling_data else None
+        scaling = VideoScaling.deserialize(scaling_data) if scaling_data else None
 
         return Resolution(data.get('width'), data.get('height'), scaling, data.get('sampleAspectRatio'))
 
@@ -185,3 +185,7 @@ class ImageFilter(Serializable, Deserializable):
             'name': self.name,
             'settings': self.settings
         }
+
+
+VideoFilter = ImageFilter
+VideoScaling = ImageScaling

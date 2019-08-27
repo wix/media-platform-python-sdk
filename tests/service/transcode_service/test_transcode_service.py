@@ -8,8 +8,8 @@ from media_platform.http.authenticated_http_client import AuthenticatedHTTPClien
 from media_platform.job.transcode.audio_qualities import AudioQuality
 from media_platform.job.transcode.stream_specification import StreamSpecification, StreamType
 from media_platform.job.transcode.video_qualities import VideoQuality, VideoQualityRange
-from media_platform.job.transcode.video_specification import VideoSpecification, VideoCodec, Resolution, ImageFilter, \
-    GOP, ImageScaling
+from media_platform.job.transcode.video_specification import VideoSpecification, VideoCodec, Resolution, VideoFilter, \
+    GOP, VideoScaling
 from media_platform.job.transcode_job import TranscodeSpecification, TranscodeJob
 from media_platform.job.transcode.clipping import Clipping
 from media_platform.service.destination import Destination
@@ -62,9 +62,9 @@ class TestTranscodeService(unittest.TestCase):
                 Destination(path='/video.720.mp4'),
                 video=StreamSpecification(StreamType.video, VideoSpecification(
                     VideoCodec('h264', 'main', '3.1', 25, 10000, GOP(0, 30, 30, 2, 0, 0, 3), 'faster'),
-                    Resolution(256, 144, ImageScaling('lanczos'), '1:1'),
+                    Resolution(256, 144, VideoScaling('lanczos'), '1:1'),
                     30.0,
-                    [ImageFilter('unsharp', {'value': '5:5:0.5:3:3:0.0'})],
+                    [VideoFilter('unsharp', {'value': '5:5:0.5:3:3:0.0'})],
                     '30000/1001'
                 ))
             )
