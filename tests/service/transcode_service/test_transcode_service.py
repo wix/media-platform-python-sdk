@@ -9,7 +9,7 @@ from media_platform.job.transcode.audio_qualities import AudioQuality
 from media_platform.job.transcode.stream_specification import StreamSpecification, StreamType
 from media_platform.job.transcode.video_qualities import VideoQuality, VideoQualityRange
 from media_platform.job.transcode.video_specification import VideoSpecification, VideoCodec, Resolution, VideoFilter, \
-    GOP, VideoScaling
+    GOP, VideoScaling, VideoFilterName
 from media_platform.job.transcode_job import TranscodeSpecification, TranscodeJob
 from media_platform.job.transcode.clipping import Clipping
 from media_platform.service.destination import Destination
@@ -23,6 +23,10 @@ from tests.service.transcode_service.test_files.transcode2_request import transc
 from tests.service.transcode_service.test_files.transcode2_response import transcode2_response
 from tests.service.transcode_service.test_files.transcode_clip_request import transcode_clip_request
 from tests.service.transcode_service.test_files.transcode_clip_response import transcode_clip_response
+from tests.service.transcode_service.test_files.wix_transparent_transcode_request import \
+    wix_transparent_transcode_request
+from tests.service.transcode_service.test_files.wix_transparent_transcode_response import \
+    wix_transparent_transcode_response
 
 
 class TestTranscodeService(unittest.TestCase):
@@ -64,7 +68,7 @@ class TestTranscodeService(unittest.TestCase):
                     VideoCodec('h264', 'main', '3.1', 25, 10000, GOP(0, 30, 30, 2, 0, 0, 3), 'faster'),
                     Resolution(256, 144, VideoScaling('lanczos'), '1:1'),
                     30.0,
-                    [VideoFilter('unsharp', {'value': '5:5:0.5:3:3:0.0'})],
+                    [VideoFilter(VideoFilterName.unsharp, {'value': '5:5:0.5:3:3:0.0'})],
                     '30000/1001'
                 ))
             )
@@ -73,6 +77,29 @@ class TestTranscodeService(unittest.TestCase):
         assert_that(group.jobs[0], instance_of(TranscodeJob))
         assert_that(group.group_id, is_('g'))
         self.assertEqual(transcode2_request, json.loads(httpretty.last_request().body))
+
+    @httpretty.activate
+    def test_transcode_request__make_wix_transparent(self):
+        self._register_transcode_request(wix_transparent_transcode_response)
+
+        group = self.transcode_service.transcode_request().add_sources(
+            Source('/video.mp4')
+        ).add_specifications(
+            TranscodeSpecification(
+                Destination(path='/video.720.mp4'),
+                video=StreamSpecification(StreamType.video, VideoSpecification(
+                    VideoCodec('h264', 'main', '3.1', 25, 10000, GOP(0, 30, 30, 2, 0, 0, 3), 'faster'),
+                    Resolution(256, 144, VideoScaling('lanczos'), '1:1'),
+                    30.0,
+                    [VideoFilter(VideoFilterName.make_wix_transparent)],
+                    '30000/1001'
+                ))
+            )
+        ).execute()
+
+        assert_that(group.jobs[0], instance_of(TranscodeJob))
+        assert_that(group.group_id, is_('g'))
+        self.assertEqual(wix_transparent_transcode_request, json.loads(httpretty.last_request().body))
 
     @httpretty.activate
     def test_transcode__audio_clipping(self):

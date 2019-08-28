@@ -148,15 +148,15 @@ class GOP(Serializable, Deserializable):
         }
 
 
-class ImageScaling(Serializable, Deserializable):
+class VideoScaling(Serializable, Deserializable):
     def __init__(self, algorithm):
-        super(ImageScaling, self).__init__()
+        super(VideoScaling, self).__init__()
 
         self.algorithm = algorithm
 
     @classmethod
     def deserialize(cls, data):
-        # type: (dict) -> ImageScaling
+        # type: (dict) -> VideoScaling
         return cls(data['algorithm'])
 
     def serialize(self):
@@ -166,18 +166,23 @@ class ImageScaling(Serializable, Deserializable):
         }
 
 
-class ImageFilter(Serializable, Deserializable):
-    def __init__(self, name, settings):
-        # type: (str, dict) -> None
+class VideoFilterName(object):
+    unsharp = 'unsharp'
+    make_wix_transparent = 'makeWixTransparent'
+
+
+class VideoFilter(Serializable, Deserializable):
+    def __init__(self, name, settings=None):
+        # type: (VideoFilterName, dict or None) -> None
         super(ImageFilter, self).__init__()
 
         self.name = name  # 'unsharp'
-        self.settings = settings  # '{"value": "5:5:0.5:3:3:0.0"}'
+        self.settings = settings or {} # '{"value": "5:5:0.5:3:3:0.0"}'
 
     @classmethod
     def deserialize(cls, data):
         # type: (dict) -> ImageFilter
-        return cls(data['name'], data['settings'])
+        return cls(data['name'], data.get('settings'))
 
     def serialize(self):
         # type: () -> dict
@@ -187,5 +192,5 @@ class ImageFilter(Serializable, Deserializable):
         }
 
 
-VideoFilter = ImageFilter
-VideoScaling = ImageScaling
+ImageFilter = VideoFilter
+ImageScaling = VideoScaling
