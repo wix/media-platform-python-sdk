@@ -6,7 +6,7 @@ import httpretty
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.extract_poster_job import ExtractPosterSpecification, ExtractPosterJob, PosterImageFormat, \
-    PosterFilter
+    PosterFilter, PixelFormat
 from media_platform.job.extract_storyboard_job import ExtractStoryboardSpecification, ExtractStoryboardJob
 from media_platform.service.destination import Destination
 from media_platform.service.rest_result import RestResult
@@ -33,12 +33,13 @@ class TestVideoService(unittest.TestCase):
                     'second': 20,
                     'percentage': None,
                     'destination': {
-                        'path': '/video.poster.jpg',
+                        'path': '/video.poster.png',
                         'directory': '/',
                         'acl': 'public'
                     },
-                    'format': 'jpg',
-                    'filters': ['transparentCrop']
+                    'format': 'png',
+                    'filters': ['transparentCrop'],
+                    'pixelFormat': 'rgba'
                 },
                 'sources': [
                     {
@@ -61,8 +62,8 @@ class TestVideoService(unittest.TestCase):
         group = self.video_service.extract_poster_request().add_sources(
             Source('/video.mp4')
         ).add_specifications(
-            ExtractPosterSpecification(20, Destination('/video.poster.jpg'), PosterImageFormat.jpeg,
-                                       filters=[PosterFilter.transparent_crop])
+            ExtractPosterSpecification(20, Destination('/video.poster.png'), PosterImageFormat.png,
+                                       filters=[PosterFilter.transparent_crop], pixel_format=PixelFormat.rgba)
         ).execute()
 
         self.assertIsInstance(group.jobs[0], ExtractPosterJob)
@@ -74,13 +75,14 @@ class TestVideoService(unittest.TestCase):
                     'percentage': None,
                     'destination': {
                         'directory': None,
-                        'path': '/video.poster.jpg',
+                        'path': '/video.poster.png',
                         'lifecycle': None,
                         'acl': 'public',
                         'bucket': None
                     },
-                    'format': 'jpg',
-                    'filters': ['transparentCrop']
+                    'format': 'png',
+                    'filters': ['transparentCrop'],
+                    'pixelFormat': 'rgba'
                 }],
                 'sources': [{
                     'path': '/video.mp4',

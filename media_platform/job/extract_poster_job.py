@@ -19,11 +19,19 @@ class PosterFilter(object):
     values = [transparent_crop]
     invalid_value_message = 'Filters must be one of: %s' % ', '.join(values)
 
+class PixelFormat(object):
+    rgb24 = 'rgb24'
+    rgba = 'rgba'
+
+    values = [None, rgb24, rgba]
+
+    invalid_value_message = 'Pixel format must be one of: %s' % ', '.join(str(v) for v in values)
+
 
 class ExtractPosterSpecification(Specification):
     def __init__(self, second, destination, image_format=PosterImageFormat.jpeg, percentage=None, filters=None,
-                 resolution=None):
-        # type: (Optional[float], Destination, Optional[PosterImageFormat], Optional[float], Optional[PosterFilter], Optional[Resolution]) -> None
+                 resolution=None, pixel_format=None):
+        # type: (Optional[float], Destination, Optional[PosterImageFormat], Optional[float], Optional[PosterFilter], Optional[Resolution], Optional[PixelFormat]) -> None
         super(ExtractPosterSpecification, self).__init__()
 
         self.second = second
@@ -32,6 +40,7 @@ class ExtractPosterSpecification(Specification):
         self.percentage = percentage
         self.filters = filters or []
         self.resolution = resolution
+        self.pixel_format = pixel_format
 
     def serialize(self):
         # type: () -> dict
@@ -42,8 +51,12 @@ class ExtractPosterSpecification(Specification):
             'format': self.image_format,
             'filters': self.filters,
         }
+
         if self.resolution:
             data['resolution'] = self.resolution.serialize()
+
+        if self.pixel_format:
+            data['pixelFormat'] = self.pixel_format
 
         return data
 
@@ -55,7 +68,7 @@ class ExtractPosterSpecification(Specification):
         resolution_data = data.get('resolution')
         resolution = Resolution.deserialize(resolution_data) if resolution_data else None
         return ExtractPosterSpecification(data['second'], destination, data['format'], data.get('percentage'),
-                                          data.get('filters'), resolution)
+                                          data.get('filters'), resolution, data.get('pixelFormat'))
 
     def validate(self):
         self._validate_image_format()
