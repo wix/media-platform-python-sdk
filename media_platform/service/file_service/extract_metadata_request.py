@@ -48,5 +48,5 @@ class ExtractMetadataRequest(MediaPlatformRequest):
         # type: () -> dict
         return {
             'path': self.path,
-            'detections': self.detections
+            'detections': ','.join(self.detections)
         }
