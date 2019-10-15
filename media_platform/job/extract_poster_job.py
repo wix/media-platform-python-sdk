@@ -15,8 +15,14 @@ class PosterImageFormat(object):
 
 
 class PosterFilter(object):
+    video = 'video'
+    wix_alpha = 'wixAlpha'
+    video_alpha = 'videoAlpha'
+
+    # backwards compatibility - same as wixAlpha
     transparent_crop = 'transparentCrop'
-    values = [transparent_crop]
+
+    values = [video, wix_alpha, video_alpha, transparent_crop]
     invalid_value_message = 'Filters must be one of: %s' % ', '.join(values)
 
 class PixelFormat(object):
