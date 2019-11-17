@@ -24,6 +24,6 @@ class MediaPlatformClient(object):
         self.archive_service = ArchiveService(domain, authenticated_http_client, app_id, self.app_authenticator)
         self.transcode_service = TranscodeService(domain, authenticated_http_client)
         self.flow_control_service = FlowControlService(domain, authenticated_http_client)
-        self.image_service = ImageService(domain, authenticated_http_client)
+        self.image_service = ImageService(domain, authenticated_http_client, self.app_authenticator)
         self.audio_service = AudioService(domain, authenticated_http_client)
         self.text_service = TextService(domain, authenticated_http_client)
