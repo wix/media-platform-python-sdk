@@ -358,6 +358,7 @@ class TestFileService(unittest.TestCase):
         assert_that(json.loads(httpretty.last_request().body),
                     is_({
                         'mimeType': None,
+                        'bucket': None,
                         'path': '/fish.txt',
                         'size': None,
                         'acl': None,
