@@ -1,3 +1,5 @@
+import warnings
+
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_service.copy_file_request import CopyFileRequest
@@ -44,6 +46,7 @@ class FileService(MediaPlatformService):
 
     def upload_url_request(self):
         # type: () -> UploadUrlRequest
+        warnings.warn('use upload upload_configuration_request_v3 instead', DeprecationWarning)
         return UploadUrlRequest(self._authenticated_http_client, self._base_url)
 
     def upload_configuration_request(self):
@@ -56,6 +59,7 @@ class FileService(MediaPlatformService):
 
     def upload_file_request(self):
         # type: () -> UploadFileRequest
+        warnings.warn('use upload upload_file_v3_request instead', DeprecationWarning)
         return UploadFileRequest(self._authenticated_http_client, self._base_url)
 
     def upload_file_v2_request(self):

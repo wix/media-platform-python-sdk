@@ -9,8 +9,8 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class UploadFileV2Request(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url, version="v2"):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    def __init__(self, authenticated_http_client, base_url, version='v2'):
+        # type: (AuthenticatedHTTPClient, str, str) -> None
         super(UploadFileV2Request, self).__init__(authenticated_http_client, 'POST', base_url, FileDescriptor)
 
         self.path = None
