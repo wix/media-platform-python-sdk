@@ -41,4 +41,4 @@ class FlowInvocationRequest(MediaPlatformRequest):
     def _validate_entry_points(self):
         invalid_entry_points = [e for e in self.invocation.entry_points if e not in self.flow.components]
         if invalid_entry_points:
-            raise ValueError('entry points not defined in components: ' % invalid_entry_points)
+            raise ValueError('entry points not defined in components: %s' % invalid_entry_points)

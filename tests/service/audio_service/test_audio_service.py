@@ -11,7 +11,8 @@ from media_platform.http.authenticated_http_client import AuthenticatedHTTPClien
 from media_platform.job.job import JobStatus
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification, \
     ReplaceExtraMetadataJob
-from media_platform.metadata.audio.audio_extra_metadata import Image, Lyrics, AudioExtraMetadata
+from media_platform.metadata.audio.lyrics import Lyrics
+from media_platform.service.audio_service.audio_extra_metadata import Image, AudioExtraMetadata
 from media_platform.service.file_descriptor import FileType, ACL
 from media_platform.service.rest_result import RestResult
 from media_platform.service.audio_service.audio_service import AudioService
@@ -27,7 +28,7 @@ lyrics = Lyrics('text', 'lang', 'lyrics_description')
 extra_metadata = AudioExtraMetadata('track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer', 'year',
                                     image, lyrics)
 
-specification = ReplaceAudioExtraMetadataSpecification(source, destination, extra_metadata)
+specification = ReplaceAudioExtraMetadataSpecification(destination, extra_metadata)
 
 file_id = 'file_id'
 audio_mime_type = 'audio/mp3'
@@ -59,7 +60,7 @@ class TestAudioService(TestCase):
 
         got_file_descriptor = self.audio_service.replace_extra_metadata_sync_request().set_specification(
             specification
-        ).execute()
+        ).set_source(source).execute()
 
         assert_that(got_file_descriptor.serialize(), is_(audio_file_descriptor.serialize()))
 
@@ -75,6 +76,6 @@ class TestAudioService(TestCase):
 
         got_job = self.audio_service.replace_extra_metadata_async_request().set_specification(
             specification
-        ).execute()
+        ).set_source(source).execute()
 
         assert_that(got_job.serialize(), is_(job.serialize()))

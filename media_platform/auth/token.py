@@ -4,8 +4,8 @@ import time
 
 
 class Token(object):
-    def __init__(self, issuer, subject, verbs=None, issued_at=None, expiration=None,
-                 additional_claims=None, token_id=None):
+    def __init__(self, issuer, subject, verbs=None, issued_at=None, expiration=None, additional_claims=None,
+                 token_id=None):
         # type: (str, str, [str], int, int, dict, str) -> None
 
         self.issuer = issuer

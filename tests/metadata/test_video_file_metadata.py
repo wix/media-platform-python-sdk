@@ -9,6 +9,7 @@ class TestVideoFileMetadata(TestCase):
     def test_deserialize(self):
         data = {
             'basic': {
+                'transparency': 'not_transparent',
                 'tbr': None,
                 'interlaced': False,
                 'videoStreams': [{
@@ -25,7 +26,9 @@ class TestVideoFileMetadata(TestCase):
                     'codecName': 'h264',
                     'width': 100,
                     'sampleAspectRatio': '1:1',
-                    'displayAspectRatio': '16:9'
+                    'displayAspectRatio': '16:9',
+                    'fieldOrder': None,
+                    'disposition': []
                 }], 'audioStreams': [{
                     'codecLongName': 'long axx',
                     'index': 0,

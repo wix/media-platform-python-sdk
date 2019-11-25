@@ -1,14 +1,17 @@
+import copy
 import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_, contains_string, starts_with
+from hamcrest import assert_that, instance_of, is_, contains_string, starts_with, has_length
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.metadata.video.transparency import Transparency
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
+from media_platform.service.file_service.extract_metadata_request import Detection
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.upload_configuration import UploadConfiguration
 from media_platform.service.file_service.upload_url import UploadUrl
@@ -17,6 +20,58 @@ from media_platform.service.list_request import OrderBy
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
 
+metadata_response = RestResult(0, 'OK', {
+    'mediaType': 'video',
+    'fileDescriptor': {
+        'acl': 'private',
+        'hash': None,
+        'id': '2de4305552004e0b9076183651030646',
+        'mimeType': 'video/mp4',
+        'path': '/videos/animals/cat.mp4',
+        'size': 15431333,
+        'type': '-'
+    },
+    'basic': {
+        'interlaced': False,
+        'videoStreams': [
+            {
+                'codecLongName': 'MPEG-4 part 2',
+                'height': 720,
+                'duration': 59351,
+                'bitrate': 1950467,
+                'index': 0,
+                'rFrameRate': '3000/100',
+                'codecTag': 'mp4v',
+                'avgFrameRate': '2997/100',
+                'codecName': 'mpeg4',
+                'width': 1280,
+                'sampleAspectRatio': '1:1',
+                'displayAspectRatio': '16:9',
+                'fieldOrder': None,
+                'disposition': []
+            }
+        ],
+        'audioStreams': [
+            {
+                'codecLongName': 'AAC (Advanced Audio Coding)',
+                'index': 1,
+                'codecTag': 'mp4a',
+                'codecName': 'aac',
+                'duration': 59351,
+                'bitrate': 128322
+            }
+        ],
+        'format': {
+            'duration': 59351,
+            'formatLongName': 'QuickTime / MOV',
+            'bitrate': 2085272,
+            'size': 15476893
+        }
+    }
+})
+
+metadata_response_with_transparency = copy.deepcopy(metadata_response)
+metadata_response_with_transparency.payload['basic']['transparency'] = Transparency.video_alpha
 
 class TestFileService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
@@ -77,7 +132,61 @@ class TestFileService(unittest.TestCase):
                         'path': '/fish',
                         'size': 0,
                         'type': FileType.directory,
-                        'acl': ACL.public
+                        'acl': ACL.public,
+                        'id': None,
+                        'bucket': None
+                    }))
+
+    @httpretty.activate
+    def test_create_files_request(self):
+        expected_file_descriptor = FileDescriptor('/fish', 'file-id', FileType.directory, FileMimeType.directory, 0)
+        expected_response_body = RestResult(0, 'OK', expected_file_descriptor.serialize())
+
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/files',
+            body=json.dumps(expected_response_body.serialize())
+        )
+
+        response = self.file_service.create_files_request().add_file(
+            self.file_service.create_file_request().set_path('/fish')
+        ).execute()
+
+        assert_that(response.file_descriptors, instance_of(list))
+        assert_that(response.file_descriptors, has_length(1))
+        assert_that(response.file_descriptors[0], instance_of(FileDescriptor))
+        assert_that(response.file_descriptors[0].serialize(), is_(expected_file_descriptor.serialize()))
+
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'mimeType': FileMimeType.directory,
+                        'path': '/fish',
+                        'size': 0,
+                        'type': FileType.directory,
+                        'acl': ACL.public,
+                        'id': None,
+                        'bucket': None
+                    }))
+
+    @httpretty.activate
+    def test_update_file_request(self):
+        payload = FileDescriptor('/fish.txt', 'file-id', FileType.file, 'text/plain', 18).serialize()
+        response_body = RestResult(0, 'OK', payload)
+        httpretty.register_uri(
+            httpretty.PUT,
+            'https://fish.barrel/_api/files',
+            body=json.dumps(response_body.serialize())
+        )
+
+        file_descriptor = self.file_service.update_file_request().set_path('/fish.txt').set_acl(ACL.public).execute()
+
+        assert_that(file_descriptor.serialize(), is_(payload))
+        assert_that(file_descriptor, instance_of(FileDescriptor))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'path': '/fish.txt',
+                        'id': None,
+                        'acl': 'public'
                     }))
 
     @httpretty.activate
@@ -225,6 +334,7 @@ class TestFileService(unittest.TestCase):
                     is_({
                         'mimeType': None,
                         'path': '/fish.txt',
+                        'bucket': None,
                         'size': None,
                         'acl': None,
                         'callback': None
@@ -377,7 +487,8 @@ class TestFileService(unittest.TestCase):
                             'directory': None,
                             'path': '/img.png',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'externalAuthorization': None
                     }))
@@ -410,7 +521,8 @@ class TestFileService(unittest.TestCase):
                             'directory': None,
                             'path': '/file.copy.txt',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         }
                     }))
 
@@ -460,57 +572,11 @@ class TestFileService(unittest.TestCase):
 
     @httpretty.activate
     def test_file_metadata_request(self):
-        response_body = RestResult(0, 'OK', {
-            'mediaType': 'video',
-            'fileDescriptor': {
-                'acl': 'private',
-                'hash': None,
-                'id': '2de4305552004e0b9076183651030646',
-                'mimeType': 'video/mp4',
-                'path': '/videos/animals/cat.mp4',
-                'size': 15431333,
-                'type': '-'
-            },
-            'basic': {
-                'interlaced': False,
-                'videoStreams': [
-                    {
-                        'codecLongName': 'MPEG-4 part 2',
-                        'height': 720,
-                        'duration': 59351,
-                        'bitrate': 1950467,
-                        'index': 0,
-                        'rFrameRate': '3000/100',
-                        'codecTag': 'mp4v',
-                        'avgFrameRate': '2997/100',
-                        'codecName': 'mpeg4',
-                        'width': 1280,
-                        'sampleAspectRatio': '1:1',
-                        'displayAspectRatio': '16:9'
-                    }
-                ],
-                'audioStreams': [
-                    {
-                        'codecLongName': 'AAC (Advanced Audio Coding)',
-                        'index': 1,
-                        'codecTag': 'mp4a',
-                        'codecName': 'aac',
-                        'duration': 59351,
-                        'bitrate': 128322
-                    }
-                ],
-                'format': {
-                    'duration': 59351,
-                    'formatLongName': 'QuickTime / MOV',
-                    'bitrate': 2085272,
-                    'size': 15476893
-                }
-            }
-        })
+
         httpretty.register_uri(
             httpretty.GET,
             'https://fish.barrel/_api/files/metadata',
-            body=json.dumps(response_body.serialize())
+            body=json.dumps(metadata_response.serialize())
         )
 
         file_metadata = self.file_service.file_metadata_request().set_path('/videos/animals/cat.mp4').execute()
@@ -522,57 +588,10 @@ class TestFileService(unittest.TestCase):
 
     @httpretty.activate
     def test_extract_metadata_request(self):
-        response_body = RestResult(0, 'OK', {
-            'mediaType': 'video',
-            'fileDescriptor': {
-                'acl': 'private',
-                'hash': None,
-                'id': '2de4305552004e0b9076183651030646',
-                'mimeType': 'video/mp4',
-                'path': '/videos/animals/cat.mp4',
-                'size': 15431333,
-                'type': '-'
-            },
-            'basic': {
-                'interlaced': False,
-                'videoStreams': [
-                    {
-                        'codecLongName': 'MPEG-4 part 2',
-                        'height': 720,
-                        'duration': 59351,
-                        'bitrate': 1950467,
-                        'index': 0,
-                        'rFrameRate': '3000/100',
-                        'codecTag': 'mp4v',
-                        'avgFrameRate': '2997/100',
-                        'codecName': 'mpeg4',
-                        'width': 1280,
-                        'sampleAspectRatio': '1:1',
-                        'displayAspectRatio': '16:9'
-                    }
-                ],
-                'audioStreams': [
-                    {
-                        'codecLongName': 'AAC (Advanced Audio Coding)',
-                        'index': 1,
-                        'codecTag': 'mp4a',
-                        'codecName': 'aac',
-                        'duration': 59351,
-                        'bitrate': 128322
-                    }
-                ],
-                'format': {
-                    'duration': 59351,
-                    'formatLongName': 'QuickTime / MOV',
-                    'bitrate': 2085272,
-                    'size': 15476893
-                }
-            }
-        })
         httpretty.register_uri(
             httpretty.GET,
             'https://fish.barrel/_api/files/metadata/extract',
-            body=json.dumps(response_body.serialize())
+            body=json.dumps(metadata_response.serialize())
         )
 
         file_metadata = self.file_service.extract_metadata_request().set_path('/videos/animals/cat.mp4').execute()
@@ -581,3 +600,19 @@ class TestFileService(unittest.TestCase):
         assert_that(httpretty.last_request().querystring), is_({
             'path': ['/videos/animals/cat.mp4'],
         })
+
+
+    @httpretty.activate
+    def test_extract_metadata_request__with_transparency_detection(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/files/metadata/extract',
+            body=json.dumps(metadata_response_with_transparency.serialize())
+        )
+
+        file_metadata = self.file_service.extract_metadata_request().\
+            set_path('/videos/animals/cat.mp4').\
+            add_detection(Detection.transparency).\
+            execute()
+
+        assert_that(file_metadata.basic.transparency, is_(Transparency.video_alpha))

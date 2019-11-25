@@ -5,7 +5,8 @@ transcode1_request = {
             'directory': '/',
             'path': None,
             'lifecycle': None,
-            'acl': 'public'
+            'acl': 'public',
+            'bucket': None
         },
         'quality': None,
         'qualityRange': {

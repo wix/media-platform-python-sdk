@@ -20,7 +20,8 @@ class TestExtractStoryboardSpecification(TestCase):
                 'directory': None,
                 'path': '/poster.png',
                 'lifecycle': None,
-                'acl': 'public'
+                'acl': 'public',
+                'bucket': None
             },
         }
 
@@ -40,7 +41,8 @@ class TestExtractStoryboardSpecification(TestCase):
                 'directory': None,
                 'path': '/poster.png',
                 'lifecycle': None,
-                'acl': 'public'
+                'acl': 'public',
+                'bucket': None
             },
         }
 
@@ -59,7 +61,8 @@ class TestExtractStoryboardSpecification(TestCase):
                 'directory': None,
                 'path': '/poster.png',
                 'lifecycle': None,
-                'acl': 'public'
+                'acl': 'public',
+                'bucket': None
             },
         }
 
@@ -78,7 +81,8 @@ class TestExtractStoryboardSpecification(TestCase):
                 'directory': None,
                 'path': '/poster.png',
                 'lifecycle': None,
-                'acl': 'public'
+                'acl': 'public',
+                'bucket': None
             },
         }
 
@@ -97,7 +101,8 @@ class TestExtractStoryboardSpecification(TestCase):
                 'directory': None,
                 'path': '/poster.png',
                 'lifecycle': None,
-                'acl': 'public'
+                'acl': 'public',
+                'bucket': None
             },
         }
 

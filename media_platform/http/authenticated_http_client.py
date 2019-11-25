@@ -1,9 +1,12 @@
+import os
 import requests
 import urllib3
+from future.utils import PY3
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RetryError
 from requests.structures import CaseInsensitiveDict
 from requests_toolbelt import MultipartEncoder
+from requests_toolbelt.adapters.appengine import AppEngineAdapter
 from typing import Type
 
 from media_platform.lang.serialization import Deserializable
@@ -17,6 +20,7 @@ class AuthenticatedHTTPClient(object):
     APPLICATION_JSON = 'application/json'
     RETRYABLE_CODES = [500, 503, 504, 429]
     RETRYABLE_METHODS = ['GET', 'POST', 'PUT', 'DELETE']
+    TIMEOUT = 60
 
     def __init__(self, app_authenticator, retry_count=5, retry_backoff_factor=0.2):
         # type: (AppAuthenticator, int, float) -> None
@@ -27,8 +31,16 @@ class AuthenticatedHTTPClient(object):
         retry = urllib3.Retry(total=retry_count, backoff_factor=retry_backoff_factor,
                               status_forcelist=self.RETRYABLE_CODES, method_whitelist=self.RETRYABLE_METHODS)
 
-        self._session.mount('http://', HTTPAdapter(max_retries=retry))
-        self._session.mount('https://', HTTPAdapter(max_retries=retry))
+        self._session.mount('http://', self._matched_adapter(retry))
+        self._session.mount('https://', self._matched_adapter(retry))
+
+    def _matched_adapter(self, retry):
+        server_software = os.environ.get('SERVER_SOFTWARE', '')
+
+        if not PY3 and server_software.startswith('Google App Engine/'):
+            return AppEngineAdapter(max_retries=retry)
+
+        return HTTPAdapter(max_retries=retry)
 
     def get(self, url, params=None, payload_type=None):
         # type: (str, dict, Type[Deserializable]) -> Deserializable or None
@@ -77,7 +89,7 @@ class AuthenticatedHTTPClient(object):
         # type: (str, str, dict, dict, Type[Deserializable]) -> Deserializable or None
 
         try:
-            response = self._session.request(verb, url, params=params, json=json, headers=self._headers())
+            response = self._session.request(verb, url, params=params, json=json, headers=self._headers(), timeout=self.TIMEOUT)
         except RetryError as e:
             raise MediaPlatformException(cause=e)
 

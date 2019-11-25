@@ -2,7 +2,7 @@ import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_
+from hamcrest import assert_that, instance_of, is_, not_none
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.image_operation_job import ImageOperationSpecification
@@ -19,7 +19,7 @@ class TestImageService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 
-    image_service = ImageService('fish.barrel', authenticated_http_client)
+    image_service = ImageService('fish.barrel', authenticated_http_client, authenticator)
 
     @httpretty.activate
     def test_extract_features_request(self):
@@ -88,8 +88,20 @@ class TestImageService(unittest.TestCase):
                                 'directory': None,
                                 'path': '/pony.png',
                                 'lifecycle': None,
-                                'acl': 'public'
+                                'acl': 'public',
+                                'bucket': None
                             },
                             'command': '/v1/fit/w_200,h_100'
                         }
                     }))
+
+    def test_token(self):
+        token = self.image_service.token()
+
+        assert_that(token.issuer, is_('urn:app:app'))
+
+    def test_sign_token(self):
+        token = self.image_service.token()
+        signed_token = self.image_service.sign_token(token)
+
+        assert_that(signed_token, not_none())

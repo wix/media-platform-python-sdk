@@ -12,6 +12,7 @@ class UploadConfigurationRequest(MediaPlatformRequest):
                                                          base_url + '/' + version + '/upload/configuration',
                                                          UploadConfiguration)
         self.path = None
+        self.bucket = None
         self.mime_type = None
         self.acl = None
         self.size = None
@@ -20,6 +21,11 @@ class UploadConfigurationRequest(MediaPlatformRequest):
     def set_path(self, path):
         # type: (str) -> UploadConfigurationRequest
         self.path = path
+        return self
+
+    def set_bucket(self, bucket):
+        # type: (str) -> UploadConfigurationRequest
+        self.bucket = bucket
         return self
 
     def set_mime_type(self, mime_type):
@@ -54,6 +60,7 @@ class UploadConfigurationRequest(MediaPlatformRequest):
         # type: () -> dict
         return {
             'path': self.path,
+            'bucket': self.bucket,
             'mimeType': self.mime_type,
             'size': self.size,
             'acl': self.acl,

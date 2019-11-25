@@ -20,6 +20,7 @@ class UploadFileV2Request(MediaPlatformRequest):
         self.lifecycle = None
         self.callback = None
         self.version = version
+        self.bucket = None
 
         self.response_processor = None
 
@@ -56,6 +57,11 @@ class UploadFileV2Request(MediaPlatformRequest):
         self.callback = callback
         return self
 
+    def set_bucket(self, bucket):
+        # type: (str) -> UploadFileV2Request
+        self.bucket = bucket
+        return self
+
     def override_response_processor(self, response_processor):
         # type: (callable) -> UploadFileV2Request
         self.response_processor = response_processor
@@ -83,7 +89,7 @@ class UploadFileV2Request(MediaPlatformRequest):
             self.path
         ).set_acl(self.acl).set_mime_type(self.mime_type).set_callback(self.callback).set_size(
             self.size
-        ).execute()
+        ).set_bucket(self.bucket).execute()
 
         params = self._params()
         if config.upload_token:

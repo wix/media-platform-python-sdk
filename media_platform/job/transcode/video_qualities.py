@@ -2,14 +2,14 @@ from media_platform.job.specification import Specification
 
 
 class VideoQuality(object):
-    res_2160p = '2160p'
-    res_1440p = '1440p'
-    res_1080p = '1080p'
-    res_720p = '720p'
-    res_480p = '480p'
-    res_360p = '360p'
-    res_240p = '240p'
     res_144p = '144p'
+    res_240p = '240p'
+    res_360p = '360p'
+    res_480p = '480p'
+    res_720p = '720p'
+    res_1080p = '1080p'
+    res_1440p = '1440p'
+    res_2160p = '2160p'
 
     # order matters!
     values = [res_144p, res_240p, res_360p, res_480p, res_720p, res_1080p, res_1440p, res_2160p]
@@ -22,8 +22,7 @@ class VideoQuality(object):
 
 class VideoQualityRange(Specification):
     def __init__(self, minimum, maximum):
-        # type: (str, str) -> None
-
+        # type: (VideoQuality, VideoQuality) -> None
         self.minimum = minimum
         self.maximum = maximum
 
@@ -43,11 +42,11 @@ class VideoQualityRange(Specification):
         if not (self.maximum and self.minimum):
             raise ValueError('must define minimum and maximum')
 
-        if not VideoQuality.has_value(self.minimum):
+        if not VideoQuality.has_value(str(self.minimum)):
             raise ValueError('minimum value %s not supported' % self.minimum)
 
-        if not VideoQuality.has_value(self.maximum):
+        if not VideoQuality.has_value(str(self.maximum)):
             raise ValueError('maximum value %s not supported' % self.maximum)
 
-        if VideoQuality.values.index(self.maximum) < VideoQuality.values.index(self.minimum):
+        if VideoQuality.values.index(str(self.maximum)) < VideoQuality.values.index(str(self.minimum)):
             raise ValueError('maximum %s is greater than minimum %s' % (self.maximum, self.minimum))

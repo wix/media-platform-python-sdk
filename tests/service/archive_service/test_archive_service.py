@@ -2,11 +2,12 @@ import json
 import unittest
 
 import httpretty
-from hamcrest import assert_that, instance_of, is_
+from hamcrest import assert_that, instance_of, is_, starts_with
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.create_archive_job import ArchiveType, CreateArchiveJob
-from media_platform.job.extract_archive_job import ExtractionReport, ExtractionReportFormat, ExtractArchiveJob
+from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
+from media_platform.job.extract_archive.extraction_report import ExtractionReportFormat, ExtractionReport
 from media_platform.service.archive_service.archive_service import ArchiveService
 from media_platform.service.archive_service.create_archive_manifest_request import ZipAlgorithm
 from media_platform.service.callback import Callback
@@ -20,7 +21,7 @@ class TestArchiveService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
 
-    archive_service = ArchiveService('fish.appspot.com', authenticated_http_client)
+    archive_service = ArchiveService('fish.appspot.com', authenticated_http_client, 'app', authenticator)
 
     @httpretty.activate
     def test_create_archive_request(self):
@@ -77,7 +78,8 @@ class TestArchiveService(unittest.TestCase):
                             'directory': None,
                             'path': '/video.tar',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'jobCallback': {
                             'url': 'https://call.me.back/',
@@ -117,7 +119,8 @@ class TestArchiveService(unittest.TestCase):
                             'directory': None,
                             'path': '/m.zip',
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'name': 'archive.zip',
                         'algorithm': 'store'
@@ -145,7 +148,8 @@ class TestArchiveService(unittest.TestCase):
                 'destination': {
                     'directory': '/video',
                     'path': None,
-                    'acl': 'public'
+                    'acl': 'public',
+                    'bucket': None
                 },
                 'extractedFilesReport': {
                     'destination': {
@@ -207,21 +211,41 @@ class TestArchiveService(unittest.TestCase):
                             'directory': '/video',
                             'path': None,
                             'lifecycle': None,
-                            'acl': 'public'
+                            'acl': 'public',
+                            'bucket': None
                         },
                         'extractedFilesReport': {
                             'destination': {
                                 'directory': None,
                                 'path': '/video.report.json',
                                 'lifecycle': None,
-                                'acl': 'public'
+                                'acl': 'public',
+                                'bucket': None
                             },
                             'format': 'json'
                         },
                         'jobCallback': None
                     }))
 
-    def test_archive_manifest_url_request(self):
-        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute()
+    def test_archive_manifest_url_request__url(self):
+        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').url()
 
         assert_that(url, is_('//archive-fish.wixmp.com/path/to/manifest.zip'))
+
+    def test_archive_manifest_url_request__url_with_auth(self):
+        url = self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').set_ttl(600).url()
+
+        assert_that(url, starts_with('//archive-fish.wixmp.com/path/to/manifest.zip?auth='))
+
+    @httpretty.activate
+    def test_archive_manifest_url_request__execute(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://archive-fish.wixmp.com/path/to/manifest.zip',
+            body='barks!'
+        )
+
+        with self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))

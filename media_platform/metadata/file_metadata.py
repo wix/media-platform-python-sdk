@@ -7,6 +7,7 @@ class MediaType(object):
     image = 'image'
     video = 'video'
     audio = 'audio'
+    font = 'font'
 
 
 class FileMetadata(Deserializable):

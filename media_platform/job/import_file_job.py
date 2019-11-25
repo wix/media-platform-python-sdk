@@ -1,3 +1,4 @@
+from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
 from media_platform.job.job import Job
@@ -27,5 +28,5 @@ class ImportFileSpecification(Specification):
 
 
 class ImportFileJob(Job):
-    type = 'urn:job:import.file'
+    type = JobType.import_file
     specification_type = ImportFileSpecification

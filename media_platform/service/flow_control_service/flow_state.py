@@ -1,4 +1,4 @@
-from media_platform.lang.serialization import Deserializable
+from media_platform.lang.serialization import Deserializable, Serializable
 from media_platform.service.flow_control_service.flow_error import FlowError
 from media_platform.service.flow_control_service.invocation import Invocation
 from media_platform.service.flow_control_service.operation import Operation
@@ -12,7 +12,7 @@ class FlowStatus(object):
     aborted = 'aborted'
 
 
-class FlowState(Deserializable):
+class FlowState(Deserializable, Serializable):
     def __init__(self, flow_id, status, invocation, operations, flow_error=None):
         # type: (str, FlowStatus, Invocation, [str, Operation], FlowError) -> None
         super(FlowState, self).__init__()
@@ -38,7 +38,7 @@ class FlowState(Deserializable):
         return {
             'id': self.id,
             'invocation': self.invocation.serialize(),
-            'operations': [o.serialize() for o in self.operations],
+            'operations': {k: v.serialize() for k, v in self.operations.items()},
             'status': self.status,
             'error': self.flow_error.serialize() if self.flow_error else None
         }
