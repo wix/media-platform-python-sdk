@@ -36,17 +36,25 @@ class FileService(MediaPlatformService):
         # type: () -> UploadUrlRequest
         return UploadUrlRequest(self._authenticated_http_client, self._base_url)
 
-    def upload_file_request(self):
-        # type: () -> UploadFileRequest
-        return UploadFileRequest(self._authenticated_http_client, self._base_url)
-
     def upload_configuration_request(self):
         # type: () -> UploadConfigurationRequest
         return UploadConfigurationRequest(self._authenticated_http_client, self._base_url)
 
+    def upload_configuration_request_v3(self):
+        # type: () -> UploadConfigurationRequest
+        return UploadConfigurationRequest(self._authenticated_http_client, self._base_url, "v3")
+
+    def upload_file_request(self):
+        # type: () -> UploadFileRequest
+        return UploadFileRequest(self._authenticated_http_client, self._base_url)
+
     def upload_file_v2_request(self):
         # type: () -> UploadFileV2Request
         return UploadFileV2Request(self._authenticated_http_client, self._base_url)
+
+    def upload_file_v3_request(self):
+        # type: () -> UploadFileV2Request
+        return UploadFileV2Request(self._authenticated_http_client, self._base_url, "v3")
 
     def import_file_request(self):
         # type: () -> ImportFileRequest

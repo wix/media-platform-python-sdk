@@ -6,10 +6,11 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class UploadConfigurationRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
+    def __init__(self, authenticated_http_client, base_url, version="v2"):
         # type: (AuthenticatedHTTPClient, str) -> None
         super(UploadConfigurationRequest, self).__init__(authenticated_http_client, 'POST',
-                                                         base_url + '/v2/upload/configuration', UploadConfiguration)
+                                                         base_url + '/' + version + '/upload/configuration',
+                                                         UploadConfiguration)
         self.path = None
         self.mime_type = None
         self.acl = None
@@ -56,5 +57,5 @@ class UploadConfigurationRequest(MediaPlatformRequest):
             'mimeType': self.mime_type,
             'size': self.size,
             'acl': self.acl,
-            'callback':  self.callback.serialize() if self.callback else None
+            'callback': self.callback.serialize() if self.callback else None
         }

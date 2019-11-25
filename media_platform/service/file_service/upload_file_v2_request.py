@@ -9,7 +9,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class UploadFileV2Request(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
+    def __init__(self, authenticated_http_client, base_url, version="v2"):
         # type: (AuthenticatedHTTPClient, str) -> None
         super(UploadFileV2Request, self).__init__(authenticated_http_client, 'POST', base_url, FileDescriptor)
 
@@ -19,6 +19,7 @@ class UploadFileV2Request(MediaPlatformRequest):
         self.size = None
         self.lifecycle = None
         self.callback = None
+        self.version = version
 
         self.response_processor = None
 
@@ -78,16 +79,17 @@ class UploadFileV2Request(MediaPlatformRequest):
         # type: () -> FileDescriptor
         self.validate()
 
-        config = UploadConfigurationRequest(self.authenticated_http_client, self.url).set_path(
+        config = UploadConfigurationRequest(self.authenticated_http_client, self.url, self.version).set_path(
             self.path
         ).set_acl(self.acl).set_mime_type(self.mime_type).set_callback(self.callback).set_size(
             self.size
         ).execute()
 
         params = self._params()
-        params.update({
-            'uploadToken': config.upload_token
-        })
+        if config.upload_token:
+            params.update({
+                'uploadToken': config.upload_token
+            })
 
         return self.authenticated_http_client.post_data(config.upload_url, self.content, self.mime_type, params,
                                                         FileDescriptor, self.filename, self.response_processor)
