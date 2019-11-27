@@ -341,6 +341,31 @@ class TestFileService(unittest.TestCase):
                     }))
 
     @httpretty.activate
+    def test_upload_configuration_request_v3(self):
+        response_body = RestResult(0, 'OK', {
+            'uploadUrl': 'url'
+        })
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/v3/upload/configuration',
+            body=json.dumps(response_body.serialize())
+        )
+
+        upload_url = self.file_service.upload_configuration_request_v3().set_path('/fish.txt').execute()
+
+        assert_that(upload_url, instance_of(UploadConfiguration))
+        assert_that(upload_url.upload_url, is_('url'))
+        assert_that(json.loads(httpretty.last_request().body),
+                    is_({
+                        'mimeType': None,
+                        'bucket': None,
+                        'path': '/fish.txt',
+                        'size': None,
+                        'acl': None,
+                        'callback': None
+                    }))
+
+    @httpretty.activate
     def test_upload_file_v2_request(self):
         url_response_body = RestResult(0, 'OK', {
             'uploadToken': 'token',
@@ -377,6 +402,46 @@ class TestFileService(unittest.TestCase):
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="uploadToken"\r\n\r\n%s'
                                     % 'token'))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="lifecycle"\r\n\r\n%s' %
+                                    json.dumps(upload_lifecycle.serialize())))
+        assert_that(request_body,
+                    contains_string('Content-Disposition: form-data; name="file"; filename="fishenzon"\r\n'
+                                    'Content-Type: %s\r\n\r\n%s' % (upload_mime_type, upload_content)))
+
+    @httpretty.activate
+    def test_upload_file_v3_request(self):
+        url_response_body = RestResult(0, 'OK', {
+            'uploadUrl': 'https://fish.barrel/v3/cryptic-path'
+        })
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/_api/v3/upload/configuration',
+            body=json.dumps(url_response_body.serialize())
+        )
+
+        upload_mime_type = 'text/plain'
+        upload_response_body = RestResult(0, 'OK',
+                                          FileDescriptor('/fish.txt', 'file-id', FileType.file, upload_mime_type,
+                                                         123).serialize()
+                                          )
+        httpretty.register_uri(
+            httpretty.POST,
+            'https://fish.barrel/v3/cryptic-path',
+            body=json.dumps(upload_response_body.serialize())
+        )
+
+        upload_content = 'some content'
+        upload_lifecycle = Lifecycle(age=30, action=Action.delete)
+        file_descriptor = self.file_service.upload_file_v3_request() \
+            .set_acl(ACL.private).set_path('/fish.txt').set_content(upload_content).set_mime_type(upload_mime_type) \
+            .set_lifecycle(upload_lifecycle).set_filename('fishenzon').execute()
+
+        assert_that(file_descriptor, instance_of(FileDescriptor))
+        assert_that(file_descriptor.path, is_('/fish.txt'))
+
+        request_body = httpretty.last_request().body.decode('utf-8')
+
         assert_that(request_body,
                     contains_string('Content-Disposition: form-data; name="lifecycle"\r\n\r\n%s' %
                                     json.dumps(upload_lifecycle.serialize())))
