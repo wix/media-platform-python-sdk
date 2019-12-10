@@ -1,21 +1,8 @@
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.import_file_job import ImportFileJob
-from media_platform.lang.serialization import Serializable
 from media_platform.service.destination import Destination
+from media_platform.service.file_service.external_authorization import ExternalAuthorization
 from media_platform.service.media_platform_request import MediaPlatformRequest
-
-
-class ExternalAuthorization(Serializable):
-    def __init__(self, headers):
-        # type: (dict) -> None
-        super(ExternalAuthorization, self).__init__()
-
-        self.headers = headers
-
-    def serialize(self):
-        return {
-            'headers': self.headers
-        }
 
 
 class ImportFileRequest(MediaPlatformRequest):

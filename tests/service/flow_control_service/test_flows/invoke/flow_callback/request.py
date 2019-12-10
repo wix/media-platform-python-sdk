@@ -15,6 +15,7 @@ invoke_flow_callback_request = {
             'deleteSources': False,
             'specification': {
                 'sourceUrl': 'http://movs.me/video.mp4',
+                'externalAuthorization': None,
                 'destination': {
                     'directory': None,
                     'path': '/imports/video.mp4',

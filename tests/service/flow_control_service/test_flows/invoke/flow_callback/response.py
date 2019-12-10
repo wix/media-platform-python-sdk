@@ -23,6 +23,7 @@ invoke_flow_callback_response = {
                     'lifecycle': None,
                     'bucket': None
                 },
+                'externalAuthorization': None,
                 'sourceUrl': 'https://fish.com/dag.gadol'
             },
 
