@@ -30,6 +30,7 @@ class TestFlowState(TestCase):
                             'lifecycle': None,
                             'bucket': None
                         },
+                        'externalAuthorization': None,
                         'sourceUrl': 'https://fish.com/dag.gadol'
                     },
                     'results': [
