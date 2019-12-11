@@ -18,13 +18,15 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     packages=find_packages(include=('media_platform', 'media_platform.*',)),
     install_requires=[
         'python-jose==3.0.1',
         'requests==2.22.0',
         'requests-toolbelt==0.9.1',
-        'typing==3.6.6'
+        'typing==3.6.6',
+        'furl==2.1.0'
     ],
     tests_require=[
         'PyHamcrest==1.9.0',

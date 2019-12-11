@@ -7,6 +7,7 @@ from media_platform.service.file_service.create_file_request import CreateFileRe
 from media_platform.service.file_service.create_files_request import CreateFilesRequest
 from media_platform.service.file_service.delete_file_request import DeleteFileRequest
 from media_platform.service.file_service.download_file_request import DownloadFileRequest
+from media_platform.service.file_service.download_file_v2_request import DownloadFileV2Request
 from media_platform.service.file_service.extract_metadata_request import ExtractMetadataRequest
 from media_platform.service.file_service.file_list_request import FileListRequest
 from media_platform.service.file_service.file_metadata_request import FileMetadataRequest
@@ -85,6 +86,10 @@ class FileService(MediaPlatformService):
     def download_file_request(self):
         # type: () -> DownloadFileRequest
         return DownloadFileRequest(self._app_id, self._app_authenticator, self._base_url)
+
+    def download_file_v2_request(self):
+        # type: () -> DownloadFileV2Request
+        return DownloadFileV2Request(self._app_id, self._app_authenticator, self._base_url)
 
     def file_list_request(self):
         # type: () -> FileListRequest

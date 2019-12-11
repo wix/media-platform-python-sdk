@@ -544,6 +544,24 @@ class TestFileService(unittest.TestCase):
             dogs = next(response.iter_lines())
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))
+            
+    def test_download_file_v2_request_url(self):
+        signed_url = self.file_service.download_file_v2_request().set_path('/file.txt').url()
+
+        assert_that(signed_url, starts_with('https://fish.barrel/file.txt?token='))
+
+    @httpretty.activate
+    def test_download_file_v2_request(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/file.txt',
+            body='barks!'
+        )
+
+        with self.file_service.download_file_v2_request().set_path('/file.txt').execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
 
     @httpretty.activate
     def test_file_list_request(self):
