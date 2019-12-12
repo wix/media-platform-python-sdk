@@ -73,6 +73,7 @@ metadata_response = RestResult(0, 'OK', {
 metadata_response_with_transparency = copy.deepcopy(metadata_response)
 metadata_response_with_transparency.payload['basic']['transparency'] = Transparency.video_alpha
 
+
 class TestFileService(unittest.TestCase):
     authenticator = AppAuthenticator('app', 'secret')
     authenticated_http_client = AuthenticatedHTTPClient(authenticator)
@@ -478,21 +479,28 @@ class TestFileService(unittest.TestCase):
 
         import_file_job = self.file_service.import_file_request().set_destination(
             Destination('/img.png')
-        ).set_source_url('source-url').execute()
+        ).set_source_url(
+            'source-url'
+        ).set_job_callback(Callback('http://callback.com', {'key': 'value'})
+                           ).execute()
 
-        assert_that(import_file_job.id, is_('71f0d3fde7f348ea89aa1173299146f8_19e137e8221b4a709220280b432f947f'))
-        assert_that(json.loads(httpretty.last_request().body),
-                    is_({
-                        'sourceUrl': 'source-url',
-                        'destination': {
-                            'directory': None,
-                            'path': '/img.png',
-                            'lifecycle': None,
-                            'acl': 'public',
-                            'bucket': None
-                        },
-                        'externalAuthorization': None
-                    }))
+        self.assertEqual('71f0d3fde7f348ea89aa1173299146f8_19e137e8221b4a709220280b432f947f', import_file_job.id)
+        self.assertEqual({'sourceUrl': 'source-url',
+                          'destination': {
+                              'directory': None,
+                              'path': '/img.png',
+                              'lifecycle': None,
+                              'acl': 'public',
+                              'bucket': None
+                          },
+                          'externalAuthorization': None,
+                          'jobCallback': {
+                              'url': 'http://callback.com',
+                              'attachment': {'key': 'value'},
+                              'headers': None,
+                              'passthrough': False
+                          }
+                          }, json.loads(httpretty.last_request().body))
 
     @httpretty.activate
     def test_copy_file_request(self):
@@ -563,6 +571,24 @@ class TestFileService(unittest.TestCase):
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))
 
+    def test_download_file_v2_request_url(self):
+        signed_url = self.file_service.download_file_v2_request().set_path('/file.txt').url()
+
+        assert_that(signed_url, starts_with('https://fish.barrel/file.txt?token='))
+
+    @httpretty.activate
+    def test_download_file_v2_request(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/file.txt',
+            body='barks!'
+        )
+
+        with self.file_service.download_file_v2_request().set_path('/file.txt').execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
+
     @httpretty.activate
     def test_file_list_request(self):
         response_body = RestResult(0, 'OK', {
@@ -591,7 +617,6 @@ class TestFileService(unittest.TestCase):
 
     @httpretty.activate
     def test_file_metadata_request(self):
-
         httpretty.register_uri(
             httpretty.GET,
             'https://fish.barrel/_api/files/metadata',
@@ -620,7 +645,6 @@ class TestFileService(unittest.TestCase):
             'path': ['/videos/animals/cat.mp4'],
         })
 
-
     @httpretty.activate
     def test_extract_metadata_request__with_transparency_detection(self):
         httpretty.register_uri(
@@ -629,9 +653,9 @@ class TestFileService(unittest.TestCase):
             body=json.dumps(metadata_response_with_transparency.serialize())
         )
 
-        file_metadata = self.file_service.extract_metadata_request().\
-            set_path('/videos/animals/cat.mp4').\
-            add_detection(Detection.transparency).\
+        file_metadata = self.file_service.extract_metadata_request(). \
+            set_path('/videos/animals/cat.mp4'). \
+            add_detection(Detection.transparency). \
             execute()
 
         assert_that(file_metadata.basic.transparency, is_(Transparency.video_alpha))
