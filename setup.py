@@ -22,11 +22,12 @@ setup(
     ],
     packages=find_packages(include=('media_platform', 'media_platform.*',)),
     install_requires=[
-        'python-jose==3.0.1',
+        'python-jose==3.1.0',
         'requests==2.22.0',
         'requests-toolbelt==0.9.1',
         'typing==3.6.6',
-        'furl==2.1.0'
+        'furl==2.1.0',
+        'future'
     ],
     tests_require=[
         'PyHamcrest==1.9.0',
