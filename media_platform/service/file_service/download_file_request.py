@@ -5,6 +5,7 @@ from requests import Response
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.auth.token import Token
 from media_platform.service.file_service.attachment import Attachment
+from media_platform.service.file_service.inline import Inline
 
 
 class DownloadFileRequest(object):
@@ -14,6 +15,7 @@ class DownloadFileRequest(object):
         self.path = None
         self.ttl = 600  # seconds
         self.attachment = None
+        self.inline = None
         self.on_expired_redirect_to = None
 
         self._app_urn = 'urn:app:' + app_id
@@ -35,6 +37,11 @@ class DownloadFileRequest(object):
         self.attachment = attachment
         return self
 
+    def set_inline(self, inline):
+        # type: (Inline) -> DownloadFileRequest
+        self.inline = inline
+        return self
+
     def set_on_expired_redirect_to(self, on_expired_redirect_to):
         # type: (str) -> DownloadFileRequest
         self.on_expired_redirect_to = on_expired_redirect_to
@@ -46,8 +53,14 @@ class DownloadFileRequest(object):
         payload = {'path': self.path}
         if self.on_expired_redirect_to:
             payload['onExpireRedirectTo'] = self.on_expired_redirect_to
+
+        if self.attachment and self.inline:
+            raise ValueError('Can\'t set both attachment and inline')
+
         if self.attachment:
             payload['attachment'] = self.attachment.serialize()
+        elif self.inline:
+            payload['inline'] = self.inline.serialize()
 
         token = Token(
             self._app_urn,
@@ -64,7 +77,10 @@ class DownloadFileRequest(object):
 
     def execute(self):
         # type: () -> Response
+        """
+        if you don't close the response, don't come complaining about connection leakage :)
         # http://docs.python-requests.org/en/master/user/advanced/#body-content-workflow
-
-        # if you don't close the response, don't come complaining about connection leakage :)
+        """
         return requests.get(self._url, stream=True)
+
+
