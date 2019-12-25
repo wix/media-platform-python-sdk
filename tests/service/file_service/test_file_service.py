@@ -11,8 +11,10 @@ from media_platform.metadata.video.transparency import Transparency
 from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
+from media_platform.service.file_service.attachment import Attachment
 from media_platform.service.file_service.extract_metadata_request import Detection
 from media_platform.service.file_service.file_service import FileService
+from media_platform.service.file_service.inline import Inline
 from media_platform.service.file_service.upload_configuration import UploadConfiguration
 from media_platform.service.file_service.upload_url import UploadUrl
 from media_platform.service.lifecycle import Lifecycle, Action
@@ -552,24 +554,39 @@ class TestFileService(unittest.TestCase):
             dogs = next(response.iter_lines())
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))
-            
-    def test_download_file_v2_request_url(self):
-        signed_url = self.file_service.download_file_v2_request().set_path('/file.txt').url()
-
-        assert_that(signed_url, starts_with('https://fish.barrel/file.txt?token='))
 
     @httpretty.activate
-    def test_download_file_v2_request(self):
+    def test_download_file_v2_request__attachment(self):
         httpretty.register_uri(
             httpretty.GET,
-            'https://fish.barrel/file.txt',
-            body='barks!'
+            'https://fish.barrel/file.txt?filename=attachment-filename.txt',
+            body='barks!',
+            adding_headers={'Content-Disposition': 'attachment; filename*=UTF-8\'\'attachment-filename.txt'},
         )
 
-        with self.file_service.download_file_v2_request().set_path('/file.txt').execute() as response:
+        with self.file_service.download_file_v2_request().set_path('/file.txt'). \
+                set_attachment(Attachment('attachment-filename.txt')).execute() as response:
             dogs = next(response.iter_lines())
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))
+            assert_that(response.headers['Content-Disposition'],
+                        is_('attachment; filename*=UTF-8\'\'attachment-filename.txt'))
+
+    @httpretty.activate
+    def test_download_file_v2_request__inline_with_filename(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/file.txt',
+            body='barks!',
+            adding_headers={'Content-Disposition': 'inline; filename*=UTF-8\'\'inline-filename.txt'}
+        )
+
+        with self.file_service.download_file_v2_request().set_path('/file.txt'). \
+                set_inline(Inline('inline-filename.txt')).execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
+            assert_that(response.headers['Content-Disposition'], is_('inline; filename*=UTF-8\'\'inline-filename.txt'))
 
     def test_download_file_v2_request_url(self):
         signed_url = self.file_service.download_file_v2_request().set_path('/file.txt').url()

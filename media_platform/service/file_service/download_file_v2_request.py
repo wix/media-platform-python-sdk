@@ -6,6 +6,7 @@ from requests import Response
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.auth.token import Token
 from media_platform.service.file_service.attachment import Attachment
+from media_platform.service.file_service.inline import Inline
 
 
 class DownloadFileV2Request(object):
@@ -15,6 +16,7 @@ class DownloadFileV2Request(object):
         self.path = None
         self.ttl = 600  # seconds
         self.attachment = None
+        self.inline = None
         self.on_expired_redirect_to = None
 
         self._app_urn = 'urn:app:' + app_id
@@ -34,6 +36,11 @@ class DownloadFileV2Request(object):
     def set_attachment(self, attachment):
         # type: (Attachment) -> DownloadFileV2Request
         self.attachment = attachment
+        return self
+
+    def set_inline(self, inline):
+        # type: (Inline) -> DownloadFileV2Request
+        self.inline = inline
         return self
 
     def set_on_expired_redirect_to(self, on_expired_redirect_to):
@@ -60,8 +67,16 @@ class DownloadFileV2Request(object):
         signed_token = self._authenticator.sign_token(token)
 
         url = furl(self._url).add(path=self.path).add(query_params={'token': signed_token})
+
+        if self.attachment and self.inline:
+            raise ValueError('Can\'t set both attachment and inline')
+
         if self.attachment:
             url.add(query_params={'filename': self.attachment.file_name})
+        elif self.inline:
+            url.add(query_params={'filename': self.inline.file_name})
+            url.add(query_params={'inline': ''})
+
 
         return url.url
 
@@ -71,3 +86,4 @@ class DownloadFileV2Request(object):
 
         # if you don't close the response, don't come complaining about connection leakage :)
         return requests.get(self.url(), stream=True)
+
