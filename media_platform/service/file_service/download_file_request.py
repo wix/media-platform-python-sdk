@@ -81,6 +81,6 @@ class DownloadFileRequest(object):
         if you don't close the response, don't come complaining about connection leakage :)
         # http://docs.python-requests.org/en/master/user/advanced/#body-content-workflow
         """
-        return requests.get(self._url, stream=True)
+        return requests.get(self.url(), stream=True)
 
 
