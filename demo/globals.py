@@ -1,9 +1,12 @@
 import os
-import uuid
+import random
+import string
 
 import media_platform
 
-demo_path = '/python-demo/' + str(uuid.uuid4())
+unique_path = ''.join(random.choice(string.ascii_lowercase) for _ in range(8))
+
+demo_path = '/python-demo/' + unique_path
 resources_dir = os.path.abspath(os.path.dirname(os.path.realpath(__file__)) + '/resources')
 
 project_id = 'wixmp-410a67650b2f46baa5d003c6'

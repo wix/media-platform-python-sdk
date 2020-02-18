@@ -1,8 +1,9 @@
-from globals import demo_path, resources_dir, client
+from globals import demo_path, resources_dir, client, project_id
 from media_platform import Source, Destination, FileDescriptor
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
 from media_platform.job.extract_archive.extraction_report import ExtractionReport
-from wait_for_result import wait_for_result
+from media_platform.job.result.extract_archive_result import ExtractArchiveResult
+from wait_for_results import wait_for_result
 
 archive_path = demo_path + '/archive1.zip'
 extracted_path = demo_path + '/extracted'
@@ -12,16 +13,17 @@ report_path = extracted_path + '/report.csv'
 def extract_archive_demo():
     archive_file = upload_archive()
 
-    extraction_job = extract(archive_file)
+    extraction_job = extract_archive(archive_file)
 
-    wait_for_result(extraction_job)
+    result = wait_for_result(extraction_job)  # type: ExtractArchiveResult
 
-    print_report()
+    print_report(result.report_file_descriptor)
 
 
 def upload_archive():
     # type: () -> FileDescriptor
     print('Uploading archive to %s...' % archive_path)
+
     with open(resources_dir + '/archive.zip', 'rb') as archive:
         return client.file_service.upload_file_v2_request(). \
             set_path(archive_path). \
@@ -29,7 +31,7 @@ def upload_archive():
             execute()
 
 
-def extract(archive_file):
+def extract_archive(archive_file):
     # type: (FileDescriptor) -> ExtractArchiveJob
     print('Extracting archive to %s...' % extracted_path)
 
@@ -40,13 +42,15 @@ def extract(archive_file):
         execute()
 
 
-def print_report():
+def print_report(report_file):
+    # type: (FileDescriptor) -> None
     print('Successfully extracted. Archive contents:')
 
     report = client.file_service.download_file_v2_request(). \
-        set_path(report_path). \
+        set_path(report_file.path). \
         execute()
 
     with report:
-        print(report.content)
+        for path in list(report.iter_lines())[1:]:
+            print('https://%s.wixmp.com%s' % (project_id, path))
     print('')

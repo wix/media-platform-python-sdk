@@ -3,13 +3,13 @@ from media_platform import FileDescriptor, Source, Destination
 from media_platform.job.job_group import JobGroup
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
 from media_platform.job.transcode_job import TranscodeSpecification
-from wait_for_result import wait_for_result
+from wait_for_results import wait_for_result_files
 
 video_path = demo_path + '/video.mp4'
-transcoded_dir = demo_path + '/transcoded'
+transcoded_path = demo_path + '/transcoded'
 
 transcode_specification = TranscodeSpecification(
-    Destination(directory=transcoded_dir),
+    Destination(transcoded_path),
     quality_range=VideoQualityRange(VideoQuality.res_360p, VideoQuality.res_720p)
 )
 
@@ -18,7 +18,7 @@ def transcode_video_demo():
     video_file = upload_video()
     transcode_job_group = transcode_video(video_file)
 
-    transcoded_files = wait_for_results(transcode_job_group)
+    transcoded_files = wait_for_result_files(transcode_job_group)
 
     print_playlist_url(transcoded_files)
 
@@ -36,18 +36,9 @@ def upload_video():
 def transcode_video(video_file):
     # type: (FileDescriptor) -> JobGroup
     return client.transcode_service.transcode_request(). \
-        add_sources(Source(video_path)). \
+        add_sources(Source(video_file.path)). \
         add_specifications(transcode_specification). \
         execute()
-
-
-def wait_for_results(transcode_job_group):
-    transcoded_files = []
-    for job in transcode_job_group.jobs:
-        job = wait_for_result(job)
-        transcoded_files.append(job.result.file_descriptor)
-
-    return transcoded_files
 
 
 def print_playlist_url(transcoded_files):
