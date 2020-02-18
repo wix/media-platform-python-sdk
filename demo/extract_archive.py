@@ -1,10 +1,8 @@
-from time import sleep
-
+from globals import demo_path, resources_dir, client
 from media_platform import Source, Destination, FileDescriptor
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
 from media_platform.job.extract_archive.extraction_report import ExtractionReport
-from media_platform.job.job import JobStatus
-from globals import demo_path, resources_dir, client
+from wait_for_result import wait_for_result
 
 archive_path = demo_path + '/archive1.zip'
 extracted_path = demo_path + '/extracted'
@@ -42,24 +40,13 @@ def extract(archive_file):
         execute()
 
 
-def wait_for_result(job):
-    # type: (ExtractArchiveJob) -> None
-    while job.status not in [JobStatus.success, JobStatus.error]:
-        sleep(1)
-        job = client.job_service.job_request(). \
-            set_id(job.id). \
-            execute()
-
-    if job.status == JobStatus.error:
-        raise Exception('Error extracting archive: %s' % job.result.message)
-
-
 def print_report():
     print('Successfully extracted. Archive contents:')
 
-    report = client.file_service.download_file_request(). \
+    report = client.file_service.download_file_v2_request(). \
         set_path(report_path). \
         execute()
 
     with report:
         print(report.content)
+    print('')
