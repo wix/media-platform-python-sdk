@@ -47,3 +47,6 @@ def print_playlist_url(transcoded_files):
         execute()
     print('Playlist url: https:%s' % playlist)
     print('')
+
+if __name__ == '__main__':
+    transcode_video_demo()

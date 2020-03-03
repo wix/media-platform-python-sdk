@@ -6,9 +6,6 @@
 
 # Python SDK
  
-...
-
-
 ## Installation
 
 ```bash
