@@ -5,6 +5,7 @@ from requests import Response
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.auth.token import Token
 from media_platform.service.file_service.attachment import Attachment
+from media_platform.service.file_service.content_disposition import ContentDisposition
 from media_platform.service.file_service.inline import Inline
 
 
@@ -40,6 +41,17 @@ class DownloadFileRequest(object):
     def set_inline(self, inline):
         # type: (Inline) -> DownloadFileRequest
         self.inline = inline
+        return self
+
+    def set_disposition(self, disposition):
+        # type: (ContentDisposition) -> DownloadFileRequest
+        if disposition.type == ContentDisposition.Type.inline:
+            self.inline = Inline(disposition.file_name)
+        elif disposition.type == ContentDisposition.Type.attachment:
+            self.attachment = Attachment(disposition.file_name)
+        else:
+            raise ValueError('Unsupported disposition type %s' % disposition.type)
+
         return self
 
     def set_on_expired_redirect_to(self, on_expired_redirect_to):

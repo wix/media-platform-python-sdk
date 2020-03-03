@@ -12,6 +12,7 @@ from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
 from media_platform.service.file_service.attachment import Attachment
+from media_platform.service.file_service.content_disposition import ContentDisposition
 from media_platform.service.file_service.extract_metadata_request import Detection
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.inline import Inline
@@ -572,6 +573,24 @@ class TestFileService(unittest.TestCase):
                         is_('attachment; filename*=UTF-8\'\'attachment-filename.txt'))
 
     @httpretty.activate
+    def test_download_file_request__disposition_attachment(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/download/file',
+            body='barks!',
+            adding_headers={'Content-Disposition': 'attachment; filename*=UTF-8\'\'attachment-filename.txt'}
+        )
+
+        with self.file_service.download_file_request().set_path('/file.txt'). \
+                set_disposition(ContentDisposition('attachment-filename.txt', ContentDisposition.Type.attachment)). \
+                execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
+            assert_that(response.headers['Content-Disposition'],
+                        is_('attachment; filename*=UTF-8\'\'attachment-filename.txt'))
+
+    @httpretty.activate
     def test_download_file_request__inline_with_filename(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -580,9 +599,28 @@ class TestFileService(unittest.TestCase):
             adding_headers={'Content-Disposition': 'inline; filename*=UTF-8\'\'inline-filename.txt'}
         )
 
-        download_request = self.file_service.download_file_request().\
-            set_path('/file.txt').\
+        download_request = self.file_service.download_file_request(). \
+            set_path('/file.txt'). \
             set_inline(Inline('inline-filename.txt'))
+
+        with download_request.execute() as response:
+            dogs = next(response.iter_lines())
+
+            assert_that(dogs.decode('utf-8'), is_('barks!'))
+            assert_that(response.headers['Content-Disposition'], is_('inline; filename*=UTF-8\'\'inline-filename.txt'))
+
+    @httpretty.activate
+    def test_download_file_request__disposition_inline_with_filename(self):
+        httpretty.register_uri(
+            httpretty.GET,
+            'https://fish.barrel/_api/download/file',
+            body='barks!',
+            adding_headers={'Content-Disposition': 'inline; filename*=UTF-8\'\'inline-filename.txt'}
+        )
+
+        download_request = self.file_service.download_file_request(). \
+            set_path('/file.txt'). \
+            set_disposition(ContentDisposition('inline-filename.txt', ContentDisposition.Type.inline))
 
         with download_request.execute() as response:
             dogs = next(response.iter_lines())
@@ -616,8 +654,8 @@ class TestFileService(unittest.TestCase):
             adding_headers={'Content-Disposition': 'inline; filename*=UTF-8\'\'inline-filename.txt'}
         )
 
-        download_request = self.file_service.download_file_v2_request().\
-            set_path('/file.txt').\
+        download_request = self.file_service.download_file_v2_request(). \
+            set_path('/file.txt'). \
             set_inline(Inline('inline-filename.txt'))
 
         with download_request.execute() as response:
