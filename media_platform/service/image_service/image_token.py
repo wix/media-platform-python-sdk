@@ -42,12 +42,13 @@ class Watermark(object):
 
 
 class Policy(object):
-    def __init__(self, path, max_width=None, max_height=None):
-        # type: (str, int, int) -> None
+    def __init__(self, path, max_width=None, max_height=None, min_blur=None):
+        # type: (str, int, int, float) -> None
         super(Policy, self).__init__()
         self.path = path
         self.max_width = max_width
         self.max_height = max_height
+        self.min_blur = min_blur
 
     def to_claim(self):
         # type: () -> dict
@@ -58,6 +59,8 @@ class Policy(object):
             policy['height'] = '<=%s' % self.max_height
         if self.max_width:
             policy['width'] = '<=%s' % self.max_width
+        if self.min_blur:
+            policy['blur'] = '>=%s' % self.min_blur
 
         return {
             'obj': [[policy]]
