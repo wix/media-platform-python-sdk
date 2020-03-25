@@ -1,4 +1,4 @@
-from globals import demo_path, resources_dir, client, project_id
+from demo.globals import demo_path, resources_dir, client, project_id
 from media_platform import Source, Destination, FileDescriptor
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
 from media_platform.job.extract_archive.extraction_report import ExtractionReport

@@ -1,4 +1,4 @@
-from globals import demo_path, resources_dir, client, project_id
+from demo.globals import demo_path, resources_dir, client, project_id
 from media_platform import FileDescriptor
 
 image_path = demo_path + '/image.png'

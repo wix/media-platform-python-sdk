@@ -2,7 +2,7 @@ from time import sleep
 
 from typing import List
 
-from globals import client
+from demo.globals import client
 from media_platform import FileDescriptor
 from media_platform.job.job import JobStatus, Job
 from media_platform.job.job_group import JobGroup
