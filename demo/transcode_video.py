@@ -1,9 +1,9 @@
 from demo.globals import demo_path, resources_dir, client
+from demo.wait_for_results import wait_for_result_files
 from media_platform import FileDescriptor, Source, Destination
 from media_platform.job.job_group import JobGroup
 from media_platform.job.transcode.video_qualities import VideoQualityRange, VideoQuality
 from media_platform.job.transcode_job import TranscodeSpecification
-from wait_for_results import wait_for_result_files
 
 video_path = demo_path + '/video.mp4'
 transcoded_path = demo_path + '/transcoded'
