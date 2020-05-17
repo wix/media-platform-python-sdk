@@ -23,9 +23,9 @@ setup(
     packages=find_packages(include=('media_platform', 'media_platform.*',)),
     install_requires=[
         'python-jose==3.1.0',
-        'requests==2.22.0',
+        'requests==2.23.0',
         'requests-toolbelt==0.9.1',
-        'typing==3.6.6',
+        'typing==3.7.4.1',
         'furl==2.1.0',
         'future'
     ],

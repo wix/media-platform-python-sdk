@@ -38,7 +38,13 @@ class TestImageService(unittest.TestCase):
             ],
             'faces': [
                 {'y': 446, 'x': 1319, 'height': 670, 'width': 580}
-            ]}
+            ],
+            'cropHints': [
+                {'x': 383, 'y': 393, 'width': 155, 'height': 180,
+                 'confidence': 0.79999995,
+                 'importanceFraction': 0.59999996}
+            ],
+        }
 
         response = RestResult(0, 'OK', payload)
         httpretty.register_uri(
@@ -50,14 +56,14 @@ class TestImageService(unittest.TestCase):
         features = self.image_service.extract_features_request().set_path(
             '/image.png'
         ).add_features(
-            Feature.explicit_content, Feature.faces, Feature.colors, Feature.labels
+            Feature.explicit_content, Feature.faces, Feature.colors, Feature.labels, Feature.crop_hints
         ).execute()
 
         assert_that(features, instance_of(ImageFeatures))
         assert_that(httpretty.last_request().querystring,
                     is_({
                         'path': ['/image.png'],
-                        'features': ['explicit_content,faces,colors,labels']
+                        'features': ['explicit_content,faces,colors,labels,crop_hints']
                     }))
 
     @httpretty.activate

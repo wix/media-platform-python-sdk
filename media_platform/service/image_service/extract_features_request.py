@@ -8,8 +8,9 @@ class Feature(object):
     labels = 'labels'
     colors = 'colors'
     explicit_content = 'explicit_content'
+    crop_hints = 'crop_hints'
 
-    values = [faces, labels, colors, explicit_content]
+    values = [faces, labels, colors, explicit_content, crop_hints]
 
     @classmethod
     def has_value(cls, value):
