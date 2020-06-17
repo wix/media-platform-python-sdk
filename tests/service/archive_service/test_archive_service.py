@@ -158,6 +158,12 @@ class TestArchiveService(unittest.TestCase):
                         'acl': 'public'
                     },
                     'format': 'json'
+                },
+                'jobCallback': {
+                    'url': 'http://callback.url',
+                    'headers': {'headerKey': 'headerValue'},
+                    'attachment': {'attachmentKey': 'attachmentValue'},
+                    'passthrough': False
                 }
             },
             'result': {
@@ -197,6 +203,12 @@ class TestArchiveService(unittest.TestCase):
                 Destination(path='/video.report.json'),
                 ExtractionReportFormat.json
             )
+        ).set_callback(
+            Callback(
+                'http://callback.url',
+                {'attachmentKey': 'attachmentValue'},
+                {'headerKey': 'headerValue'}
+            )
         ).execute()
 
         assert_that(job, instance_of(ExtractArchiveJob))
@@ -224,7 +236,12 @@ class TestArchiveService(unittest.TestCase):
                             },
                             'format': 'json'
                         },
-                        'jobCallback': None
+                        'jobCallback': {
+                            'url': 'http://callback.url',
+                            'headers': {'headerKey': 'headerValue'},
+                            'attachment': {'attachmentKey': 'attachmentValue'},
+                            'passthrough': False
+                        }
                     }))
 
     def test_archive_manifest_url_request__url(self):
