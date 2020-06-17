@@ -1,11 +1,8 @@
 from unittest import TestCase
 from hamcrest import *
 
-from media_platform.job.job_callback_payload import JobCallbackPayload
-from media_platform.service.destination import Destination
-from media_platform.service.file_descriptor import ACL, FileDescriptor, FileType, FileMimeType
+from media_platform.service.file_descriptor import FileDescriptor, FileType
 from media_platform.service.file_service.file_upload_callback_payload import FileUploadCallbackPayload
-from media_platform.service.source import Source
 
 
 class TestFileUploadCallbackPayload(TestCase):
