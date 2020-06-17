@@ -3,6 +3,7 @@ import unittest
 
 import httpretty
 from hamcrest import assert_that, instance_of, is_, starts_with
+
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.create_archive_job import ArchiveType, CreateArchiveJob
@@ -158,13 +159,13 @@ class TestArchiveService(unittest.TestCase):
                         'acl': 'public'
                     },
                     'format': 'json'
-                },
-                'jobCallback': {
-                    'url': 'http://callback.url',
-                    'headers': {'headerKey': 'headerValue'},
-                    'attachment': {'attachmentKey': 'attachmentValue'},
-                    'passthrough': False
                 }
+            },
+            'callback': {
+                'url': 'http://callback.url',
+                'headers': {'headerKey': 'headerValue'},
+                'attachment': {'attachmentKey': 'attachmentValue'},
+                'passthrough': False
             },
             'result': {
                 'message': 'OK',
@@ -213,6 +214,9 @@ class TestArchiveService(unittest.TestCase):
 
         assert_that(job, instance_of(ExtractArchiveJob))
         assert_that(job.group_id, is_('g'))
+        assert_that(job.callback.url, is_('http://callback.url'))
+        assert_that(job.callback.attachment, is_({'attachmentKey': 'attachmentValue'}))
+        assert_that(job.callback.headers, is_({'headerKey': 'headerValue'}))
         assert_that(json.loads(httpretty.last_request().body),
                     is_({
                         'source': {
