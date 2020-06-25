@@ -21,6 +21,9 @@ def live_stream_demo():
     print('Stream Key: ' + stream_key)
     print('Playback url: https:' + stream.playback[0].path)
 
+    stream = client.live_service.get_stream_request().set_id(stream.id).execute()
+    print('Got stream: %s' % stream.serialize())
+
 
 if __name__ == '__main__':
     live_stream_demo()
