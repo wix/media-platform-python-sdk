@@ -127,7 +127,7 @@ class TestJobService(unittest.TestCase):
         jobs = self.job_service.job_group_request().set_group_id('g').execute()
 
         assert_that(jobs[0], instance_of(Job))
-        assert_that(jobs[0].id, is_('g_1'))
+        assert_that(jobs[0].file_id, is_('g_1'))
 
     @httpretty.activate
     def test_job_list_request(self):
@@ -159,7 +159,7 @@ class TestJobService(unittest.TestCase):
         ).set_status(JobStatus.pending).execute()
 
         assert_that(job_list.jobs[0], instance_of(Job))
-        assert_that(job_list.jobs[0].id, is_('g_1'))
+        assert_that(job_list.jobs[0].file_id, is_('g_1'))
         assert_that(httpretty.last_request().querystring, is_({
             'nextPageToken': ['nnn'],
             'orderBy': ['dateUpdated'],

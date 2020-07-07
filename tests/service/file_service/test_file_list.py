@@ -22,5 +22,5 @@ class TestFileList(TestCase):
 
         file_list = FileList.deserialize(files_data)
 
-        assert_that(file_list.files[0].id, is_('moshe'))
+        assert_that(file_list.files[0].file_id, is_('moshe'))
         assert_that(file_list.next_page_token, is_('token'))

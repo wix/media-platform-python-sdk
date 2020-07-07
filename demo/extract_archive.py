@@ -20,7 +20,6 @@ def extract_archive_demo():
     print_report(result.report_file_descriptor)
 
 
-
 def upload_archive():
     # type: () -> FileDescriptor
     print('Uploading archive to %s...' % archive_path)
@@ -55,6 +54,7 @@ def print_report(report_file):
         for path in list(report.iter_lines())[1:]:
             print('https://%s.wixmp.com%s' % (project_id, path))
     print('')
+
 
 if __name__ == '__main__':
     extract_archive_demo()

@@ -1,63 +1,57 @@
+from __future__ import annotations
+
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_descriptor import FileDescriptor, FileMimeType, FileType, ACL
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class CreateFileRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    path: str
+    mime_type: FileMimeType = FileMimeType.directory
+    type: FileType = FileType.directory
+    acl: ACL = ACL.public
+    size: int = 0
+    file_id: str
+    bucket: str
+
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(CreateFileRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/files', FileDescriptor)
 
-        self.path = None
-        self.mime_type = FileMimeType.directory
-        self.type = FileType.directory
-        self.acl = ACL.public
-        self.size = 0
-        self.id = None
-        self.bucket = None
-
-    def set_path(self, path):
-        # type: (str) -> CreateFileRequest
+    def set_path(self, path: str) -> CreateFileRequest:
         self.path = path
         return self
 
-    def set_mime_type(self, mime_type):
-        # type: (FileMimeType) -> CreateFileRequest
+    def set_mime_type(self, mime_type: FileMimeType) -> CreateFileRequest:
         self.mime_type = mime_type
         return self
 
-    def set_type(self, file_type):
-        # type: (FileType) -> CreateFileRequest
+    def set_type(self, file_type: FileType) -> CreateFileRequest:
         self.type = file_type
         return self
 
-    def set_acl(self, acl):
-        # type: (ACL) -> CreateFileRequest
+    def set_acl(self, acl: ACL) -> CreateFileRequest:
         self.acl = acl
         return self
 
-    def set_size(self, size):
-        # type: (int) -> CreateFileRequest
+    def set_size(self, size: int) -> CreateFileRequest:
         self.size = size
         return self
 
-    def set_id(self, id):
-        # type: (str) -> CreateFileRequest
-        self.id = id
+    def set_id(self, file_id: str) -> CreateFileRequest:
+        self.file_id = file_id
         return self
 
-    def set_bucket(self, bucket):
-        # type: (str) -> CreateFileRequest
+    def set_bucket(self, bucket: str) -> CreateFileRequest:
         self.bucket = bucket
         return self
 
-    def _params(self):
+    def _params(self) -> dict:
         return {
             'path': self.path,
             'mimeType': self.mime_type,
             'type': self.type,
             'acl': self.acl,
             'size': self.size,
-            'id': self.id,
+            'id': self.file_id,
             'bucket': self.bucket
         }

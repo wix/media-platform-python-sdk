@@ -1,3 +1,3 @@
-class StreamProtocol(object):
+class StreamProtocol:
     rtmp = 'rtmp'
     webrtc = 'webrtc'

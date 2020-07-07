@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.import_file_job import ImportFileJob
 from media_platform.service.callback import Callback
@@ -7,41 +9,35 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class ImportFileRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    source_url: str
+    external_authorization: ExternalAuthorization
+    destination: Destination
+    job_callback: Callback
+
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(ImportFileRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/import/file',
                                                 ImportFileJob)
 
-        self.source_url = None
-        self.external_authorization = None  # type: ExternalAuthorization
-        self.destination = None  # type: Destination
-        self.job_callback = None  # type: Callback
-
-    def set_source_url(self, source_url):
-        # type: (str) -> ImportFileRequest
+    def set_source_url(self, source_url: str) -> ImportFileRequest:
         self.source_url = source_url
         return self
 
-    def set_external_authorization(self, external_authorization):
-        # type: (ExternalAuthorization) -> ImportFileRequest
+    def set_external_authorization(self, external_authorization: ExternalAuthorization) -> ImportFileRequest:
         self.external_authorization = external_authorization
         return self
 
-    def set_destination(self, destination):
-        # type: (Destination) -> ImportFileRequest
+    def set_destination(self, destination: Destination) -> ImportFileRequest:
         self.destination = destination
         return self
 
-    def set_job_callback(self, job_callback):
-        # type: (Callback) -> ImportFileRequest
+    def set_job_callback(self, job_callback: Callback) -> ImportFileRequest:
         self.job_callback = job_callback
         return self
 
-    def execute(self):
-        # type: () -> ImportFileJob
+    def execute(self) -> ImportFileJob:
         return super(ImportFileRequest, self).execute()
 
-    def _params(self):
+    def _params(self) -> dict:
         return {
             'sourceUrl': self.source_url,
             'externalAuthorization': self.external_authorization.serialize() if self.external_authorization else None,

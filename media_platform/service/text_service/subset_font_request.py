@@ -7,8 +7,7 @@ from media_platform.service.source import Source
 
 
 class SubsetFontRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(SubsetFontRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/fonts/subset',
                                                 SubsetFontJobGroup)
 
@@ -16,29 +15,25 @@ class SubsetFontRequest(MediaPlatformRequest):
         self.specification = None
         self.callback = None
 
-    def set_source(self, source):
-        # type: (Source) -> SubsetFontRequest
+    def set_source(self, source: Source):
         self.source = source
         return self
 
-    def set_specification(self, specification):
-        # type: (SubsetFontSpecification) -> SubsetFontRequest
+    def set_specification(self, specification: SubsetFontSpecification):
         self.specification = specification
         return self
 
-    def set_callback(self, callback):
-        # type: (Callback) -> SubsetFontRequest
+    def set_callback(self, callback: Callback):
         self.callback = callback
         return self
 
     def validate(self):
         self.specification.validate()
 
-    def execute(self):
-        # type: () -> SubsetFontJobGroup
+    def execute(self) -> SubsetFontJobGroup:
         return super(SubsetFontRequest, self).execute()
 
-    def _params(self):
+    def _params(self) -> dict:
         return {
             'source': self.source.serialize(),
             'specification': self.specification.serialize(),

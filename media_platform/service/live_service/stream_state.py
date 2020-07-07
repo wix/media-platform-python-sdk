@@ -1,4 +1,4 @@
-class StreamState(object):
+class StreamState:
     created = 'created'
     streaming = 'streaming'
     pending_reconnect = 'pending_reconnect'

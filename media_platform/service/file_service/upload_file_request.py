@@ -1,53 +1,67 @@
+from __future__ import annotations
+
 import json
 
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.callback import Callback
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileMimeType
-from media_platform.service.file_service.upload_file_response import _UploadFileResponse
-from media_platform.service.file_service.upload_url_request import UploadUrlRequest
+from media_platform.service.file_service.upload_configuration_request import UploadConfigurationRequest
 from media_platform.service.lifecycle import Lifecycle
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class UploadFileRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    path: str
+    mime_type: str = FileMimeType.defualt
+    acl: ACL = ACL.public
+    size: int
+    lifecycle: Lifecycle
+    callback: Callback
+    bucket: str
+    response_processor: callable
+    filename: str = 'filename'
+    content: str
+
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(UploadFileRequest, self).__init__(authenticated_http_client, 'POST', base_url, FileDescriptor)
 
-        self.path = None
-        self.mime_type = FileMimeType.defualt
-        self.acl = ACL.public
-        self.lifecycle = None
-        self.callback = None
-
-        self.content = None
-
-    def set_path(self, path):
-        # type: (str) -> UploadFileRequest
+    def set_path(self, path: str) -> UploadFileRequest:
         self.path = path
         return self
 
-    def set_mime_type(self, mime_type):
-        # type: (str) -> UploadFileRequest
+    def set_mime_type(self, mime_type: str) -> UploadFileRequest:
         self.mime_type = mime_type
         return self
 
-    def set_acl(self, acl):
-        # type: (ACL) -> UploadFileRequest
+    def set_acl(self, acl: ACL) -> UploadFileRequest:
         self.acl = acl
         return self
 
-    def set_lifecycle(self, lifecycle):
-        # type: (Lifecycle) -> UploadFileRequest
+    def set_size(self, size: int) -> UploadFileRequest:
+        self.size = size
+        return self
+
+    def set_lifecycle(self, lifecycle: Lifecycle) -> UploadFileRequest:
         self.lifecycle = lifecycle
         return self
 
-    def set_callback(self, callback):
-        # type: (Callback) -> UploadFileRequest
+    def set_callback(self, callback: Callback) -> UploadFileRequest:
         self.callback = callback
         return self
 
-    def set_content(self, content):
+    def set_bucket(self, bucket: str) -> UploadFileRequest:
+        self.bucket = bucket
+        return self
+
+    def override_response_processor(self, response_processor: callable) -> UploadFileRequest:
+        self.response_processor = response_processor
+        return self
+
+    def set_filename(self, filename: str) -> UploadFileRequest:
+        self.filename = filename
+        return self
+
+    def set_content(self, content: str) -> UploadFileRequest:
         self.content = content
         return self
 
@@ -55,30 +69,20 @@ class UploadFileRequest(MediaPlatformRequest):
         FileDescriptor.path_validator(self.path)
         FileDescriptor.acl_validator(self.acl)
 
-    def execute(self):
-        # type: () -> FileDescriptor
+    def execute(self) -> FileDescriptor:
         self.validate()
 
-        upload_url = UploadUrlRequest(self.authenticated_http_client, self.url).set_path(self.path).set_acl(
-            self.acl
-        ).set_mime_type(self.mime_type).execute()
+        config = UploadConfigurationRequest(self.authenticated_http_client, self.url).set_path(
+            self.path
+        ).set_acl(self.acl).set_mime_type(self.mime_type).set_callback(self.callback).set_size(
+            self.size
+        ).set_bucket(self.bucket).execute()
 
         params = self._params()
-        params.update({
-            'uploadToken': upload_url.upload_token
-        })
+        return self.authenticated_http_client.post_data(config.upload_url, self.content, self.mime_type, params,
+                                                        FileDescriptor, self.filename, self.response_processor)
 
-        response = self.authenticated_http_client.post_data(upload_url.upload_url, self.content, self.mime_type, params,
-                                                            _UploadFileResponse)
-
-        return response.file_descriptors[0]
-
-    def _params(self):
-        # type: () -> dict
+    def _params(self) -> dict:
         return {
-            'path': self.path,
-            'mimeType': self.mime_type,
-            'acl': self.acl,
             'lifecycle': json.dumps(self.lifecycle.serialize()) if self.lifecycle else None,
-            'callback': json.dumps(self.callback.serialize()) if self.callback else None,
         }

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 from media_platform.lang import datetime_serialization
@@ -5,7 +7,7 @@ from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.service.lifecycle import Lifecycle
 
 
-class ACL(object):
+class ACL:
     public = 'public'
     private = 'private'
 
@@ -14,13 +16,13 @@ class ACL(object):
         return value in [cls.public, cls.private]
 
 
-class FileType(object):
+class FileType:
     file = '-'
     directory = 'd'
     symlink = 'l'
 
 
-class FileMimeType(object):
+class FileMimeType:
     directory = 'application/vnd.wix-media.dir'
     symlink = 'application/vnd.wix-media.symlink'
 
@@ -28,9 +30,9 @@ class FileMimeType(object):
 
 
 class FileDescriptor(Serializable, Deserializable):
-    def __init__(self, path, file_id, file_type, mime_type, size, acl=ACL.public, lifecycle=None, file_hash=None,
-                 date_created=None, date_updated=None):
-        # type: (str, str, str, str, int, ACL, Lifecycle, str, datetime, datetime) -> None
+    def __init__(self, path: str, file_id: str, file_type: FileType, mime_type: str, size: int, acl: ACL = ACL.public,
+                 lifecycle: Lifecycle = None, file_hash: str = None,
+                 date_created: datetime = None, date_updated: datetime = None):
         super(FileDescriptor, self).__init__()
 
         self._validate_values(acl, path)
@@ -47,9 +49,7 @@ class FileDescriptor(Serializable, Deserializable):
         self.date_updated = date_updated or datetime.utcnow()
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> FileDescriptor
-
+    def deserialize(cls, data: dict) -> FileDescriptor:
         lifecycle_data = data.get('lifecycle')
         lifecycle = Lifecycle.deserialize(lifecycle_data) if lifecycle_data else None
 
@@ -58,8 +58,7 @@ class FileDescriptor(Serializable, Deserializable):
                               datetime_serialization.deserialize(data.get('dateCreated')),
                               datetime_serialization.deserialize(data.get('dateUpdated')))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'id': self.id,
             'path': self.path,
@@ -79,8 +78,7 @@ class FileDescriptor(Serializable, Deserializable):
         FileDescriptor.acl_validator(acl)
 
     @staticmethod
-    def path_validator(path):
-        # type: (str) -> None
+    def path_validator(path: str):
         if not path.startswith('/'):
             raise ValueError('path must start with "/"' % path)
 

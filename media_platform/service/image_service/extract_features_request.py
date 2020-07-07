@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.metadata.image.image_features import ImageFeatures
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
-class Feature(object):
+class Feature:
     faces = 'faces'
     labels = 'labels'
     colors = 'colors'
@@ -13,42 +15,35 @@ class Feature(object):
     values = [faces, labels, colors, explicit_content, crop_hints]
 
     @classmethod
-    def has_value(cls, value):
-        # type: (str) -> bool
+    def has_value(cls, value: str) -> bool:
         return value in cls.values
 
 
 class ExtractFeaturesRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    path: str
+    features: [Feature] = []
+
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(ExtractFeaturesRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/images/features',
                                                      ImageFeatures)
 
-        self.path = None
-        self.features = []
-
-    def set_path(self, path):
-        # type: (str) -> ExtractFeaturesRequest
+    def set_path(self, path: str) -> ExtractFeaturesRequest:
         self.path = path
         return self
 
-    def set_features(self, features):
-        # type: ([Feature]) -> ExtractFeaturesRequest
+    def set_features(self, features: [Feature]) -> ExtractFeaturesRequest:
         self.features = features
         return self
 
-    def add_features(self, *features):
-        # type: ([Feature]) -> ExtractFeaturesRequest
+    def add_features(self, *features: [Feature]) -> ExtractFeaturesRequest:
         self.features.extend(features)
         return self
 
-    def _params(self):
-        # type: () -> dict
+    def _params(self) -> dict:
         return {
             'path': self.path,
             'features': ','.join(self.features)
         }
 
-    def execute(self):
-        # type: () -> ImageFeatures
+    def execute(self) -> ImageFeatures:
         return super(ExtractFeaturesRequest, self).execute()

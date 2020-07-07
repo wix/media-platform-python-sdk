@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.convert_font_job import ConvertFontSpecification
 from media_platform.job.create_archive_job import CreateArchiveSpecification
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveSpecification
@@ -69,8 +71,7 @@ class Component(Serializable, Deserializable):
         }
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Component
+    def deserialize(cls, data: dict) -> Component:
         specification_type = _SPECIFICATIONS[data['type']]
         specification = specification_type.deserialize(data['specification']) if specification_type else None
 

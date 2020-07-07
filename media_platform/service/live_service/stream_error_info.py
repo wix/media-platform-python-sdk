@@ -1,6 +1,7 @@
+from abc import ABC
+
 from media_platform.lang.serialization import Serializable
 
 
-# noinspection PyAbstractClass
-class StreamErrorInfo(Serializable):
+class StreamErrorInfo(ABC, Serializable):
     pass

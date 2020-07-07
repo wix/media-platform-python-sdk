@@ -1,4 +1,4 @@
-class ErrorCode(object):
+class ErrorCode:
     ok = 0
 
     server_error = 500

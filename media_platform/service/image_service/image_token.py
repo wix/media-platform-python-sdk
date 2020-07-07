@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from media_platform.auth.token import Token
 
 _VERB = 'urn:service:image.operations'
 
 
-class Gravity(object):
+class Gravity:
     center = 'center'
     north = "north"
     north_west = "north-west"
@@ -15,17 +17,15 @@ class Gravity(object):
     north_east = "north-east"
 
 
-class Watermark(object):
-    def __init__(self, path, opacity=50, proportions=0.25, gravity=Gravity.center):
-        # type: (str, int, float, Gravity) -> None
+class Watermark:
+    def __init__(self, path: str, opacity: int = 50, proportions: float = 0.25, gravity: Gravity = Gravity.center):
         super(Watermark, self).__init__()
         self.path = path
         self.opacity = opacity
         self.proportions = proportions
         self.gravity = gravity
 
-    def to_claim(self):
-        # type: () -> dict
+    def to_claim(self) -> dict:
         watermark = {}
         if self.path:
             watermark['path'] = self.path
@@ -41,17 +41,15 @@ class Watermark(object):
         }
 
 
-class Policy(object):
-    def __init__(self, path, max_width=None, max_height=None, min_blur=None):
-        # type: (str, int, int, float) -> None
+class Policy:
+    def __init__(self, path: str, max_width: int = None, max_height: int = None, min_blur: float = None):
         super(Policy, self).__init__()
         self.path = path
         self.max_width = max_width
         self.max_height = max_height
         self.min_blur = min_blur
 
-    def to_claim(self):
-        # type: () -> dict
+    def to_claim(self) -> dict:
         policy = {}
         if self.path:
             policy['path'] = self.path
@@ -68,14 +66,13 @@ class Policy(object):
 
 
 class ImageToken(Token):
-    def __init__(self, issuer, subject, policy=None, watermark=None, issued_at=None, expiration=None,
-                 additional_claims=None, token_id=None):
+    def __init__(self, issuer: str, subject: str, policy: Policy = None, watermark: Watermark = None,
+                 issued_at: int = None, expiration: int = None, additional_claims: dict = None, token_id: str = None):
         super(ImageToken, self).__init__(issuer, subject, [_VERB], issued_at, expiration, additional_claims, token_id)
         self.policy = policy
         self.watermark = watermark
 
-    def to_claims(self):
-        # type: () -> dict
+    def to_claims(self) -> dict:
         claims = super(ImageToken, self).to_claims()
 
         if self.watermark:
@@ -86,7 +83,6 @@ class ImageToken(Token):
         return claims
 
     @classmethod
-    def from_token(cls, token):
-        # type: (Token) -> ImageToken
+    def from_token(cls, token: Token) -> ImageToken:
         return cls(token.issuer, token.subject, None, None, token.issued_at, token.expiration, token.additional_claims,
                    token.id)

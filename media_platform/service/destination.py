@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from media_platform.lang.serialization import Serializable, Deserializable
 from media_platform.service.file_descriptor import FileDescriptor, ACL
@@ -6,8 +6,8 @@ from media_platform.service.lifecycle import Lifecycle
 
 
 class Destination(Serializable, Deserializable):
-    def __init__(self, path=None, directory=None, acl=ACL.public, lifecycle=None, bucket=None):
-        # type: (Optional[str], Optional[str], Optional[ACL], Optional[Lifecycle], Optional[str]) -> None
+    def __init__(self, path: str = None, directory: str = None, acl: ACL = ACL.public, lifecycle: Lifecycle = None,
+                 bucket: str = None):
         super(Destination, self).__init__()
 
         self._validate_values(path, directory, acl)
@@ -19,16 +19,13 @@ class Destination(Serializable, Deserializable):
         self.bucket = bucket
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Destination
-
+    def deserialize(cls, data: dict) -> Destination:
         lifecycle_data = data.get('lifecycle')
         lifecycle = Lifecycle.deserialize(lifecycle_data) if lifecycle_data else None
 
         return cls(data.get('path'), data.get('directory'), data['acl'], lifecycle, data.get('bucket'))
 
     def serialize(self):
-        # type: () -> dict
         return {
             'path': self.path,
             'directory': self.directory,
@@ -38,9 +35,7 @@ class Destination(Serializable, Deserializable):
         }
 
     @staticmethod
-    def _validate_values(path, directory, acl):
-        # type: (str, str, ACL) -> None
-
+    def _validate_values(path: str, directory: str, acl: ACL):
         if not (path or directory):
             raise ValueError('path or directory must be specified')
 

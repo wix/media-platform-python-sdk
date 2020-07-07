@@ -8,47 +8,40 @@ from media_platform.service.source import Source
 
 
 class ExtractStoryboardRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(ExtractStoryboardRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/av/storyboard',
                                                        ExtractStoryboardJobGroup)
         self.sources = []
         self.specifications = []
         self.callback = None
 
-    def set_sources(self, sources):
-        # type: ([Source]) -> ExtractStoryboardRequest
+    def set_sources(self, sources: [Source]):
         self.sources = sources
         return self
 
-    def add_sources(self, *sources):
-        # type: ([Source]) -> ExtractStoryboardRequest
+    def add_sources(self, *sources: [Source]):
         self.sources.extend(sources)
         return self
 
-    def set_specifications(self, specifications):
-        # type: ([ExtractStoryboardSpecification]) -> ExtractStoryboardRequest
+    def set_specifications(self, specifications: [ExtractStoryboardSpecification]):
         self.specifications = specifications
         return self
 
-    def add_specifications(self, *specifications):
-        # type: ([ExtractStoryboardSpecification]) -> ExtractStoryboardRequest
+    def add_specifications(self, *specifications: [ExtractStoryboardSpecification]):
         self.specifications.extend(specifications)
         return self
 
-    def set_callback(self, callback):
-        # type: (Callback) -> ExtractStoryboardRequest
+    def set_callback(self, callback: Callback):
         self.callback = callback
         return self
 
     def validate(self):
         [specification.validate() for specification in self.specifications]
 
-    def execute(self):
-        # type: () -> ExtractPosterJobGroup
+    def execute(self) -> ExtractPosterJobGroup:
         return super(ExtractStoryboardRequest, self).execute()
 
-    def _params(self):
+    def _params(self) -> dict:
         return {
             'sources': [source.serialize() for source in self.sources],
             'specifications': [specification.serialize() for specification in self.specifications],

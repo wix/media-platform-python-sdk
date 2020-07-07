@@ -15,23 +15,21 @@ setup(
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
     packages=find_packages(include=('media_platform', 'media_platform.*',)),
     install_requires=[
-        'python-jose==3.1.0',
-        'requests==2.23.0',
-        'requests-toolbelt==0.9.1',
-        'typing==3.7.4.1',
-        'furl==2.1.0',
+        'python-jose[cryptography]',
+        'requests',
+        'requests-toolbelt',
+        'typing',
+        'furl',
         'future'
     ],
     tests_require=[
-        'PyHamcrest==1.9.0',
-        'mockito==1.1.1',
-        'httpretty==0.9.6'
+        'PyHamcrest',
+        'mockito',
+        'httpretty'
     ]
 )
