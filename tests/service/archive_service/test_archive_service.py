@@ -266,7 +266,8 @@ class TestArchiveService(unittest.TestCase):
             body='barks!'
         )
 
-        with self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute() as response:
+        with self.archive_service.archive_manifest_url_request().set_path(
+                '/path/to/manifest.zip').execute() as response:
             dogs = next(response.iter_lines())
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))

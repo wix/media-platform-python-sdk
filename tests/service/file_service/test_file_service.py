@@ -12,7 +12,6 @@ from media_platform.service.callback import Callback
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import FileDescriptor, FileType, FileMimeType, ACL
 from media_platform.service.file_service.attachment import Attachment
-from media_platform.service.file_service.content_disposition import ContentDisposition
 from media_platform.service.file_service.extract_metadata_request import Detection
 from media_platform.service.file_service.file_service import FileService
 from media_platform.service.file_service.inline import Inline
@@ -207,7 +206,6 @@ class TestFileService(unittest.TestCase):
         upload_url = self.file_service.upload_configuration_request().set_path('/fish.txt').execute()
 
         assert_that(upload_url, instance_of(UploadConfiguration))
-        assert_that(upload_url.upload_token, is_('token'))
         assert_that(upload_url.upload_url, is_('url'))
         assert_that(json.loads(httpretty.last_request().body),
                     is_({
@@ -230,10 +228,10 @@ class TestFileService(unittest.TestCase):
             body=json.dumps(response_body.serialize())
         )
 
-        upload_url = self.file_service.upload_configuration_request().set_path('/fish.txt').execute()
+        upload_configuration = self.file_service.upload_configuration_request().set_path('/fish.txt').execute()
 
-        assert_that(upload_url, instance_of(UploadConfiguration))
-        assert_that(upload_url.upload_url, is_('url'))
+        assert_that(upload_configuration, instance_of(UploadConfiguration))
+        assert_that(upload_configuration.upload_url, is_('url'))
         assert_that(json.loads(httpretty.last_request().body),
                     is_({
                         'mimeType': None,

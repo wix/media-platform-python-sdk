@@ -1,5 +1,4 @@
 from abc import ABC
-from typing import Type
 
 from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.lang.serialization import Deserializable
@@ -7,9 +6,8 @@ from media_platform.lang.serialization import Deserializable
 
 class MediaPlatformRequest(ABC):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, method: str, url: str,
-                 response_payload_type: Type[Deserializable] = None):
+                 response_payload_type: Deserializable = None):
         self.authenticated_http_client = authenticated_http_client
-
         self.method = method
         self.url = url
         self.response_payload_type = response_payload_type

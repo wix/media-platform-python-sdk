@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from media_platform.job.extract_poster_job import ExtractPosterSpecification, PosterFilter, PixelFormat
+from media_platform.job.extract_poster_job import ExtractPosterSpecification, PosterFilter, PixelFormat, \
+    PosterImageFormat
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL
 
@@ -22,7 +23,8 @@ class TestExtractPosterSpecification(TestCase):
             'filters': []
         }
 
-        specification = ExtractPosterSpecification(0.12, Destination('/poster.png', acl=ACL.public), 'png')
+        specification = ExtractPosterSpecification(0.12, Destination('/poster.png', acl=ACL.public),
+                                                   PosterImageFormat.png)
         self.assertEqual(data, specification.serialize())
 
     def test_serialize__with_percentage(self):
@@ -40,7 +42,8 @@ class TestExtractPosterSpecification(TestCase):
             'filters': []
         }
 
-        specification = ExtractPosterSpecification(None, Destination('/poster.png', acl=ACL.public), 'png', 10)
+        specification = ExtractPosterSpecification(None, Destination('/poster.png', acl=ACL.public),
+                                                   PosterImageFormat.png, 10)
         self.assertEqual(data, specification.serialize())
 
     def test_serialize__with_filters_and_pixel_format(self):
@@ -60,8 +63,8 @@ class TestExtractPosterSpecification(TestCase):
         }
 
         specification = ExtractPosterSpecification(
-            0.12, Destination('/poster.png', acl=ACL.public), 'png', filters=[PosterFilter.transparent_crop],
-            pixel_format=PixelFormat.rgba)
+            0.12, Destination('/poster.png', acl=ACL.public), PosterImageFormat.png,
+            filters=[PosterFilter.transparent_crop], pixel_format=PixelFormat.rgba)
         self.assertEqual(data, specification.serialize())
 
     def test_deserialize(self):

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Serializable, Deserializable
 
 
@@ -12,14 +14,12 @@ class Action:
 class Lifecycle(Serializable, Deserializable):
     def __init__(self, age: int, action: Action):
         super(Lifecycle, self).__init__()
-
         self._validate_values(action, age)
-
         self.age = age  # int seconds
         self.action = action  # delete
 
     @classmethod
-    def deserialize(cls, data: dict):
+    def deserialize(cls, data: dict) -> Lifecycle:
         return Lifecycle(data['age'], data['action'])
 
     def serialize(self) -> dict:

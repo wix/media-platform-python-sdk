@@ -1,4 +1,4 @@
-from typing import Type
+from __future__ import annotations
 
 from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.lang.serialization import Deserializable
@@ -16,10 +16,8 @@ class OrderDirection:
 
 
 class _ListRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, url: str,
-                 payload_type: Type[Deserializable]):
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, url: str, payload_type: Deserializable):
         super(_ListRequest, self).__init__(authenticated_http_client, 'GET', url, payload_type)
-
         self.next_page_token = None
         self.page_size = 20
         self.order_by = OrderBy.date_updated

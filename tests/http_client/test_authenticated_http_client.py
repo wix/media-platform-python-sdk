@@ -123,7 +123,8 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
 
     @httpretty.activate
     def test_get_500_retry(self):
-        authenticated_http_client = AuthenticatedHTTPClient(self.app_authenticator, retry_count=1, retry_backoff_factor=0)
+        authenticated_http_client = AuthenticatedHTTPClient(self.app_authenticator, retry_count=1,
+                                                            retry_backoff_factor=0)
 
         httpretty.register_uri(
             httpretty.GET,
