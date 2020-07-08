@@ -29,7 +29,8 @@ class AuthenticatedHTTPClient(object):
         self._session = requests.Session()
 
         retry = urllib3.Retry(total=retry_count, backoff_factor=retry_backoff_factor,
-                              status_forcelist=self.RETRYABLE_CODES, method_whitelist=self.RETRYABLE_METHODS)
+                              status_forcelist=self.RETRYABLE_CODES, method_whitelist=self.RETRYABLE_METHODS,
+                              raise_on_status=False)
 
         self._session.mount('http://', self._matched_adapter(retry))
         self._session.mount('https://', self._matched_adapter(retry))

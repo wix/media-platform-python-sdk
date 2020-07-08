@@ -3,6 +3,7 @@ from typing import Type
 
 from media_platform.exception.bad_gateway_exception import BadGatewayException
 from media_platform.exception.conflict_exception import ConflictException
+from media_platform.exception.server_error_exception import ServerErrorException
 from media_platform.lang.serialization import Deserializable
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
@@ -48,21 +49,23 @@ class ResponseProcessor(object):
         except (ValueError, KeyError):
             message = response.content
 
-        status_code = response.status_code
-
-        if status_code == 401:
+        if response.status_code == 401:
             raise UnauthorizedException(message)
 
-        if status_code == 403:
+        elif response.status_code == 403:
             raise ForbiddenException(message)
 
-        if status_code == 404:
+        elif response.status_code == 404:
             raise NotFoundException(message)
 
-        if status_code == 409:
+        elif response.status_code == 409:
             raise ConflictException(message)
 
-        if status_code == 502:
+        elif response.status_code == 500:
+            raise ServerErrorException(message)
+
+        elif response.status_code == 502:
             raise BadGatewayException(message)
 
-        raise MediaPlatformException(message)
+        else:
+            raise MediaPlatformException(message)
