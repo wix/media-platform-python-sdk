@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.job.extract_archive.extraction_report import ExtractionReport
 from media_platform.job.job_type import JobType
@@ -7,16 +9,14 @@ from media_platform.job.result.job_result import JobResult
 class ExtractArchiveResult(JobResult):
     type = JobType.extract_archive
 
-    def __init__(self, code=None, message=None, extraction_report=None, report_file_descriptor=None):
-        # type: (int, str, ExtractionReport, FileDescriptor) -> None
+    def __init__(self, code: int = None, message: str = None, extraction_report: ExtractionReport = None,
+                 report_file_descriptor: FileDescriptor = None):
         super(ExtractArchiveResult, self).__init__(code, message)
-
         self.extraction_report = extraction_report
         self.report_file_descriptor = report_file_descriptor
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict or None) -> ExtractArchiveResult or None
+    def deserialize(cls, data: dict or None) -> ExtractArchiveResult or None:
         if data is None:
             return None
 
@@ -30,8 +30,7 @@ class ExtractArchiveResult(JobResult):
         result.__class__ = ExtractArchiveResult
         return result
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         data = super(ExtractArchiveResult, self).serialize()
         payload = {}
         if self.extraction_report:
@@ -45,14 +44,14 @@ class ExtractArchiveResult(JobResult):
         return data
 
     @classmethod
-    def _get_extraction_report(cls, extraction_report_data):
+    def _get_extraction_report(cls, extraction_report_data: dict or None) -> ExtractionReport or None:
         if not extraction_report_data:
             return None
 
         return ExtractionReport.deserialize(extraction_report_data)
 
     @classmethod
-    def _get_report_file_descriptor(cls, report_file_data):
+    def _get_report_file_descriptor(cls, report_file_data: dict or None) -> FileDescriptor or None:
         if not report_file_data:
             return None
 

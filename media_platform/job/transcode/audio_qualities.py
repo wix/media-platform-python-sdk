@@ -1,4 +1,4 @@
-class AudioQuality(object):
+class AudioQuality:
     mp3_128 = 'mp3_128'
     mp3_256 = 'mp3_256'
     mp3_320 = 'mp3_320'
@@ -21,6 +21,5 @@ class AudioQuality(object):
     ]
 
     @classmethod
-    def has_value(cls, value):
-        # type: (str) -> bool
+    def has_value(cls, value: str) -> bool:
         return value in cls.values

@@ -1,24 +1,25 @@
+from __future__ import annotations
+
 from media_platform.job.specification import Specification
 from media_platform.job.transcode.audio_specification import AudioSpecification
 from media_platform.job.transcode.video_specification import VideoSpecification
 
 
-class StreamType(object):
+class StreamType:
     audio = 'audio'
     video = 'video'
 
 
 class StreamSpecification(Specification):
-    def __init__(self, stream_type, specification=None, skip=False, copy=False):
-        # type: (StreamType, AudioSpecification or VideoSpecification, bool, bool) -> None
+    def __init__(self, stream_type: StreamType, specification: AudioSpecification or VideoSpecification = None,
+                 skip: bool = False, copy: bool = False):
         self.stream_type = stream_type
         self.specification = specification
         self.skip = skip
         self.copy = copy
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> StreamSpecification
+    def deserialize(cls, data: dict) -> StreamSpecification:
         stream_type = data['type']
 
         skip = data.get('skip', False)
@@ -36,8 +37,7 @@ class StreamSpecification(Specification):
 
         return StreamSpecification(stream_type, specification, skip, copy)
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'type': self.stream_type,
             'skip': self.skip,

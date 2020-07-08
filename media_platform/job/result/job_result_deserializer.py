@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.error_code import ErrorCode
 from media_platform.job.job_type import JobType
 from media_platform.job.result.convert_font_result import ConvertFontResult
@@ -14,7 +16,7 @@ from media_platform.job.result.subset_font_result import SubsetFontResult
 from media_platform.job.result.transcode_result import TranscodeResult
 
 
-class JobResultDeserializer(object):
+class JobResultDeserializer:
     _result_classes = [
         CreateArchiveResult,
         ExtractArchiveResult,
@@ -30,9 +32,7 @@ class JobResultDeserializer(object):
     _type_to_class = {c.type: c for c in _result_classes}
 
     @classmethod
-    def deserialize(cls, type, data):
-        # type: (JobType, dict) -> JobResult or None
-
+    def deserialize(cls, job_type: JobType, data: dict) -> JobResult or None:
         if data['code'] == ErrorCode.job_callback_failed:
             job_result_class = JobCallbackFailedResult
 
@@ -40,6 +40,6 @@ class JobResultDeserializer(object):
             job_result_class = JobTimeoutResult
 
         else:
-            job_result_class = cls._type_to_class.get(type, JobResult)
+            job_result_class = cls._type_to_class.get(job_type, JobResult)
 
         return job_result_class.deserialize(data)

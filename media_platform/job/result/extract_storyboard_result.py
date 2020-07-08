@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.job.job_type import JobType
 from media_platform.job.result.job_result import JobResult
@@ -6,14 +8,13 @@ from media_platform.job.result.job_result import JobResult
 class ExtractStoryboardResult(JobResult):
     type = JobType.extract_storyboard
 
-    def __init__(self, code=None, message=None, file_descriptors=None):
-        # type: (int, str, [FileDescriptor]) -> None
+    def __init__(self, code: int = None, message: str = None, file_descriptors: [FileDescriptor] = None):
         super(ExtractStoryboardResult, self).__init__(code, message)
 
         self.payload = file_descriptors or []
 
     @classmethod
-    def deserialize(cls, data):
+    def deserialize(cls, data: dict or None) -> ExtractStoryboardResult or None:
         if data is None:
             return None
 
@@ -24,7 +25,7 @@ class ExtractStoryboardResult(JobResult):
 
         return result
 
-    def serialize(self):
+    def serialize(self) -> dict:
         data = super(ExtractStoryboardResult, self).serialize()
         data['payload'] = [f.serialize() for f in self.payload]
 
