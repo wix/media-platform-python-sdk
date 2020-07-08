@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.job import Job
 from media_platform.job.specification import Specification
 from media_platform.service.audio_service.audio_extra_metadata import AudioExtraMetadata

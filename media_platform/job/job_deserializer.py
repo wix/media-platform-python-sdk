@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.convert_font_job import ConvertFontJob
 from media_platform.job.create_archive_job import CreateArchiveJob
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
@@ -27,8 +29,7 @@ class _JobDeserializer(Deserializable):
     _type_to_class = {c.type: c for c in _job_classes}
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Job
+    def deserialize(cls, data: dict) -> Job:
         job_type = data['type']
         job_class = cls._type_to_class.get(job_type, Job)
         return job_class.deserialize(data)

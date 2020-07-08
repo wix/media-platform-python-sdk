@@ -50,10 +50,11 @@ from tests.service.flow_control_service.test_flows.invoke.replace_extra_metadata
 
 import_file_specification = ImportFileSpecification('http://movs.me/video.mp4', Destination('/imports/video.mp4'))
 
+
 class TestFlowControlService(unittest.TestCase):
-    authenticator = None  # type: AppAuthenticator
-    authenticated_http_client = None  # type: AuthenticatedHTTPClient
-    flow_control_service = None  # type: FlowControlService
+    authenticator: AppAuthenticator = None
+    authenticated_http_client: AuthenticatedHTTPClient = None
+    flow_control_service: FlowControlService = None
 
     @classmethod
     def setUpClass(cls):
@@ -121,6 +122,8 @@ class TestFlowControlService(unittest.TestCase):
 
     @httpretty.activate
     def test_invoke_flow_replace_extra_metadata(self):
+        self.maxDiff = None
+
         extra_metadata = AudioExtraMetadata(
             'track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer', 'year',
             Image('image_url', 'mime_type', 'image_description'), Lyrics('text', 'eng', 'lyrics_description'))

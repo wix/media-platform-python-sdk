@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from datetime import datetime
 
 from media_platform.job.result.job_result import JobResult
@@ -50,9 +51,7 @@ class Job(Deserializable, Serializable):
         self.date_updated = date_updated
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Job
-
+    def deserialize(cls, data: dict) -> Job:
         sources = [Source.deserialize(source) for source in data['sources']]
         date_created = datetime_serialization.deserialize(data['dateCreated'])
         date_updated = datetime_serialization.deserialize(data['dateUpdated'])
@@ -70,7 +69,7 @@ class Job(Deserializable, Serializable):
         job.type = data['type']
         return job
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {
             'type': self.type,
             'groupId': self.group_id,

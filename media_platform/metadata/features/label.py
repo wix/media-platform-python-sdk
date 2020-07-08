@@ -1,14 +1,14 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 
 
 class Label(Deserializable):
-    def __init__(self, name, score):
-        # type: (str, float) -> None
+    def __init__(self, name: str, score: float):
         super(Label, self).__init__()
         self.name = name
         self.score = score
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Label
+    def deserialize(cls, data: dict) -> Label:
         return Label(data['name'], data['score'])

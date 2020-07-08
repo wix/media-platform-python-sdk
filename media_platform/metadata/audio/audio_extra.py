@@ -1,13 +1,14 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 from media_platform.metadata.audio.attached_image import AttachedImage
 from media_platform.metadata.audio.lyrics import Lyrics
 
 
 class AudioExtra(Deserializable):
-    def __init__(self, track_name=None, artist=None, album_name=None, track_number=None, genre=None, composer=None,
-                 year=None, images=None, lyrics=None):
-        # type: (str, str, str, str, str, str, str, [AttachedImage], Lyrics) -> None
-
+    def __init__(self, track_name: str = None, artist: str = None, album_name: str = None, track_number: str = None,
+                 genre: str = None, composer: str = None, year: str = None, images: [AttachedImage] = None,
+                 lyrics: Lyrics = None):
         self.track_name = track_name
         self.artist = artist
         self.album_name = album_name
@@ -20,9 +21,7 @@ class AudioExtra(Deserializable):
         self.lyrics = lyrics
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> AudioExtra
-
+    def deserialize(cls, data: dict) -> AudioExtra:
         lyrics_data = data.get('lyrics')
 
         images_data = data.get('images')

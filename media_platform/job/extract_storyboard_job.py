@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.job import Job
 from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
@@ -8,11 +10,9 @@ SUPPORTED_IMAGE_FORMATS = ['jpg', 'png']
 
 
 class ExtractStoryboardSpecification(Specification):
-    def __init__(self, destination, columns, rows, tile_width=None, tile_height=None, image_format='jpg',
-                 segment_duration=None):
-        # type: (Destination, int, int, int, int, str, float) -> None
+    def __init__(self, destination: Destination, columns: int, rows: int, tile_width: int = None,
+                 tile_height: int = None, image_format: str = 'jpg', segment_duration: float = None):
         super(ExtractStoryboardSpecification, self).__init__()
-
         self.destination = destination
         self.columns = columns
         self.rows = rows
@@ -22,15 +22,13 @@ class ExtractStoryboardSpecification(Specification):
         self.segment_duration = segment_duration
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ExtractStoryboardSpecification
+    def deserialize(cls, data: dict) -> ExtractStoryboardSpecification:
         destination = Destination.deserialize(data['destination'])
 
         return ExtractStoryboardSpecification(destination, data['columns'], data['rows'], data.get('tileWidth'),
                                               data.get('tileHeight'), data.get('format'), data.get('segmentDuration'))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'destination': self.destination.serialize(),
             'columns': self.columns,
@@ -52,8 +50,7 @@ class ExtractStoryboardSpecification(Specification):
             self._validate_max_jpeg_size(self.rows, self.tile_height)
 
     @staticmethod
-    def _validate_max_jpeg_size(tiles, pixels):
-        # type: (int, int) -> None
+    def _validate_max_jpeg_size(tiles: int, pixels: int):
         if tiles * pixels > 65534:
             raise ValueError('jpeg supports up to 65k pixels')
 

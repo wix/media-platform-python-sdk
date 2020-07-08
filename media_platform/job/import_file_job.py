@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
 from media_platform.service.destination import Destination
@@ -6,16 +8,13 @@ from media_platform.service.file_service.external_authorization import ExternalA
 
 
 class ImportFileSpecification(Specification):
-    def __init__(self, source_url, destination, external_authorization=None):
-        # type: (str, Destination, ExternalAuthorization) -> None
+    def __init__(self, source_url: str, destination: Destination, external_authorization: ExternalAuthorization = None):
         super(ImportFileSpecification, self).__init__()
-
         self.source_url = source_url
         self.destination = destination
         self.external_authorization = external_authorization
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'sourceUrl': self.source_url,
             'destination': self.destination.serialize(),
@@ -23,8 +22,7 @@ class ImportFileSpecification(Specification):
         }
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ImportFileSpecification
+    def deserialize(cls, data: dict) -> ImportFileSpecification:
         destination = Destination.deserialize(data['destination'])
 
         external_authorization_data = data.get('externalAuthorization')

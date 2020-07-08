@@ -1,13 +1,11 @@
-class Serializable(object):
+class Serializable:
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         raise NotImplementedError()
 
 
-class Deserializable(object):
+class Deserializable:
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> object
+    def deserialize(cls, data: dict) -> object:
         raise NotImplementedError()

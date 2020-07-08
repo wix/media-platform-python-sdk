@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 from media_platform.metadata.features.crop_hint import CropHint
 from media_platform.metadata.features.explicit_content import ExplicitContent
@@ -7,8 +9,8 @@ from media_platform.metadata.features.rectangle import Rectangle
 
 
 class ImageFeatures(Deserializable):
-    def __init__(self, labels=None, faces=None, colors=None, explicit_content=None, crop_hints=None):
-        # type: ([Label], [Rectangle], [Color], [ExplicitContent], [CropHint]) -> None
+    def __init__(self, labels: [Label] = None, faces: [Rectangle] = None, colors: [Color] = None,
+                 explicit_content: [ExplicitContent] = None, crop_hints: [CropHint] = None):
         self.labels = labels or []
         self.faces = faces or []
         self.colors = colors or []
@@ -16,8 +18,7 @@ class ImageFeatures(Deserializable):
         self.crop_hints = crop_hints or []
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ImageFeatures
+    def deserialize(cls, data: dict) -> ImageFeatures:
         labels = [Label.deserialize(label) for label in data.get('labels', [])]
         faces = [Rectangle.deserialize(face) for face in data.get('faces', [])]
         colors = [Color.deserialize(color) for color in data.get('colors', [])]

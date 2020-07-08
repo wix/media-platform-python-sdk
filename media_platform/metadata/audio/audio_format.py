@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 
 
 class AudioFormat(Deserializable):
-    def __init__(self, long_name=None, bitrate=None, duration=None, size=None):
-        # type: (str, int or None, int or None, int or None) -> None
+    def __init__(self, long_name: str = None, bitrate: int = None, duration: int = None, size: int = None):
         super(AudioFormat, self).__init__()
         self.long_name = long_name
         self.duration = duration
@@ -11,15 +12,13 @@ class AudioFormat(Deserializable):
         self.size = int(size) if size else None
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> AudioFormat
+    def deserialize(cls, data: dict) -> AudioFormat:
         return AudioFormat(data.get('formatLongName'),
                            data.get('bitrate'),
                            data.get('duration'),
                            data.get('size'))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'formatLongName': self.long_name,
             'duration': self.duration,

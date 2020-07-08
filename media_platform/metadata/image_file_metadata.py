@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.metadata.file_metadata import FileMetadata, MediaType
 from media_platform.metadata.image.image_basic import ImageBasic
 from media_platform.metadata.image.image_features import ImageFeatures
@@ -5,15 +7,13 @@ from media_platform.service.file_descriptor import FileDescriptor
 
 
 class ImageFileMetadata(FileMetadata):
-    def __init__(self, file_descriptor, basic=None, features=None):
-        # type: (FileDescriptor, ImageBasic, ImageFeatures) -> None
+    def __init__(self, file_descriptor: FileDescriptor, basic: ImageBasic = None, features: ImageFeatures = None):
         super(ImageFileMetadata, self).__init__(MediaType.image, file_descriptor, basic)
 
         self.features = features
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ImageFileMetadata
+    def deserialize(cls, data: dict) -> ImageFileMetadata:
         if data['mediaType'] != MediaType.image:
             raise ValueError('not image metadata')
 

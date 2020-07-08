@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 from media_platform.service.file_descriptor import FileDescriptor
 
 
-class MediaType(object):
+class MediaType:
     undefined = ''
     image = 'image'
     video = 'video'
@@ -11,8 +13,7 @@ class MediaType(object):
 
 
 class FileMetadata(Deserializable):
-    def __init__(self, media_type, file_descriptor, basic=None):
-        # type: (str, FileDescriptor, Deserializable) -> None
+    def __init__(self, media_type: str, file_descriptor: FileDescriptor, basic: Deserializable = None):
         super(FileMetadata, self).__init__()
 
         self.media_type = media_type
@@ -20,8 +21,7 @@ class FileMetadata(Deserializable):
         self.basic = basic
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> FileMetadata
+    def deserialize(cls, data: dict) -> FileMetadata:
         file_descriptor = FileDescriptor.deserialize(data['fileDescriptor'])
 
         return FileMetadata(MediaType.undefined, file_descriptor)
