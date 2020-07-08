@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.callback import Callback
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileMimeType
 from media_platform.service.file_service.upload_configuration_request import UploadConfigurationRequest
@@ -11,19 +11,19 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class UploadFileRequest(MediaPlatformRequest):
-    path: str
-    mime_type: str = FileMimeType.defualt
-    acl: ACL = ACL.public
-    size: int
-    lifecycle: Lifecycle
-    callback: Callback
-    bucket: str
-    response_processor: callable
-    filename: str = 'filename'
-    content: str
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(UploadFileRequest, self).__init__(authenticated_http_client, 'POST', base_url, FileDescriptor)
+
+        self.path = None
+        self.mime_type = FileMimeType.defualt
+        self.acl = ACL.public
+        self.size = None
+        self.lifecycle = None
+        self.callback = None
+        self.bucket = None
+        self.response_processor = None
+        self.filename = 'filename'
+        self.content = None
 
     def set_path(self, path: str) -> UploadFileRequest:
         self.path = path

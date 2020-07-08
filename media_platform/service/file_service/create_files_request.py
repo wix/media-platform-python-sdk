@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.lang.serialization import Deserializable
 from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.service.file_service.create_file_request import CreateFileRequest
@@ -9,11 +9,11 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class CreateFilesRequest(MediaPlatformRequest):
-    file_requests: [CreateFileRequest] = []
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(CreateFilesRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/files',
                                                  FileDescriptor)
+
+        self.file_requests = []
 
     def execute(self) -> Deserializable or None:
         # TODO: Replace with single request once server supports that
@@ -27,7 +27,7 @@ class CreateFilesRequest(MediaPlatformRequest):
         return self
 
     def add_file(self, *file_request: [CreateFileRequest]) -> CreateFilesRequest:
-        self.file_requests.exand(file_request)
+        self.file_requests.extend(file_request)
         return self
 
     def _params(self):

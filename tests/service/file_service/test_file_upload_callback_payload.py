@@ -18,4 +18,4 @@ class TestFileUploadCallbackPayload(TestCase):
         payload = FileUploadCallbackPayload.deserialize(data)
 
         assert_that(payload.attachment, is_({'dog': 'bull'}))
-        assert_that(payload.file_descriptor.id, is_('file-id'))
+        assert_that(payload.file_descriptor.file_id, is_('file-id'))

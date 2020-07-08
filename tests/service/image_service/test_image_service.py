@@ -4,7 +4,7 @@ import unittest
 import httpretty
 from hamcrest import assert_that, instance_of, is_, not_none
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.image_operation_job import ImageOperationSpecification
 from media_platform.metadata.image.image_features import ImageFeatures
 from media_platform.service.destination import Destination

@@ -1,21 +1,21 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_descriptor import FileDescriptor, FileMimeType, FileType, ACL
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class CreateFileRequest(MediaPlatformRequest):
-    path: str
-    mime_type: FileMimeType = FileMimeType.directory
-    type: FileType = FileType.directory
-    acl: ACL = ACL.public
-    size: int = 0
-    file_id: str
-    bucket: str
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(CreateFileRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/files', FileDescriptor)
+
+        self.path: str or None = None
+        self.mime_type: FileMimeType = FileMimeType.directory
+        self.type: FileType = FileType.directory
+        self.acl: ACL = ACL.public
+        self.size: int = 0
+        self.file_id: str or None = None
+        self.bucket: str or None = None
 
     def set_path(self, path: str) -> CreateFileRequest:
         self.path = path

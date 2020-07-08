@@ -1,9 +1,9 @@
-import os
+import posixpath
 
 from media_platform.service.file_descriptor import FileDescriptor
 
 
-class PlaylistRequest(object):
+class PlaylistRequest:
     # https://github.com/kaltura/nginx-vod-module#multi-url-structure
     URL_SET = '{url}{prefix},{renditions},{postfix}.urlset/master.m3u8'
 
@@ -45,12 +45,12 @@ class PlaylistRequest(object):
 
     @staticmethod
     def _common_prefix(paths: [str]) -> str:
-        return os.posixpath.commonprefix(paths)
+        return posixpath.commonprefix(paths)
 
     @staticmethod
     def _common_suffix(paths: [str]) -> str:
         reversed_paths = [path[::-1] for path in paths]
 
-        reversed_common = os.posixpath.commonprefix(reversed_paths)
+        reversed_common = posixpath.commonprefix(reversed_paths)
 
         return reversed_common[::-1]

@@ -1,4 +1,4 @@
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.convert_font_job import ConvertFontSpecification
 from media_platform.job.convert_font_job_group import ConvertFontJobGroup
 from media_platform.service.callback import Callback

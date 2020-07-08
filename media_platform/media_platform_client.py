@@ -1,5 +1,5 @@
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.archive_service.archive_service import ArchiveService
 from media_platform.service.audio_service.audio_service import AudioService
 from media_platform.service.file_service.file_service import FileService

@@ -1,4 +1,4 @@
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.media_platform_service import MediaPlatformService
 from media_platform.service.transcode_service.playlist_request import PlaylistRequest
 from media_platform.service.transcode_service.transcode_request import TranscodeRequest

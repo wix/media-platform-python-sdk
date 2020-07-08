@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.live_service.live_stream import LiveStream
 from media_platform.service.media_platform_request import MediaPlatformRequest
 

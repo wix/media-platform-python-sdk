@@ -11,9 +11,9 @@ from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
 from media_platform.exception.not_found_exception import NotFoundException
 from media_platform.exception.unauthorized_exception import UnauthorizedException
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.rest_result import RestResult
-from tests.http.dummy_payload import DummyPayload
+from tests.http_client.dummy_payload import DummyPayload
 
 
 class TestAuthenticatedHTTPClient(unittest.TestCase):

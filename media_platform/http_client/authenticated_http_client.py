@@ -12,7 +12,7 @@ from typing import Type
 from media_platform.lang.serialization import Deserializable
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.exception.media_platform_exception import MediaPlatformException
-from media_platform.http.response_processor import ResponseProcessor
+from media_platform.http_client.response_processor import ResponseProcessor
 
 
 class AuthenticatedHTTPClient(object):

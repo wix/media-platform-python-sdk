@@ -1,4 +1,4 @@
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 
 
 class MediaPlatformService:

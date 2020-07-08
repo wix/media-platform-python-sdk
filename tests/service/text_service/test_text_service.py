@@ -4,7 +4,7 @@ import unittest
 import httpretty
 from hamcrest import assert_that, is_
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.convert_font_job import ConvertFontSpecification, FontType
 from media_platform.job.subset_font_job import SubsetFontSpecification
 from media_platform.service.destination import Destination

@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_descriptor import FileType
 from media_platform.service.file_service.file_list import FileList
 from media_platform.service.list_request import _ListRequest, OrderBy, OrderDirection
 
 
 class FileListRequest(_ListRequest):
-    path: str
-    recursive: bool = False
-    type: FileType = FileType.file
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(FileListRequest, self).__init__(authenticated_http_client, base_url + '/files/ls_dir', FileList)
+        self.path = None
+        self.recursive = False
+        self.type = FileType.file
 
     def set_path(self, path: str) -> FileListRequest:
         self.path = path

@@ -11,16 +11,16 @@ from media_platform.service.file_service.inline import Inline
 
 
 class DownloadFileRequest:
-    path: str
-    ttl: int = 600  # seconds
-    attachment: Attachment
-    inline: Inline
-    on_expired_redirect_to: str
-
     def __init__(self, app_id: str, authenticator: AppAuthenticator, base_url: str):
         self._app_urn = 'urn:app:' + app_id
         self._url = base_url.replace('_api', '').replace('.appspot.com', '.wixmp.com')
         self._authenticator = authenticator
+
+        self.path = None
+        self.ttl = 600  # seconds
+        self.attachment = None
+        self.inline = None
+        self.on_expired_redirect_to = None
 
     def set_path(self, path: str) -> DownloadFileRequest:
         self.path = path

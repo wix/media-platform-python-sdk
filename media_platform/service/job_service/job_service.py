@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.job_service.job_group_request import JobGroupRequest
 from media_platform.service.job_service.job_list_request import JobListRequest
 from media_platform.service.job_service.job_request import JobRequest

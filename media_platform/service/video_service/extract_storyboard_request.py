@@ -1,4 +1,4 @@
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.extract_poster_job_group import ExtractPosterJobGroup
 from media_platform.job.extract_storyboard_job import ExtractStoryboardSpecification
 from media_platform.job.extract_storyboard_job_group import ExtractStoryboardJobGroup

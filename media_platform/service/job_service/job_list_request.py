@@ -1,20 +1,19 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.job_service.job_list import JobList
 from media_platform.service.list_request import _ListRequest
 
 
 class JobListRequest(_ListRequest):
-    issuer: str
-    type: str
-    status: str
-    group_id: str
-    file_id: str
-    path: str
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(JobListRequest, self).__init__(authenticated_http_client, base_url + '/jobs', JobList)
+        self.issuer = None
+        self.type = None
+        self.status = None
+        self.group_id = None
+        self.file_id = None
+        self.path = None
 
     def set_issuer(self, issuer: str) -> JobListRequest:
         self.issuer = issuer

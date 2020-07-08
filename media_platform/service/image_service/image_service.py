@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.image_service.extract_features_request import ExtractFeaturesRequest
 from media_platform.service.image_service.image_operation_request import ImageOperationRequest
 from media_platform.service.image_service.image_token import ImageToken, Policy, Watermark

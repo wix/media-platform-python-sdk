@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.metadata.image.image_features import ImageFeatures
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
@@ -20,12 +20,11 @@ class Feature:
 
 
 class ExtractFeaturesRequest(MediaPlatformRequest):
-    path: str
-    features: [Feature] = []
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(ExtractFeaturesRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/images/features',
                                                      ImageFeatures)
+        self.path = None
+        self.features = []
 
     def set_path(self, path: str) -> ExtractFeaturesRequest:
         self.path = path

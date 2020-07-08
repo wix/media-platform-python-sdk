@@ -1,5 +1,5 @@
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.file_service.copy_file_request import CopyFileRequest
 from media_platform.service.file_service.create_file_request import CreateFileRequest
 from media_platform.service.file_service.create_files_request import CreateFilesRequest

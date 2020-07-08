@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.metadata.file_metadata import FileMetadata
 from media_platform.service.media_platform_request import MediaPlatformRequest
 # noinspection PyProtectedMember
@@ -18,12 +18,12 @@ class Detection:
 
 
 class ExtractMetadataRequest(MediaPlatformRequest):
-    path: str
-    detections: [Detection] = []
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(ExtractMetadataRequest, self).__init__(authenticated_http_client, 'GET',
                                                      base_url + '/files/metadata/extract', _FileMetadataDeserializer)
+
+        self.path = None
+        self.detections = []
 
     def set_path(self, path: str) -> ExtractMetadataRequest:
         self.path = path

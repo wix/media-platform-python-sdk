@@ -19,7 +19,7 @@ class TestFileDescriptor(TestCase):
 
         file_descriptor = FileDescriptor.deserialize(file_data)
 
-        assert_that(file_descriptor.id, is_(file_data['id']))
+        assert_that(file_descriptor.file_id, is_(file_data['id']))
         assert_that(file_descriptor.path, is_(file_data['path']))
 
     def test_serialize(self):

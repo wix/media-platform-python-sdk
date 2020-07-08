@@ -5,7 +5,7 @@ import httpretty
 from hamcrest import assert_that, instance_of
 
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.convert_font_job import ConvertFontSpecification, FontType
 from media_platform.job.import_file_job import ImportFileSpecification
 from media_platform.job.replace_extra_metadata_job import ReplaceAudioExtraMetadataSpecification

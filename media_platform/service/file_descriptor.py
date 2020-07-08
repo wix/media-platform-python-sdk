@@ -38,7 +38,7 @@ class FileDescriptor(Serializable, Deserializable):
         self._validate_values(acl, path)
 
         self.path = path
-        self.id = file_id
+        self.file_id = file_id
         self.type = file_type
         self.mime_type = mime_type
         self.size = size
@@ -60,7 +60,7 @@ class FileDescriptor(Serializable, Deserializable):
 
     def serialize(self) -> dict:
         return {
-            'id': self.id,
+            'id': self.file_id,
             'path': self.path,
             'type': self.type,
             'mimeType': self.mime_type,
