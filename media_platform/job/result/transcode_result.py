@@ -19,6 +19,8 @@ class TranscodeResult(JobResult):
             return None
 
         result = JobResult.deserialize(data)
+        result.__class__ = TranscodeResult
+
         result.file_descriptor = None
         result.master_ffmpeg_command = None
 
@@ -31,7 +33,6 @@ class TranscodeResult(JobResult):
 
             result.master_ffmpeg_command = payload_data.get('masterFFMpegCommand')
 
-        result.__class__ = TranscodeResult
         return result
 
     def serialize(self) -> dict:

@@ -16,11 +16,10 @@ class JobCallbackFailedResult(JobResult):
         if not data:
             return None
 
-        payload = data.get('payload') or {}
         result = JobResult.deserialize(data)
-        result.job_result = payload.get('jobResult')
-
         result.__class__ = JobCallbackFailedResult
+        payload = data.get('payload') or {}
+        result.job_result = payload.get('jobResult')
 
         return result
 

@@ -9,8 +9,7 @@ def image_manipulation_demo():
     print_manipulated_image_url(image_file)
 
 
-def upload_image():
-    # type: () -> FileDescriptor
+def upload_image() -> FileDescriptor:
     print('Uploading image to %s...' % image_path)
     with open(resources_dir + '/image.png', 'rb') as image:
         return client.file_service.upload_file_v2_request(). \
@@ -19,10 +18,10 @@ def upload_image():
             execute()
 
 
-def print_manipulated_image_url(image_file):
-    # type: (FileDescriptor) -> None
+def print_manipulated_image_url(image_file: FileDescriptor):
     print('Manipulated image url: https://images-%s.wixmp.com%s::fit:200_100' % (project_id, image_file.path))
     print('')
+
 
 if __name__ == '__main__':
     image_manipulation_demo()

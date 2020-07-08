@@ -10,21 +10,22 @@ class SubsetFontResult(JobResult):
 
     def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None):
         super(SubsetFontResult, self).__init__(code, message)
-        self.payload = file_descriptor
+        self.file_descriptor = file_descriptor
 
     @classmethod
     def deserialize(cls, data: dict or None) -> SubsetFontResult or None:
         if data is None:
             return None
 
-        payload_data = data.get('payload')
         result = JobResult.deserialize(data)
-        result.payload = FileDescriptor.deserialize(payload_data) if payload_data else None
         result.__class__ = SubsetFontResult
+
+        payload_data = data.get('payload')
+        result.file_descriptor = FileDescriptor.deserialize(payload_data) if payload_data else None
         return result
 
     def serialize(self) -> dict:
         data = super(SubsetFontResult, self).serialize()
-        data['payload'] = self.payload.serialize() if self.payload else None
+        data['payload'] = self.file_descriptor.serialize() if self.file_descriptor else None
 
         return data

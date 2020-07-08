@@ -10,10 +10,10 @@ class ExtractArchiveResult(JobResult):
     type = JobType.extract_archive
 
     def __init__(self, code: int = None, message: str = None, extraction_report: ExtractionReport = None,
-                 report_file_descriptor: FileDescriptor = None):
+                 file_descriptor: FileDescriptor = None):
         super(ExtractArchiveResult, self).__init__(code, message)
         self.extraction_report = extraction_report
-        self.report_file_descriptor = report_file_descriptor
+        self.file_descriptor = file_descriptor
 
     @classmethod
     def deserialize(cls, data: dict or None) -> ExtractArchiveResult or None:
@@ -21,13 +21,14 @@ class ExtractArchiveResult(JobResult):
             return None
 
         result = JobResult.deserialize(data)
+        result.__class__ = ExtractArchiveResult
+
         payload = data.get('payload') or {}
         extracted_files_report_data = payload.get('extractedFilesReport')
         report_file_descriptor_data = payload.get('reportFileDescriptor')
 
         result.extraction_report = cls._get_extraction_report(extracted_files_report_data)
-        result.report_file_descriptor = cls._get_report_file_descriptor(report_file_descriptor_data)
-        result.__class__ = ExtractArchiveResult
+        result.file_descriptor = cls._get_report_file_descriptor(report_file_descriptor_data)
         return result
 
     def serialize(self) -> dict:
@@ -36,8 +37,8 @@ class ExtractArchiveResult(JobResult):
         if self.extraction_report:
             payload['extractedFilesReport'] = self.extraction_report.serialize()
 
-        if self.report_file_descriptor:
-            payload['reportFileDescriptor'] = self.report_file_descriptor.serialize()
+        if self.file_descriptor:
+            payload['reportFileDescriptor'] = self.file_descriptor.serialize()
 
         data['payload'] = payload
 
