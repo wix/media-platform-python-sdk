@@ -1,5 +1,4 @@
 import requests
-from typing import Type
 
 from media_platform.exception.bad_gateway_exception import BadGatewayException
 from media_platform.exception.conflict_exception import ConflictException
@@ -11,20 +10,18 @@ from media_platform.exception.unauthorized_exception import UnauthorizedExceptio
 from media_platform.service.rest_result import RestResult
 
 
-class ResponseProcessor(object):
+class ResponseProcessor:
 
     @staticmethod
-    def process(response, payload_type=None):
-        # type: (requests.Response, Type[Deserializable]) -> object or None
-
+    def process(response: requests.Response, payload_type: Deserializable = None) -> object or None:
         if 200 <= response.status_code <= 299:
             return ResponseProcessor._handle_success(response, payload_type)
         else:
             ResponseProcessor._handle_error(response)
 
     @classmethod
-    def _handle_success(cls, response, payload_type):
-        # type: (requests.Response, Type[Deserializable] or [Type[Deserializable]]) -> object or None
+    def _handle_success(cls, response: requests.Response,
+                        payload_type: Deserializable or [Deserializable]) -> object or None:
         try:
             rest_result = RestResult.deserialize(response.json())
             rest_result.raise_for_code()
@@ -41,7 +38,7 @@ class ResponseProcessor(object):
             raise MediaPlatformException('Bad response format', e)
 
     @classmethod
-    def _handle_error(cls, response):
+    def _handle_error(cls, response: requests.Response):
         try:
             rest_result = RestResult.deserialize(response.json())
             message = rest_result.message
