@@ -10,6 +10,7 @@ from media_platform.exception.conflict_exception import ConflictException
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
 from media_platform.exception.not_found_exception import NotFoundException
+from media_platform.exception.server_error_exception import ServerErrorException
 from media_platform.exception.unauthorized_exception import UnauthorizedException
 from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.rest_result import RestResult
@@ -131,9 +132,8 @@ class TestAuthenticatedHTTPClient(unittest.TestCase):
             status=500
         )
 
-        with self.assertRaises(MediaPlatformException) as e:
+        with self.assertRaises(MediaPlatformException) as context:
             authenticated_http_client.get(self.test_endpoint)
             # todo: assert httpretty.latest_requests() when released
 
-        media_platform_exception = e.exception
-        assert_that(isinstance(media_platform_exception.cause, RetryError), equal_to(True))
+        self.assertIsInstance(context.exception, ServerErrorException)
