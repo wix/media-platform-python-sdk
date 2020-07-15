@@ -14,9 +14,7 @@ client = media_platform.Client(
 job_ids = argv[1:]
 for job_id in job_ids:
     print('Getting job %s' % job_id)
-    job = client.job_service.job_request(). \
-                set_id(job_id). \
-                execute()
+    job = client.job_service.job_request().set_id(job_id).execute()
 
     print(json.dumps(job.serialize(), indent=4))
     print('')

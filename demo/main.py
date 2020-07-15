@@ -3,6 +3,7 @@ from demo.image_manipulation import image_manipulation_demo
 from demo.transcode_video import transcode_video_demo
 from demo.live_stream import live_stream_demo
 
+
 def main():
     image_manipulation_demo()
     transcode_video_demo()

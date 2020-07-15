@@ -30,7 +30,7 @@ def upload_video() -> FileDescriptor:
     print('Uploading video to %s...' % video_path)
 
     with open(resources_dir + '/video.mp4', 'rb') as archive:
-        return client.file_service.upload_file_v2_request(). \
+        return client.file_service.upload_file_request(). \
             set_path(video_path). \
             set_content(archive). \
             execute()

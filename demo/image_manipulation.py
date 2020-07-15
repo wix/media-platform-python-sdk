@@ -12,10 +12,7 @@ def image_manipulation_demo():
 def upload_image() -> FileDescriptor:
     print('Uploading image to %s...' % image_path)
     with open(resources_dir + '/image.png', 'rb') as image:
-        return client.file_service.upload_file_v2_request(). \
-            set_path(image_path). \
-            set_content(image). \
-            execute()
+        return client.file_service.upload_file_request().set_path(image_path).set_content(image).execute()
 
 
 def print_manipulated_image_url(image_file: FileDescriptor):
