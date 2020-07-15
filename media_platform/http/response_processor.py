@@ -36,7 +36,9 @@ class ResponseProcessor(object):
             if payload_type is None:
                 raise MediaPlatformException('Unexpected payload (expected None)')
 
-            return payload_type.deserialize(rest_result.payload)
+            payload = payload_type.deserialize(rest_result.payload)
+            payload.seen_by = response.headers.get('X-Seen-By')
+            return payload
 
         except (ValueError, KeyError) as e:
             raise MediaPlatformException('Bad response format', e)
