@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from media_platform.job.specification import Specification
 
 
-class VideoQuality(object):
+class VideoQuality:
     res_144p = '144p'
     res_240p = '240p'
     res_360p = '360p'
@@ -15,24 +17,20 @@ class VideoQuality(object):
     values = [res_144p, res_240p, res_360p, res_480p, res_720p, res_1080p, res_1440p, res_2160p]
 
     @classmethod
-    def has_value(cls, value):
-        # type: (str) -> bool
+    def has_value(cls, value: str or VideoQuality) -> bool:
         return value in cls.values
 
 
 class VideoQualityRange(Specification):
-    def __init__(self, minimum, maximum):
-        # type: (VideoQuality, VideoQuality) -> None
+    def __init__(self, minimum: VideoQuality, maximum: VideoQuality):
         self.minimum = minimum
         self.maximum = maximum
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> VideoQualityRange
+    def deserialize(cls, data: dict) -> VideoQualityRange:
         return VideoQualityRange(data['minimum'], data['maximum'])
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'minimum': self.minimum,
             'maximum': self.maximum

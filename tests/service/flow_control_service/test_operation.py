@@ -2,6 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 
 from media_platform import Destination, Source, FileDescriptor
+from media_platform.service.file_descriptor import FileType
 from media_platform.service.flow_control_service.component import ComponentType
 from media_platform.service.flow_control_service.operation import Operation, OperationStatus
 from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
@@ -13,7 +14,8 @@ operation = Operation(ComponentType.copy_file,
                       OperationStatus.working,
                       True,
                       [Source('/source.txt')],
-                      [FileDescriptor('/destination.txt', 'file-id', '-', 'text/plain', 123, date_created=date, date_updated=date)],
+                      [FileDescriptor('/destination.txt', 'file-id', FileType.file, 'text/plain', 123,
+                                      date_created=date, date_updated=date)],
                       ['job-id'],
                       {'extra-result': 'value'},
                       'error_message',

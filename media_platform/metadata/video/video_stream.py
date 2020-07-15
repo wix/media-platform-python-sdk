@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 
 
 class VideoStream(Deserializable):
-    def __init__(self, index, width, height, avg_frame_rate, r_frame_rate, display_aspect_ratio, sample_aspect_ratio,
-                 rotate, duration, bitrate, codec_tag, codec_name, codec_long_name, pixel_format, field_order=None, disposition=None):
-        # type: (int, int, int, str, str, str, str, int, int, int, str, str, str, str, str, [str]) -> None
-
+    def __init__(self, index: int, width: int, height: int, avg_frame_rate: str, r_frame_rate: str,
+                 display_aspect_ratio: str, sample_aspect_ratio: str,
+                 rotate: int, duration: int, bitrate: int, codec_tag: str, codec_name: str, codec_long_name: str,
+                 pixel_format: str, field_order: str = None, disposition: [str] = None):
         self.index = int(index)
         self.width = int(width) if width else None
         self.height = int(height) if height else None
@@ -24,8 +26,7 @@ class VideoStream(Deserializable):
         self.disposition = disposition or []
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> VideoStream
+    def deserialize(cls, data: dict) -> VideoStream:
         return VideoStream(data.get('index'),
                            data.get('width'),
                            data.get('height'),
@@ -42,10 +43,9 @@ class VideoStream(Deserializable):
                            data.get('pixelFormat'),
                            data.get('fieldOrder'),
                            data.get('disposition')
-        )
+                           )
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'index': self.index,
             'width': self.width,

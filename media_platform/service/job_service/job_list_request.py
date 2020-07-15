@@ -1,13 +1,13 @@
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from __future__ import annotations
+
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.job_service.job_list import JobList
 from media_platform.service.list_request import _ListRequest
 
 
 class JobListRequest(_ListRequest):
-    def __init__(self, authenticated_http_client, base_url):
-        # type: (AuthenticatedHTTPClient, str) -> None
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(JobListRequest, self).__init__(authenticated_http_client, base_url + '/jobs', JobList)
-
         self.issuer = None
         self.type = None
         self.status = None
@@ -15,32 +15,34 @@ class JobListRequest(_ListRequest):
         self.file_id = None
         self.path = None
 
-    def set_issuer(self, issuer):
-        # type: (str) -> JobListRequest
+    def set_issuer(self, issuer: str) -> JobListRequest:
         self.issuer = issuer
         return self
 
-    def set_type(self, job_type):
-        # type: (str) -> JobListRequest
+    def set_type(self, job_type: str) -> JobListRequest:
         self.type = job_type
         return self
 
-    def set_status(self, status):
-        # type: (str) -> JobListRequest
+    def set_status(self, status: str) -> JobListRequest:
         self.status = status
         return self
 
-    def set_path(self, path):
-        # type: (str) -> JobListRequest
+    def set_path(self, path: str) -> JobListRequest:
         self.path = path
         return self
 
-    def execute(self):
-        # type: () -> JobList
+    def set_group_id(self, group_id: str) -> JobListRequest:
+        self.group_id = group_id
+        return self
+
+    def set_file_id(self, file_id: str) -> JobListRequest:
+        self.file_id = file_id
+        return self
+
+    def execute(self) -> JobList:
         return super(JobListRequest, self).execute()
 
-    def _params(self):
-        # type: () -> dict
+    def _params(self) -> dict:
         params = super(JobListRequest, self)._params()
 
         if self.issuer:

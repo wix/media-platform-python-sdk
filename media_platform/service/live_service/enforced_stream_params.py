@@ -1,47 +1,42 @@
-import logging
+from __future__ import annotations
 
-from typing import Optional
+import logging
+from abc import ABC
 
 from media_platform.lang.serialization import Deserializable, Serializable
-
 from media_platform.service.live_service.stream_error_info import StreamErrorInfo
 
 
 class StreamParamsOutOfRangeErrorInfo(StreamErrorInfo):
-    def __init__(self, enforced_stream_params, actual_params):
-        # type: (EnforcedStreamParams, Params) -> None
+    def __init__(self, enforced_stream_params: EnforcedStreamParams, actual_params: Params):
         self.enforced_stream_params = enforced_stream_params
         self.actual_params = actual_params
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'enforcedStreamParams': self.enforced_stream_params.serialize,
             'actualParams': self.actual_params.serialize
         }
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> StreamParamsOutOfRangeErrorInfo
+    def deserialize(cls, data: dict) -> StreamParamsOutOfRangeErrorInfo:
         return cls(EnforcedStreamParams.deserialize(data['enforcedStreamParams']),
                    Params.deserialize(data['actualParams']))
 
 
 class StreamParamsOutOfRange(Exception):
-    def __init__(self, message, error_info):
-        # type: (str, StreamParamsOutOfRangeErrorInfo) -> None
+    def __init__(self, message: str, error_info: StreamParamsOutOfRangeErrorInfo):
         super(StreamParamsOutOfRange, self).__init__(message)
         self.error_info = error_info
 
 
 class Params(Serializable, Deserializable):
-    def __init__(self, width=None, height=None, bitrate=None):
+    def __init__(self, width: int = None, height: int = None, bitrate: int = None):
         self.width = width
         self.height = height
         self.bitrate = bitrate
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         data = {}
         if self.width:
             data['width'] = self.width
@@ -55,12 +50,10 @@ class Params(Serializable, Deserializable):
         return data
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Params
+    def deserialize(cls, data: dict) -> Params:
         return cls(data.get('width'), data.get('height'), data.get('bitrate'))
 
-    def __lt__(self, other):
-        # type: (Params) -> bool
+    def __lt__(self, other: Params) -> bool:
         if not isinstance(other, Params):
             return NotImplemented
 
@@ -75,39 +68,34 @@ class Params(Serializable, Deserializable):
 
         return False
 
-    def __eq__(self, other):
-        # type: (Params) -> bool
+    def __eq__(self, other: Params) -> bool:
         if not isinstance(other, Params):
             return NotImplemented
 
         return self.width == other.width and self.height == other.height and self.bitrate == other.bitrate
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.serialize())
 
 
-# noinspection PyAbstractClass
-class Enforceable(Serializable):
+class Enforceable(ABC, Serializable):
     name = None
 
-    def is_valid(self, params):
-        # type: (Params) -> bool
+    def is_valid(self, params: Params) -> bool:
         raise NotImplementedError()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.serialize())
 
 
 class ParamsRange(Enforceable):
     name = 'range'
 
-    def __init__(self, min_values=None, max_values=None):
-        # type: (Optional[Params], Optional[Params]) -> None
+    def __init__(self, min_values: [Params] = None, max_values: [Params] = None):
         self.min_values = min_values
         self.max_values = max_values
 
-    def is_valid(self, params):
-        # type: (Params) -> bool
+    def is_valid(self, params: Params) -> bool:
         if self.min_values and params < self.min_values:
             return False
 
@@ -116,8 +104,7 @@ class ParamsRange(Enforceable):
 
         return True
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         data = {}
         if self.min_values:
             data['minValues'] = self.min_values.serialize()
@@ -128,9 +115,7 @@ class ParamsRange(Enforceable):
         return data
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ParamsRange
-
+    def deserialize(cls, data: dict) -> ParamsRange:
         min_values_data = data.get('minValues')
         max_values_data = data.get('maxValues')
         min_values = Params.deserialize(min_values_data) if min_values_data else None
@@ -142,35 +127,29 @@ class ParamsRange(Enforceable):
 class ParamsOptions(Enforceable):
     name = 'options'
 
-    def __init__(self, options):
-        # type: (list[Params]) -> None
+    def __init__(self, options: [Params]):
         self.options = options
 
-    def is_valid(self, params):
-        # type: (Params) -> bool
+    def is_valid(self, params: Params) -> bool:
         return params in self.options
 
-    def serialize(self):
-        # type: () -> list[dict]
+    def serialize(self) -> list:
         return [o.serialize() for o in self.options]
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (list[dict]) -> ParamsOptions
+    def deserialize(cls, data: list) -> ParamsOptions:
         return cls([Params.deserialize(d) for d in data])
 
 
 class EnforcedStreamParams(Serializable):
-    def __init__(self, params_range=None, params_options=None):
-        # type: (ParamsRange, ParamsOptions) -> None
+    def __init__(self, params_range: ParamsRange = None, params_options: ParamsOptions = None):
         if params_range and params_options:
             raise ValueError('Either range or options must be specified, not both')
 
         self.params_range = params_range
         self.params_options = params_options
 
-    def enforce(self, params):
-        # type: (Params) -> None
+    def enforce(self, params: Params):
         transposed_params = Params(params.height, params.width, params.bitrate)
 
         for enforceable in [self.params_range, self.params_options]:
@@ -182,8 +161,7 @@ class EnforcedStreamParams(Serializable):
 
                 logging.debug('%s satisfies enforcement %s: %s' % (params, enforceable.name, enforceable))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         data = {}
         if self.params_range:
             data['paramsRange'] = self.params_range.serialize()
@@ -194,8 +172,7 @@ class EnforcedStreamParams(Serializable):
         return data
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> EnforcedStreamParams
+    def deserialize(cls, data: dict) -> EnforcedStreamParams:
         data = data or {}
         params_range_data = data.get('paramsRange')
         params_options_data = data.get('paramsOptions')
@@ -204,5 +181,5 @@ class EnforcedStreamParams(Serializable):
 
         return cls(params_range, params_options)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.serialize())

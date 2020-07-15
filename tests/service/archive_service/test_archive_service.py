@@ -5,7 +5,7 @@ import httpretty
 from hamcrest import assert_that, instance_of, is_, starts_with
 
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.create_archive_job import ArchiveType, CreateArchiveJob
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob
 from media_platform.job.extract_archive.extraction_report import ExtractionReportFormat, ExtractionReport
@@ -266,7 +266,8 @@ class TestArchiveService(unittest.TestCase):
             body='barks!'
         )
 
-        with self.archive_service.archive_manifest_url_request().set_path('/path/to/manifest.zip').execute() as response:
+        with self.archive_service.archive_manifest_url_request().set_path(
+                '/path/to/manifest.zip').execute() as response:
             dogs = next(response.iter_lines())
 
             assert_that(dogs.decode('utf-8'), is_('barks!'))

@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from media_platform.job.job_type import JobType
 from media_platform.job.specification import Specification
@@ -7,14 +7,14 @@ from media_platform.service.destination import Destination
 from media_platform.job.job import Job
 
 
-class PosterImageFormat(object):
+class PosterImageFormat:
     jpeg = 'jpg'
     png = 'png'
     values = [jpeg, png]
     invalid_value_message = 'Image format must be one of: %s' % ', '.join(values)
 
 
-class PosterFilter(object):
+class PosterFilter:
     video = 'video'
     wix_alpha = 'wixAlpha'
     video_alpha = 'videoAlpha'
@@ -25,7 +25,8 @@ class PosterFilter(object):
     values = [video, wix_alpha, video_alpha, transparent_crop]
     invalid_value_message = 'Filters must be one of: %s' % ', '.join(values)
 
-class PixelFormat(object):
+
+class PixelFormat:
     rgb24 = 'rgb24'
     rgba = 'rgba'
 
@@ -35,11 +36,10 @@ class PixelFormat(object):
 
 
 class ExtractPosterSpecification(Specification):
-    def __init__(self, second, destination, image_format=PosterImageFormat.jpeg, percentage=None, filters=None,
-                 resolution=None, pixel_format=None):
-        # type: (Optional[float], Destination, Optional[PosterImageFormat], Optional[float], Optional[PosterFilter], Optional[Resolution], Optional[PixelFormat]) -> None
+    def __init__(self, second: float = None, destination: Destination = None,
+                 image_format: PosterImageFormat = PosterImageFormat.jpeg, percentage: float = None,
+                 filters: [PosterFilter] = None, resolution: Resolution = None, pixel_format: PixelFormat = None):
         super(ExtractPosterSpecification, self).__init__()
-
         self.second = second
         self.destination = destination
         self.image_format = image_format or PosterImageFormat.jpeg
@@ -48,8 +48,7 @@ class ExtractPosterSpecification(Specification):
         self.resolution = resolution
         self.pixel_format = pixel_format
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         data = {
             'second': self.second,
             'percentage': self.percentage,
@@ -67,8 +66,7 @@ class ExtractPosterSpecification(Specification):
         return data
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ExtractPosterSpecification
+    def deserialize(cls, data: dict) -> ExtractPosterSpecification:
         destination = Destination.deserialize(data['destination'])
 
         resolution_data = data.get('resolution')

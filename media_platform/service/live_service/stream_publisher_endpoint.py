@@ -6,16 +6,12 @@ from media_platform.service.live_service.stream_protocol import StreamProtocol
 
 
 class StreamPublishEndpoint(Serializable, Deserializable):
-    def __init__(self, url, protocol, geo=None):
-        # type: (str, StreamProtocol, GeoLocation) -> None
-
+    def __init__(self, url: str, protocol: StreamProtocol, geo: GeoLocation = None):
         self.url = url
         self.protocol = protocol
         self.geo = geo
 
-    def serialize(self):
-        # type: () -> Dict
-
+    def serialize(self) -> Dict:
         return {
             'url': self.url,
             'protocol': self.protocol,
@@ -23,9 +19,7 @@ class StreamPublishEndpoint(Serializable, Deserializable):
         }
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (Dict) -> StreamPublishEndpoint
-
+    def deserialize(cls, data: dict):
         geo = GeoLocation.deserialize(data['geo']) if data.get('geo') else None
 
         return cls(data['url'], data['protocol'], geo)

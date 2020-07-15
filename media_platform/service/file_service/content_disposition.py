@@ -1,29 +1,25 @@
-from typing import Optional
+from __future__ import annotations
 
 
-class ContentDisposition(object):
-    class Type(object):
+class ContentDisposition:
+    class Type:
         attachment = 'attachment'
         inline = 'inline'
 
-    def __init__(self, file_name=None, type=Type.attachment):
-        # type: (Optional[str], Type) -> None
+    def __init__(self, file_name: str = None, disposition_type: Type = Type.attachment):
         self.file_name = file_name
-        self.type = type
+        self.disposition_type = disposition_type
 
-    def set_file_name(self, file_name):
-        # type: (str) -> ContentDisposition
+    def set_file_name(self, file_name: str) -> ContentDisposition:
         self.file_name = file_name
         return self
 
-    def set_type(self, type):
-        # type: (Type) -> ContentDisposition
-        self.type = type
+    def set_type(self, disposition_type: Type) -> ContentDisposition:
+        self.disposition_type = disposition_type
         return self
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'filename': self.file_name,
-            'type': self.type
+            'type': self.disposition_type
         }

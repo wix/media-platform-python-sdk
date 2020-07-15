@@ -1,6 +1,5 @@
 class MediaPlatformException(Exception):
-    def __init__(self, message=None, cause=None):
-        # type: (str, Exception) -> None
+    def __init__(self, message: str = None, cause: Exception = None):
         if cause:
             message = '%s: %s: %s' % (message, str(type(cause).__name__), str(cause))
 

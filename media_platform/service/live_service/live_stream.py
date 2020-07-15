@@ -1,6 +1,6 @@
-from datetime import datetime
+from __future__ import annotations
 
-from typing import List, Dict
+from datetime import datetime
 
 from media_platform.lang import datetime_serialization
 from media_platform.lang.serialization import Serializable, Deserializable
@@ -19,13 +19,15 @@ from media_platform.service.live_service.stream_type import StreamType
 
 
 class LiveStream(Serializable, Deserializable):
-    def __init__(self, project_id, streamer_id, stream_id, playbacks, publish_endpoint, dvr,
-                 state, duration, max_publish_duration, date_created, date_updated,
-                 state_notification, stream_type, success, error_message,
-                 connect_timeout_secs, reconnect_timeout_secs, probe_result, protocol,
-                 enforced_stream_params, publisher_geo, error_code, error_info):
-        # type: (str, str, str, List[StreamPlayback], StreamPublishEndpoint, StreamDVR, StreamState, int, int, datetime, datetime, StreamStateNotification, StreamType, bool, str, int, int, Dict, StreamProtocol, EnforcedStreamParams, GeoLocation, StreamErrorCode, StreamErrorInfo) -> None
-
+    def __init__(self, project_id: str, streamer_id: str, stream_id: str, playbacks: [StreamPlayback],
+                 publish_endpoint: StreamPublishEndpoint or None, dvr: StreamDVR or None,
+                 state: StreamState, duration: int, max_publish_duration: int, date_created: datetime,
+                 date_updated: datetime,
+                 state_notification: StreamStateNotification or None, stream_type: StreamType, success: bool,
+                 error_message: str,
+                 connect_timeout_secs: int, reconnect_timeout_secs: int, probe_result: dict, protocol: StreamProtocol,
+                 enforced_stream_params: EnforcedStreamParams, publisher_geo: GeoLocation, error_code: StreamErrorCode,
+                 error_info: StreamErrorInfo):
         self.stream_type = stream_type
         self.project_id = project_id
         self.streamer_id = streamer_id
@@ -51,8 +53,7 @@ class LiveStream(Serializable, Deserializable):
         self.error_info = error_info
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> LiveStream
+    def deserialize(cls, data: dict) -> LiveStream:
         playback_urls_data = data.get('playbackUrls')
         publish_endpoint_data = data.get('publishEndpoint')
         dvr_data = data.get('dvr')
@@ -97,8 +98,7 @@ class LiveStream(Serializable, Deserializable):
         return [StreamPlayback.deserialize(playback) for playback in
                 playback_urls_data] if playback_urls_data else None
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'id': self.id,
             'projectId': self.project_id,
@@ -126,9 +126,7 @@ class LiveStream(Serializable, Deserializable):
         }
 
     @classmethod
-    def deserialize_error_info(cls, error_code, data):
-        # type: (StreamErrorCode, dict) -> StreamErrorInfo or None
-
+    def deserialize_error_info(cls, error_code: StreamErrorCode, data: dict) -> StreamErrorInfo or None:
         if error_code == StreamErrorCode.stream_params_out_of_range:
             return StreamParamsOutOfRangeErrorInfo.deserialize(data)
         else:

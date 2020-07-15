@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 
 
 class AudioStream(Deserializable):
-    def __init__(self, index, duration, bitrate, codec_tag, codec_name, codec_long_name, sample_rate, channels,
-                 channel_layout):
+    def __init__(self, index: int, duration: int, bitrate: int, codec_tag: str, codec_name: str, codec_long_name: str,
+                 sample_rate: int, channels: int, channel_layout: str):
         self.index = int(index)
         self.duration = duration
         self.bitrate = int(bitrate) if bitrate else None
@@ -15,13 +17,12 @@ class AudioStream(Deserializable):
         self.channels = int(channels) if channels else None
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> AudioStream
+    def deserialize(cls, data: dict) -> AudioStream:
         return AudioStream(data.get('index'), data.get('duration'), data.get('bitrate'),
                            data.get('codecTag'), data.get('codecName'), data.get('codecLongName'),
                            data.get('sampleRate'), data.get('channels'), data.get('channelLayout'))
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {
             'index': self.index,
             'duration': self.duration,

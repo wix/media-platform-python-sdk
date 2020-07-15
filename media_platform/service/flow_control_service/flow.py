@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 
 from media_platform.lang.serialization import Serializable, Deserializable
@@ -5,13 +7,10 @@ from media_platform.service.flow_control_service.component import Component
 
 
 class Flow(Serializable, Deserializable):
-    def __init__(self, components=None):
-        # type: (dict[str, Component]) -> None
-
+    def __init__(self, components: [str, Component] = None):
         self.components = components or dict()
 
-    def add_component(self, key, component):
-        # type: (str, Component) -> Flow
+    def add_component(self, key: str, component: Component) -> Flow:
         self.components[key] = component
         return self
 
@@ -21,16 +20,13 @@ class Flow(Serializable, Deserializable):
         self._validate_acyclic()
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Flow
+    def deserialize(cls, data: dict) -> Flow:
         components = {k: Component.deserialize(v) for k, v in data.items()}
 
         return Flow(components)
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {k: v.serialize() for k, v in self.components.items()}
-
 
     _invalid_key_chars = re.compile('[^A-Za-z0-9-]')
 
@@ -67,6 +63,3 @@ class Flow(Serializable, Deserializable):
 
         if any(visit(v) for v in graph):
             raise ValueError('cyclic dependency detected')
-
-
-

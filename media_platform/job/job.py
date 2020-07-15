@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 from media_platform.job.result.job_result import JobResult
@@ -9,7 +11,7 @@ from media_platform.service.callback import Callback
 from media_platform.service.source import Source
 
 
-class JobStatus(object):
+class JobStatus:
     pending = 'pending'
     working = 'working'
     success = 'success'
@@ -17,14 +19,12 @@ class JobStatus(object):
 
 
 class JobID(Deserializable):
-    def __init__(self, group_id, job_key):
-        # type: (str, str) -> None
+    def __init__(self, group_id: str, job_key: str):
         self.group_id = group_id
         self.job_key = job_key
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (str) -> JobID
+    def deserialize(cls, data: str) -> JobID:
         parts = data.split('_')
         return JobID(parts[0], parts[1])
 
@@ -33,13 +33,12 @@ class Job(Deserializable, Serializable):
     specification_type = None
     type = None
 
-    def __init__(self, job_id, issuer, status, specification, sources=None, callback=None, flow_id=None,
-                 result=None, date_created=None, date_updated=None):
-        # type: (str, str, str, Specification or dict, [Source], Callback, str, JobResult, datetime, datetime) -> None
-
+    def __init__(self, job_id: str, issuer: str, status: JobStatus, specification: Specification,
+                 sources: [Source] = None, callback: Callback = None, flow_id: str = None,
+                 result: JobResult = None, date_created: datetime = None, date_updated: datetime = None):
         _id = JobID.deserialize(job_id)
 
-        self.id = job_id
+        self.job_id = job_id
         self.group_id = _id.group_id
         self.issuer = issuer
         self.status = status
@@ -52,9 +51,7 @@ class Job(Deserializable, Serializable):
         self.date_updated = date_updated
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Job
-
+    def deserialize(cls, data: dict) -> Job:
         sources = [Source.deserialize(source) for source in data['sources']]
         date_created = datetime_serialization.deserialize(data['dateCreated'])
         date_updated = datetime_serialization.deserialize(data['dateUpdated'])
@@ -72,11 +69,11 @@ class Job(Deserializable, Serializable):
         job.type = data['type']
         return job
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {
             'type': self.type,
             'groupId': self.group_id,
-            'id': self.id,
+            'id': self.job_id,
             'issuer': self.issuer,
             'status': self.status,
             'specification': (self.specification.serialize() if isinstance(self.specification, Serializable)

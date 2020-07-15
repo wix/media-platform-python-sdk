@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Serializable, Deserializable
 
 
-class Action(object):
+class Action:
     delete = 'delete'
 
     @classmethod
@@ -10,29 +12,24 @@ class Action(object):
 
 
 class Lifecycle(Serializable, Deserializable):
-    def __init__(self, age, action):
-        # type: (int, str) -> None
+    def __init__(self, age: int, action: Action):
         super(Lifecycle, self).__init__()
-
         self._validate_values(action, age)
-
-        self.age = age          # int seconds
-        self.action = action    # delete
+        self.age = age  # int seconds
+        self.action = action  # delete
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Lifecycle
-
+    def deserialize(cls, data: dict) -> Lifecycle:
         return Lifecycle(data['age'], data['action'])
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {
             'age': self.age,
             'action': self.action
         }
 
     @staticmethod
-    def _validate_values(action, age):
+    def _validate_values(action: Action, age: int):
         if age < 30:
             raise ValueError('age must be greater than 30 seconds')
 

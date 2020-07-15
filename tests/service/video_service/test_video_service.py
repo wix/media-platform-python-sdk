@@ -4,7 +4,7 @@ import unittest
 import httpretty
 
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.extract_poster_job import ExtractPosterSpecification, ExtractPosterJob, PosterImageFormat, \
     PosterFilter, PixelFormat
 from media_platform.job.extract_storyboard_job import ExtractStoryboardSpecification, ExtractStoryboardJob

@@ -1,14 +1,14 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable
 
 
 class ExplicitContent(Deserializable):
-    def __init__(self, name, likelihood):
-        # type: (str, str) -> None
+    def __init__(self, name: str, likelihood: str):
         super(ExplicitContent, self).__init__()
         self.name = name
         self.likelihood = likelihood
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ExplicitContent
+    def deserialize(cls, data: dict) -> ExplicitContent:
         return ExplicitContent(data['name'], data['likelihood'])

@@ -4,7 +4,7 @@ import unittest
 import httpretty
 from hamcrest import assert_that, instance_of, is_
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.job.transcode.audio_qualities import AudioQuality
 from media_platform.job.transcode.stream_specification import StreamSpecification, StreamType
 from media_platform.job.transcode.video_qualities import VideoQuality, VideoQualityRange

@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 from media_platform.lang.serialization import Deserializable, Serializable
 from media_platform.service.flow_control_service.flow_error import FlowError
 from media_platform.service.flow_control_service.invocation import Invocation
 from media_platform.service.flow_control_service.operation import Operation
 
 
-class FlowStatus(object):
+class FlowStatus:
     idle = 'idle'
     working = 'working'
     success = 'success'
@@ -13,8 +15,8 @@ class FlowStatus(object):
 
 
 class FlowState(Deserializable, Serializable):
-    def __init__(self, flow_id, status, invocation, operations, flow_error=None):
-        # type: (str, FlowStatus, Invocation, [str, Operation], FlowError) -> None
+    def __init__(self, flow_id: str, status: FlowStatus, invocation: Invocation, operations: [str, Operation],
+                 flow_error: FlowError = None):
         super(FlowState, self).__init__()
         self.id = flow_id
         self.invocation = invocation
@@ -23,9 +25,7 @@ class FlowState(Deserializable, Serializable):
         self.flow_error = flow_error
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> FlowState
-
+    def deserialize(cls, data: dict) -> FlowState:
         invocation = Invocation.deserialize(data['invocation'])
         operations_data = data.get('operations', {})
         operations = {k: Operation.deserialize(v) for k, v in operations_data.items()}
@@ -34,7 +34,7 @@ class FlowState(Deserializable, Serializable):
 
         return FlowState(data['id'], data['status'], invocation, operations, flow_error)
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {
             'id': self.id,
             'invocation': self.invocation.serialize(),

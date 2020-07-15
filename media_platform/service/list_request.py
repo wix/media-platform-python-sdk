@@ -1,53 +1,45 @@
-from typing import Type
+from __future__ import annotations
 
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.lang.serialization import Deserializable
 from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
-class OrderBy(object):
+class OrderBy:
     name = 'name'
     date_updated = 'dateUpdated'
 
 
-class OrderDirection(object):
+class OrderDirection:
     ascending = 'acs'
     descending = 'des'
 
 
 class _ListRequest(MediaPlatformRequest):
-    def __init__(self, authenticated_http_client, url, payload_type):
-        # type: (AuthenticatedHTTPClient, str, Type[Deserializable]) -> None
+    def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, url: str, payload_type: Deserializable):
         super(_ListRequest, self).__init__(authenticated_http_client, 'GET', url, payload_type)
-
         self.next_page_token = None
         self.page_size = 20
         self.order_by = OrderBy.date_updated
         self.order_direction = OrderDirection.descending
 
-    def set_next_page_token(self, next_page_token):
-        # type: (str) -> _ListRequest
+    def set_next_page_token(self, next_page_token: str):
         self.next_page_token = next_page_token
         return self
 
-    def set_page_size(self, page_size):
-        # type: (int) -> _ListRequest
+    def set_page_size(self, page_size: int):
         self.page_size = page_size
         return self
 
-    def set_order_by(self, order_by):
-        # type: (str) -> _ListRequest
+    def set_order_by(self, order_by: OrderBy):
         self.order_by = order_by
         return self
 
-    def set_order_direction(self, order_direction):
-        # type: (str) -> _ListRequest
+    def set_order_direction(self, order_direction: OrderDirection):
         self.order_direction = order_direction
         return self
 
-    def _params(self):
-        # type: () -> dict
-
+    def _params(self) -> dict:
         params = {}
 
         if self.next_page_token:

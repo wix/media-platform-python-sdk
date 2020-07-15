@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.convert_font_job import ConvertFontSpecification
 from media_platform.job.create_archive_job import CreateArchiveSpecification
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveSpecification
@@ -14,7 +16,7 @@ from media_platform.service.flow_control_service.specifications.copy_file_specif
 from media_platform.service.source import Source
 
 
-class ComponentType(object):
+class ComponentType:
     create_archive = 'archive.create'
     extract_archive = 'archive.extract'
     transcode = 'av.transcode'
@@ -46,10 +48,9 @@ _SPECIFICATIONS = {
 
 
 class Component(Serializable, Deserializable):
-    def __init__(self, component_type, successors=None, specification=None, delete_sources=False, callback=None, sources=None):
-        # type: (ComponentType, [str], Specification, bool, Callback, [Source]) -> None
+    def __init__(self, component_type: ComponentType, successors: [str] = None, specification: Specification = None,
+                 delete_sources: bool = False, callback: Callback = None, sources: [Source] = None):
         super(Component, self).__init__()
-
         self.type = component_type
         self.successors = successors or []
         self.specification = specification
@@ -57,8 +58,7 @@ class Component(Serializable, Deserializable):
         self.callback = callback
         self.sources = sources or []
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'type': self.type,
             'successors': self.successors,
@@ -69,8 +69,7 @@ class Component(Serializable, Deserializable):
         }
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Component
+    def deserialize(cls, data: dict) -> Component:
         specification_type = _SPECIFICATIONS[data['type']]
         specification = specification_type.deserialize(data['specification']) if specification_type else None
 

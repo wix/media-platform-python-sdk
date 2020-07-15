@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.job.job_type import JobType
 from media_platform.job.result.job_result import JobResult
@@ -12,12 +14,13 @@ class TranscodeResult(JobResult):
         self.master_ffmpeg_command = master_ffmpeg_command
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict or None) -> TranscodeResult or None
+    def deserialize(cls, data: dict or None) -> TranscodeResult or None:
         if data is None:
             return None
 
         result = JobResult.deserialize(data)
+        result.__class__ = TranscodeResult
+
         result.file_descriptor = None
         result.master_ffmpeg_command = None
 
@@ -30,17 +33,15 @@ class TranscodeResult(JobResult):
 
             result.master_ffmpeg_command = payload_data.get('masterFFMpegCommand')
 
-        result.__class__ = TranscodeResult
         return result
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         data = super(TranscodeResult, self).serialize()
         data['payload'] = self._serialize_payload()
 
         return data
 
-    def _serialize_payload(self):
+    def _serialize_payload(self) -> dict:
         payload = None
 
         if self.file_descriptor:
@@ -55,4 +56,3 @@ class TranscodeResult(JobResult):
             payload['masterFFMpegCommand'] = self.master_ffmpeg_command
 
         return payload
-

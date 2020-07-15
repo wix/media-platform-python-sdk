@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.specification import Specification
 from media_platform.lang.serialization import Serializable
 from media_platform.service.file_descriptor import FileDescriptor
@@ -5,7 +7,7 @@ from media_platform.service.flow_control_service.component import Component, Com
 from media_platform.service.source import Source
 
 
-class OperationStatus(object):
+class OperationStatus:
     waiting = 'waiting'
     aborted = 'aborted'
     working = 'working'
@@ -14,10 +16,10 @@ class OperationStatus(object):
 
 
 class Operation(Component):
-    def __init__(self, component_type, successors, specification, status, delete_sources=False, sources=None,
-                 results=None, jobs=None, extra_results=None, error_message=None, error_code=None, state_id=None,
-                 component_key=None):
-        # type: (ComponentType, [str], Specification, OperationStatus, bool, [Source], [FileDescriptor] or [dict], [str], dict, str, int, str, str) -> None
+    def __init__(self, component_type: ComponentType, successors: [str], specification: Specification,
+                 status: OperationStatus, delete_sources: bool = False, sources: [Source] = None,
+                 results: [FileDescriptor] or [dict] = None, jobs: [str] = None, extra_results: dict = None,
+                 error_message: str = None, error_code: int = None, state_id: str = None, component_key: str = None):
         super(Operation, self).__init__(component_type, successors, specification, delete_sources, sources=sources)
         self.status = status
         self.results = results or []
@@ -29,8 +31,7 @@ class Operation(Component):
         self.component_key = component_key
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Operation
+    def deserialize(cls, data: dict) -> Operation:
         o = Component.deserialize(data)
         o.__class__ = cls
 
@@ -44,7 +45,7 @@ class Operation(Component):
         o.component_key = data.get('componentKey')
         return o
 
-    def serialize(self):
+    def serialize(self) -> dict:
         data = super(Operation, self).serialize()
 
         data.update({

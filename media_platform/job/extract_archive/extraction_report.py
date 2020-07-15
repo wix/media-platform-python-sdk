@@ -1,33 +1,31 @@
+from __future__ import annotations
+
 from media_platform.service.destination import Destination
 from media_platform.lang.serialization import Serializable, Deserializable
 
 
-class ExtractionReportFormat(object):
+class ExtractionReportFormat:
     csv = 'csv'
     json = 'json'
 
     @classmethod
-    def has_value(cls, value):
+    def has_value(cls, value: str or ExtractionReportFormat):
         return value in [cls.csv, cls.json]
 
 
 class ExtractionReport(Serializable, Deserializable):
-    def __init__(self, destination, report_format=ExtractionReportFormat.csv):
-        # type: (Destination, ExtractionReportFormat) -> None
+    def __init__(self, destination: Destination, report_format: ExtractionReportFormat = ExtractionReportFormat.csv):
         super(ExtractionReport, self).__init__()
-
         self.destination = destination
         self.format = report_format
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ExtractionReport
+    def deserialize(cls, data: dict) -> ExtractionReport:
         destination = Destination.deserialize(data['destination'])
 
         return ExtractionReport(destination, data['format'])
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'destination': self.destination.serialize(),
             'format': self.format

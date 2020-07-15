@@ -1,5 +1,5 @@
 from media_platform.auth.app_authenticator import AppAuthenticator
-from media_platform.http.authenticated_http_client import AuthenticatedHTTPClient
+from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
 from media_platform.service.archive_service.archive_service import ArchiveService
 from media_platform.service.audio_service.audio_service import AudioService
 from media_platform.service.file_service.file_service import FileService
@@ -12,10 +12,8 @@ from media_platform.service.transcode_service.transcode_service import Transcode
 from media_platform.service.video_service.video_service import VideoService
 
 
-class MediaPlatformClient(object):
-    def __init__(self, domain, app_id, shared_secret):
-        # type: (str, str, str) -> None
-
+class MediaPlatformClient:
+    def __init__(self, domain: str, app_id: str, shared_secret: str):
         self.app_authenticator = AppAuthenticator(app_id, shared_secret)
         authenticated_http_client = AuthenticatedHTTPClient(self.app_authenticator)
 

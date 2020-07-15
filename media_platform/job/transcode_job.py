@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from media_platform.job.job import Job
 from media_platform.job.specification import Specification
 from media_platform.job.transcode.audio_qualities import AudioQuality
@@ -8,8 +10,9 @@ from media_platform.service.destination import Destination
 
 
 class TranscodeSpecification(Specification):
-    def __init__(self, destination, video=None, audio=None, quality_range=None, quality=None, clipping=None):
-        # type: (Destination, StreamSpecification, StreamSpecification, VideoQualityRange, AudioQuality or VideoQuality, Clipping or None) -> None
+    def __init__(self, destination: Destination, video: StreamSpecification = None, audio: StreamSpecification = None,
+                 quality_range: VideoQualityRange = None, quality: AudioQuality or VideoQuality = None,
+                 clipping: Clipping = None):
         super(Specification, self).__init__()
 
         self.destination = destination
@@ -20,9 +23,7 @@ class TranscodeSpecification(Specification):
         self.clipping = clipping
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> TranscodeSpecification
-
+    def deserialize(cls, data: dict) -> TranscodeSpecification:
         destination = Destination.deserialize(data['destination'])
 
         video_data = data.get('video')
@@ -41,8 +42,7 @@ class TranscodeSpecification(Specification):
 
         return TranscodeSpecification(destination, video, audio, quality_range, quality, clipping)
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'destination': self.destination.serialize(),
             'video': self.video.serialize() if self.video else None,
@@ -81,4 +81,3 @@ class TranscodeSpecification(Specification):
 class TranscodeJob(Job):
     type = 'urn:job:av.transcode'
     specification_type = TranscodeSpecification
-

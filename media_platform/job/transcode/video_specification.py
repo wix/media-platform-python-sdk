@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 from media_platform.job.specification import Specification
 from media_platform.lang.serialization import Serializable, Deserializable
 
 
 class VideoSpecification(Specification):
-    def __init__(self, codec, resolution=None, frame_rate=None, filters=None, frame_rate_fraction=None):
-        # type: (VideoCodec, Resolution or None, float, [VideoFilter] or None, str or None) -> None
+    def __init__(self, codec: VideoCodec, resolution: Resolution = None, frame_rate: float = None,
+                 filters: [VideoFilter] = None, frame_rate_fraction: str = None):
         self.codec = codec
         self.resolution = resolution
         self.frame_rate = frame_rate
@@ -12,7 +14,7 @@ class VideoSpecification(Specification):
         self.frame_rate_fraction = frame_rate_fraction
 
     @classmethod
-    def deserialize(cls, data):
+    def deserialize(cls, data) -> VideoSpecification:
         codec = VideoCodec.deserialize(data['codec'])
 
         resolution = Resolution.deserialize(data.get('resolution')) if data.get('resolution') else None
@@ -22,7 +24,7 @@ class VideoSpecification(Specification):
 
         return VideoSpecification(codec, resolution, data.get('frameRate'), filters, data.get('frameRateFraction'))
 
-    def serialize(self):
+    def serialize(self) -> dict:
         data = {
             'codec': self.codec.serialize(),
             'resolution': self.resolution.serialize() if self.resolution else None,
@@ -42,24 +44,21 @@ class VideoSpecification(Specification):
 
 
 class Resolution(Serializable, Deserializable):
-    def __init__(self, width=None, height=None, scaling=None, sample_aspect_ratio=None):
-        # type: (int, int, VideoScaling or None, str or None) -> None
+    def __init__(self, width: int = None, height: int = None, scaling: VideoScaling = None,
+                 sample_aspect_ratio: str = None):
         self.width = width
         self.height = height
-
         self.scaling = scaling
         self.sample_aspect_ratio = sample_aspect_ratio  # defaults to '1:1'
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> Resolution
+    def deserialize(cls, data: dict) -> Resolution:
         scaling_data = data.get('scaling')
         scaling = VideoScaling.deserialize(scaling_data) if scaling_data else None
 
         return Resolution(data.get('width'), data.get('height'), scaling, data.get('sampleAspectRatio'))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'width': self.width,
             'height': self.height,
@@ -76,8 +75,8 @@ class Resolution(Serializable, Deserializable):
 
 
 class VideoCodec(Serializable, Deserializable):
-    def __init__(self, name, profile, level, crf, max_rate, gop=None, preset=None):
-        # type: (str, str, str, int, float, GOP or None, str or None) -> None
+    def __init__(self, name: str, profile: str, level: str, crf: int, max_rate: float, gop: GOP = None,
+                 preset: str = None):
         self.name = name
         self.profile = profile
         self.level = level
@@ -87,16 +86,14 @@ class VideoCodec(Serializable, Deserializable):
         self.preset = preset
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> VideoCodec
+    def deserialize(cls, data: dict) -> VideoCodec:
         gop_data = data.get('gop')
         gop = GOP.deserialize(gop_data) if gop_data else None
 
         return VideoCodec(data['name'], data['profile'], data['level'], data['crf'], data['maxRate'], gop,
                           data.get('preset'))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'name': self.name,
             'profile': self.profile,
@@ -109,23 +106,19 @@ class VideoCodec(Serializable, Deserializable):
 
 
 class GOP(Serializable, Deserializable):
-    def __init__(self, scene_cut, key_interval, min_key_interval, b_frames, b_pyramid, b_adapt, ref_frame):
-        # type: (int or None, int or None, int or None, int or None, int or None, int or None, int or None) -> None
+    def __init__(self, scene_cut: int, key_interval: int, min_key_interval: int, b_frames: int, b_pyramid: int,
+                 b_adapt: int, ref_frame: int):
         super(GOP, self).__init__()
-
         self.scene_cut = scene_cut
-
         self.key_interval = key_interval
         self.min_key_interval = min_key_interval
-
         self.b_frames = b_frames
         self.b_pyramid = b_pyramid
         self.b_adapt = b_adapt
-
         self.ref_frame = ref_frame
 
     @classmethod
-    def deserialize(cls, data):
+    def deserialize(cls, data: dict) -> GOP:
         return cls(
             data['sceneCut'],
             data['keyInterval'],
@@ -136,7 +129,7 @@ class GOP(Serializable, Deserializable):
             data['refFrame']
         )
 
-    def serialize(self):
+    def serialize(self) -> dict:
         return {
             'sceneCut': self.scene_cut,
             'keyInterval': self.key_interval,
@@ -151,41 +144,34 @@ class GOP(Serializable, Deserializable):
 class VideoScaling(Serializable, Deserializable):
     def __init__(self, algorithm):
         super(VideoScaling, self).__init__()
-
         self.algorithm = algorithm
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> VideoScaling
+    def deserialize(cls, data: dict) -> VideoScaling:
         return cls(data['algorithm'])
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'algorithm': self.algorithm
         }
 
 
-class VideoFilterName(object):
+class VideoFilterName:
     unsharp = 'unsharp'
     make_wix_transparent = 'makeWixTransparent'
 
 
 class VideoFilter(Serializable, Deserializable):
-    def __init__(self, name, settings=None):
-        # type: (VideoFilterName, dict or None) -> None
+    def __init__(self, name: VideoFilterName, settings: dict = None):
         super(ImageFilter, self).__init__()
-
         self.name = name  # 'unsharp'
-        self.settings = settings or {} # '{"value": "5:5:0.5:3:3:0.0"}'
+        self.settings = settings or {}  # '{"value": "5:5:0.5:3:3:0.0"}'
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ImageFilter
+    def deserialize(cls, data: dict) -> ImageFilter:
         return cls(data['name'], data.get('settings'))
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'name': self.name,
             'settings': self.settings

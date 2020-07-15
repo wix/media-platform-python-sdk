@@ -40,4 +40,4 @@ class TestJobCallbackPayload(TestCase):
         payload = JobCallbackPayload.deserialize(data)
 
         assert_that(payload.attachment, is_({'dog': 'bull'}))
-        assert_that(payload.job.id, is_('group-id_job-key'))
+        assert_that(payload.job.job_id, is_('group-id_job-key'))

@@ -10,7 +10,7 @@ from media_platform.job.transcode_job import TranscodeJob, TranscodeSpecificatio
 from media_platform.lang import datetime_serialization
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileType
-from media_platform.job.job import Job
+from media_platform.job.job import Job, JobStatus
 from media_platform.service.source import Source
 
 source = Source('/source.jpg')
@@ -34,7 +34,7 @@ transcode_result = TranscodeResult(
 )
 
 extract_archive_job = ExtractArchiveJob(
-    'group-id_job-key', 'urn:member:xxx', 'pending', extract_archive_specification, [source], result=extract_archive_result,
+    'group-id_job-key', 'urn:member:xxx', JobStatus.pending, extract_archive_specification, [source], result=extract_archive_result,
     date_created=frozen_time, date_updated=frozen_time)
 
 extract_archive_data = {
@@ -52,7 +52,7 @@ extract_archive_data = {
     'type': JobType.extract_archive
 }
 
-transcode_job = TranscodeJob('group-id_job-key', 'urn:member:xxx', 'pending', transcode_specification, [source],
+transcode_job = TranscodeJob('group-id_job-key', 'urn:member:xxx', JobStatus.pending, transcode_specification, [source],
                              result=transcode_result, date_created=frozen_time, date_updated=frozen_time)
 
 transcode_data = {

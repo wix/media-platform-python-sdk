@@ -1,5 +1,4 @@
-
-class JobType(object):
+class JobType:
     transcode = 'urn:job:av.transcode'
     extract_poster = 'urn:job:av.poster'
     extract_storyboard = 'urn:job:av.storyboard'
