@@ -29,7 +29,7 @@ def upload_archive() -> FileDescriptor:
     print('Uploading archive to %s...' % archive_path)
 
     with open(resources_dir + '/archive.zip', 'rb') as archive:
-        return client.file_service.upload_file_v2_request(). \
+        return client.file_service.upload_file_request(). \
             set_path(archive_path). \
             set_content(archive). \
             execute()
@@ -48,7 +48,7 @@ def extract_archive(archive_file: FileDescriptor) -> ExtractArchiveJob:
 def print_report(report_file: FileDescriptor):
     print('Successfully extracted. Archive contents:')
 
-    report = client.file_service.download_file_v2_request(). \
+    report = client.file_service.download_file_request(). \
         set_path(report_file.path). \
         execute()
 
