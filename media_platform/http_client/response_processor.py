@@ -2,6 +2,7 @@ import requests
 
 from media_platform.exception.bad_gateway_exception import BadGatewayException
 from media_platform.exception.conflict_exception import ConflictException
+from media_platform.exception.server_error_exception import ServerErrorException
 from media_platform.lang.serialization import Deserializable
 from media_platform.exception.forbidden_exception import ForbiddenException
 from media_platform.exception.media_platform_exception import MediaPlatformException
@@ -32,7 +33,9 @@ class ResponseProcessor:
             if payload_type is None:
                 raise MediaPlatformException('Unexpected payload (expected None)')
 
-            return payload_type.deserialize(rest_result.payload)
+            payload = payload_type.deserialize(rest_result.payload)
+            payload.seen_by = response.headers.get('X-Seen-By')
+            return payload
 
         except (ValueError, KeyError) as e:
             raise MediaPlatformException('Bad response format', e)
@@ -45,21 +48,23 @@ class ResponseProcessor:
         except (ValueError, KeyError):
             message = response.content
 
-        status_code = response.status_code
-
-        if status_code == 401:
+        if response.status_code == 401:
             raise UnauthorizedException(message)
 
-        if status_code == 403:
+        elif response.status_code == 403:
             raise ForbiddenException(message)
 
-        if status_code == 404:
+        elif response.status_code == 404:
             raise NotFoundException(message)
 
-        if status_code == 409:
+        elif response.status_code == 409:
             raise ConflictException(message)
 
-        if status_code == 502:
+        elif response.status_code == 500:
+            raise ServerErrorException(message)
+
+        elif response.status_code == 502:
             raise BadGatewayException(message)
 
-        raise MediaPlatformException(message)
+        else:
+            raise MediaPlatformException(message)
