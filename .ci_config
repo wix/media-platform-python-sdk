@@ -1,0 +1,4 @@
+{
+  "base_container_image": "docker-repo.wixpress.com/com.wixpress.cloud-sdk-3.7",
+  "python_version": "3"
+}
