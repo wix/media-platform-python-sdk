@@ -11,7 +11,7 @@ def wait_for_result(job: Job) -> JobResult:
     while job.status not in [JobStatus.success, JobStatus.error]:
         sleep(1)
 
-        job = client.job_service.job_request().set_id(job.job_id).execute()
+        job = client.job_service.job_request().set_id(job.id).execute()
 
     if job.status == JobStatus.error:
         raise Exception(job.result.message)

@@ -38,7 +38,7 @@ class Job(Deserializable, Serializable):
                  result: JobResult = None, date_created: datetime = None, date_updated: datetime = None):
         _id = JobID.deserialize(job_id)
 
-        self.job_id = job_id
+        self.id = job_id
         self.group_id = _id.group_id
         self.issuer = issuer
         self.status = status
@@ -73,7 +73,7 @@ class Job(Deserializable, Serializable):
         return {
             'type': self.type,
             'groupId': self.group_id,
-            'id': self.job_id,
+            'id': self.id,
             'issuer': self.issuer,
             'status': self.status,
             'specification': (self.specification.serialize() if isinstance(self.specification, Serializable)

@@ -316,7 +316,7 @@ class TestFileService(unittest.TestCase):
         ).set_job_callback(Callback('http://callback.com', {'key': 'value'})
                            ).execute()
 
-        self.assertEqual('71f0d3fde7f348ea89aa1173299146f8_19e137e8221b4a709220280b432f947f', import_file_job.job_id)
+        self.assertEqual('71f0d3fde7f348ea89aa1173299146f8_19e137e8221b4a709220280b432f947f', import_file_job.id)
         self.assertEqual({'sourceUrl': 'source-url',
                           'destination': {
                               'directory': None,
