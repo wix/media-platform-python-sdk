@@ -1,3 +1,4 @@
 {
-  "base_container_image": "docker-repo.wixpress.com/com.wixpress.python3-test"
+  "base_container_image": "docker-repo.wixpress.com/com.wixpress.python3-test",
+  "python_version": "3.7"
 }
