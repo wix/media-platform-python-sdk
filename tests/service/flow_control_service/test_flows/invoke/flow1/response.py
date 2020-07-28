@@ -3,7 +3,8 @@ invoke_flow1_response = {
         'sources': [],
         'entryPoints': ['import'],
         'callback': None,
-        'errorStrategy': 'stopOnError'
+        'errorStrategy': 'stopOnError',
+        'operationCallbackStatusFilter': []
     },
     'operations': {
         'import': {

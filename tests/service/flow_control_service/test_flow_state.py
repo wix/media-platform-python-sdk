@@ -12,7 +12,8 @@ class TestFlowState(TestCase):
                 'sources': [],
                 'entryPoints': ['import'],
                 'callback': None,
-                'errorStrategy': 'stopOnError'
+                'errorStrategy': 'stopOnError',
+                'operationCallbackStatusFilter': []
             },
             'operations': {
                 'import': {
