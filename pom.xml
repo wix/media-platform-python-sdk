@@ -60,25 +60,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>test-media-platform-python-sdk</id>
-                        <phase>test</phase>
-                        <configuration>
-                            <executable>tests.sh</executable>
-                            <environmentVariables>
-                                <WIX_RUN_TC_AGENT>${env.IS_BUILD_AGENT}</WIX_RUN_TC_AGENT>
-                            </environmentVariables>
-                        </configuration>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.2.1</version>
