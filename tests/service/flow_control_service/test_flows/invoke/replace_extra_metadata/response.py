@@ -8,7 +8,8 @@ invoke_flow_replace_extra_metadata_response = {
         ],
         'entryPoints': ['metadata1'],
         'callback': None,
-        'errorStrategy': 'stopOnError'
+        'errorStrategy': 'stopOnError',
+        'operationCallbackStatusFilter': []
     },
     'operations': {
         'metadata1': {

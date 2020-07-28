@@ -8,7 +8,8 @@ invoke_flow_copy_file_request = {
         ],
         'entryPoints': ['copyfile1'],
         'callback': None,
-        'errorStrategy': 'stopOnError'
+        'errorStrategy': 'stopOnError',
+        'operationCallbackStatusFilter': []
     },
     'flow': {
         'copyfile1': {

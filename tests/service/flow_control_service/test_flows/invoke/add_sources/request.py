@@ -3,7 +3,8 @@ invoke_flow_with_add_sources_request = {
         'sources': [],
         'entryPoints': ['addSources1', 'addSources2'],
         'callback': None,
-        'errorStrategy': 'stopOnError'
+        'errorStrategy': 'stopOnError',
+        'operationCallbackStatusFilter': []
     },
     'flow': {
         'addSources1': {

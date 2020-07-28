@@ -8,7 +8,8 @@ invoke_flow_convert_font_request = {
         ],
         'entryPoints': ['convert-font'],
         'callback': None,
-        'errorStrategy': 'stopOnError'
+        'errorStrategy': 'stopOnError',
+        'operationCallbackStatusFilter': []
     },
     'flow': {
         'convert-font': {

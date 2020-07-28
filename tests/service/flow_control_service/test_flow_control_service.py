@@ -20,6 +20,7 @@ from media_platform.service.flow_control_service.flow import Flow
 from media_platform.service.flow_control_service.flow_control_service import FlowControlService
 from media_platform.service.flow_control_service.flow_state import FlowState
 from media_platform.service.flow_control_service.invocation import Invocation
+from media_platform.service.flow_control_service.operation import OperationStatus
 from media_platform.service.flow_control_service.specifications.add_sources_specification import AddSourcesSpecification
 from media_platform.service.flow_control_service.specifications.copy_file_specification import CopyFileSpecification
 from media_platform.service.rest_result import RestResult
@@ -204,7 +205,7 @@ class TestFlowControlService(unittest.TestCase):
     def test_invoke_flow_with_component_callback(self):
         self._register_invoke_flow_response(invoke_flow_operation_callback_response)
         flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
-            Invocation(['import1'])
+            Invocation(['import1'], operation_callback_status_filter={OperationStatus.success, OperationStatus.error})
         ).set_flow(
             Flow().add_component(
                 'import1',

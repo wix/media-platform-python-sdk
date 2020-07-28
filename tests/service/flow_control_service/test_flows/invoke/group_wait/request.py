@@ -8,7 +8,8 @@ invoke_flow_group_wait_request = {
         ],
         'entryPoints': ['copy1', 'copy2'],
         'callback': None,
-        'errorStrategy': 'stopOnError'
+        'errorStrategy': 'stopOnError',
+        'operationCallbackStatusFilter': []
     },
     'flow': {
         'copy1': {
