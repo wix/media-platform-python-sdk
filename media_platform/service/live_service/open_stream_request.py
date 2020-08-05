@@ -12,15 +12,15 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class OpenStreamRequest(MediaPlatformRequest):
-    protocol: StreamProtocol
-    dvr: StreamDVR
-    geo: GeoLocation
-    max_stream_time_sec: int
-    state_notification: StreamStateNotification
+    protocol: StreamProtocol = None
+    dvr: StreamDVR = None
+    geo: GeoLocation = None
+    max_stream_time_sec: int = None
+    state_notification: StreamStateNotification = None
     stream_type: StreamType = StreamType.event
-    connect_timeout: int
-    reconnect_timeout: int
-    enforced_stream_params: EnforcedStreamParams
+    connect_timeout: int = None
+    reconnect_timeout: int = None
+    enforced_stream_params: EnforcedStreamParams = None
 
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(OpenStreamRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/live/streams',
