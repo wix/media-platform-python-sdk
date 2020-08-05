@@ -12,19 +12,18 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 
 class OpenStreamRequest(MediaPlatformRequest):
-    protocol: StreamProtocol = None
-    dvr: StreamDVR = None
-    geo: GeoLocation = None
-    max_stream_time_sec: int = None
-    state_notification: StreamStateNotification = None
-    stream_type: StreamType = StreamType.event
-    connect_timeout: int = None
-    reconnect_timeout: int = None
-    enforced_stream_params: EnforcedStreamParams = None
-
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
         super(OpenStreamRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/live/streams',
                                                 LiveStream)
+        self.protocol: StreamProtocol or None = None
+        self.dvr: StreamDVR or None = None
+        self.geo: GeoLocation or None = None
+        self.max_stream_time_sec: int or None = None
+        self.state_notification: StreamStateNotification or None = None
+        self.stream_type: StreamType = StreamType.event
+        self.connect_timeout: int or None = None
+        self.reconnect_timeout: int or None = None
+        self.enforced_stream_params: EnforcedStreamParams or None = None
 
     def set_protocol(self, protocol: StreamProtocol) -> OpenStreamRequest:
         self.protocol = protocol
