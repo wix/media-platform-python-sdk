@@ -1,9 +1,9 @@
 import json
 import unittest
+from typing import Dict
 
 import httpretty
 from hamcrest import assert_that, instance_of
-from typing import Dict
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
@@ -27,28 +27,6 @@ from media_platform.service.flow_control_service.specifications.copy_file_specif
 from media_platform.service.rest_result import RestResult
 from media_platform.service.source import Source
 from tests.service.flow_control_service.test_flows.flow_state.response import flow_state_response
-from tests.service.flow_control_service.test_flows.invoke.add_sources.request import \
-    invoke_flow_with_add_sources_request
-from tests.service.flow_control_service.test_flows.invoke.add_sources.response import \
-    invoke_flow_with_add_sources_response
-from tests.service.flow_control_service.test_flows.invoke.convert_font.request import invoke_flow_convert_font_request
-from tests.service.flow_control_service.test_flows.invoke.convert_font.response import invoke_flow_convert_font_response
-from tests.service.flow_control_service.test_flows.invoke.copy_file.request import invoke_flow_copy_file_request
-from tests.service.flow_control_service.test_flows.invoke.copy_file.response import invoke_flow_copy_file_response
-from tests.service.flow_control_service.test_flows.invoke.flow1.request import invoke_flow1_request
-from tests.service.flow_control_service.test_flows.invoke.flow1.response import invoke_flow1_response
-from tests.service.flow_control_service.test_flows.invoke.flow_callback.request import invoke_flow_callback_request
-from tests.service.flow_control_service.test_flows.invoke.flow_callback.response import invoke_flow_callback_response
-from tests.service.flow_control_service.test_flows.invoke.group_wait.request import invoke_flow_group_wait_request
-from tests.service.flow_control_service.test_flows.invoke.group_wait.response import invoke_flow_group_wait_response
-from tests.service.flow_control_service.test_flows.invoke.operation_callback.request import \
-    invoke_flow_operation_callback_request
-from tests.service.flow_control_service.test_flows.invoke.operation_callback.response import \
-    invoke_flow_operation_callback_response
-from tests.service.flow_control_service.test_flows.invoke.replace_extra_metadata.request import \
-    invoke_flow_replace_extra_metadata_request
-from tests.service.flow_control_service.test_flows.invoke.replace_extra_metadata.response import \
-    invoke_flow_replace_extra_metadata_response
 
 import_file_specification = ImportFileSpecification('http://movs.me/video.mp4', Destination('/imports/video.mp4'))
 
@@ -66,13 +44,13 @@ class TestFlowControlService(unittest.TestCase):
 
     @httpretty.activate
     def test_invoke_flow1_request(self):
-        self._register_invoke_flow_response(invoke_flow1_response)
+        self._register_invoke_flow_response()
 
         transcode_specification = TranscodeSpecification(
             Destination(directory='/deliverables/'),
             quality_range=VideoQualityRange(VideoQuality.res_720p, VideoQuality.res_1080p))
 
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        result = self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import'])
         ).set_flow(
             Flow().add_component(
@@ -87,13 +65,13 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow1_request, flow_state)
+        self.assertIsNone(result)
 
     @httpretty.activate
     def test_invoke_flow_convert_font(self):
-        self._register_invoke_flow_response(invoke_flow_convert_font_response)
+        self._register_invoke_flow_response()
 
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['convert-font'], [Source('/source/font.ttf')])
         ).set_flow(
             Flow().add_component(
@@ -104,13 +82,11 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow_convert_font_request, flow_state)
-
     @httpretty.activate
     def test_invoke_flow_copy_file(self):
-        self._register_invoke_flow_response(invoke_flow_copy_file_response)
+        self._register_invoke_flow_response()
 
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['copyfile1'], [Source('/source/path.txt')])
         ).set_flow(
             Flow().add_component(
@@ -120,8 +96,6 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow_copy_file_request, flow_state)
-
     @httpretty.activate
     def test_invoke_flow_replace_extra_metadata(self):
         self.maxDiff = None
@@ -130,9 +104,9 @@ class TestFlowControlService(unittest.TestCase):
             'track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer', 'year',
             Image('image_url', 'mime_type', 'image_description'), Lyrics('text', 'eng', 'lyrics_description'))
 
-        self._register_invoke_flow_response(invoke_flow_replace_extra_metadata_response)
+        self._register_invoke_flow_response()
 
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['metadata1'], [Source('/source/path.mp3')])
         ).set_flow(
             Flow().add_component(
@@ -143,17 +117,15 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow_replace_extra_metadata_request, flow_state)
-
     @httpretty.activate
     def test_invoke_flow_with_add_sources(self):
-        self._register_invoke_flow_response(invoke_flow_with_add_sources_response)
+        self._register_invoke_flow_response()
 
         extra_metadata = AudioExtraMetadata(
             'track_name', 'artist', 'album_name', 'track_number', 'genre', 'composer', 'year',
             Image('image_url', 'mime_type', 'image_description'), Lyrics('text', 'eng', 'lyrics_description'))
 
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['addSources1', 'addSources2'], [])
         ).set_flow(
             Flow().add_component(
@@ -177,13 +149,11 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow_with_add_sources_request, flow_state)
-
     @httpretty.activate
     def test_invoke_flow_with_group_wait(self):
-        self._register_invoke_flow_response(invoke_flow_group_wait_response)
+        self._register_invoke_flow_response()
 
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['copy1', 'copy2'], [Source('/source/path.txt')])
         ).set_flow(
             Flow().add_component(
@@ -200,12 +170,10 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow_group_wait_request, flow_state)
-
     @httpretty.activate
     def test_invoke_flow_with_component_callback(self):
-        self._register_invoke_flow_response(invoke_flow_operation_callback_response)
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self._register_invoke_flow_response()
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import1'], operation_callback_status_filter={OperationStatus.error, OperationStatus.success})
         ).set_flow(
             Flow().add_component(
@@ -217,12 +185,10 @@ class TestFlowControlService(unittest.TestCase):
             )
         ).execute()
 
-        self._assert_flow(invoke_flow_operation_callback_request, flow_state)
-
     @httpretty.activate
     def test_invoke_flow_with_callback(self):
-        self._register_invoke_flow_response(invoke_flow_callback_response)
-        flow_state = self.flow_control_service.invoke_flow_request().set_invocation(
+        self._register_invoke_flow_response()
+        self.flow_control_service.invoke_flow_request().set_invocation(
             Invocation(['import1'],
                        callback=Callback('http://requestbin.fullcontact.com/sc9kxnsc',
                                          {'attachment-key': 'attachment-value'},
@@ -233,8 +199,6 @@ class TestFlowControlService(unittest.TestCase):
                 Component(ComponentType.import_file, [], import_file_specification)
             )
         ).execute()
-
-        self._assert_flow(invoke_flow_callback_request, flow_state)
 
     @httpretty.activate
     def test_invoke_flow_missing_successors(self):
@@ -274,8 +238,8 @@ class TestFlowControlService(unittest.TestCase):
         self.flow_control_service.abort_flow_request().set_id('state-id').execute()
 
     @staticmethod
-    def _register_invoke_flow_response(response_payload):
-        response = RestResult(0, 'OK', response_payload)
+    def _register_invoke_flow_response():
+        response = RestResult(0, 'OK')
         httpretty.register_uri(httpretty.POST, 'https://fish.barrel/_api/flow_control/flow',
                                body=json.dumps(response.serialize()))
 

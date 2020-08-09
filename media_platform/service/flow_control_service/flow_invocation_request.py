@@ -9,8 +9,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class FlowInvocationRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(FlowInvocationRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/flow_control/flow',
-                                                    FlowState)
+        super(FlowInvocationRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/flow_control/flow')
         self.invocation = None
         self.flow = None
 
