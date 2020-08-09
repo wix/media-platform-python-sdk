@@ -3,6 +3,7 @@ import unittest
 
 import httpretty
 from hamcrest import assert_that, instance_of
+from typing import Dict
 
 from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.http_client.authenticated_http_client import AuthenticatedHTTPClient
@@ -280,4 +281,12 @@ class TestFlowControlService(unittest.TestCase):
 
     def _assert_flow(self, expected_request_payload, response_flow_state):
         assert_that(response_flow_state, instance_of(FlowState))
-        self.assertEqual(expected_request_payload, json.loads(httpretty.last_request().body))
+        self._normalize_request_payload(expected_request_payload)
+        request_payload = json.loads(httpretty.last_request().body)
+        self._normalize_request_payload(request_payload)
+
+        self.assertEqual(expected_request_payload, request_payload)
+
+    @staticmethod
+    def _normalize_request_payload(request_payload: Dict):
+        request_payload['invocation']['operationCallbackStatusFilter'].sort()
