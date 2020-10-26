@@ -23,7 +23,6 @@ setup(
         'python-jose[cryptography]',
         'requests',
         'requests-toolbelt',
-        'typing',
         'furl',
         'future'
     ],
