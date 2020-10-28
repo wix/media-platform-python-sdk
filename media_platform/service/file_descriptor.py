@@ -33,8 +33,6 @@ class FileDescriptor(Serializable, Deserializable):
     def __init__(self, path: str, file_id: str, file_type: FileType, mime_type: str, size: int, acl: ACL = ACL.public,
                  lifecycle: Lifecycle = None, file_hash: str = None,
                  date_created: datetime = None, date_updated: datetime = None):
-        super(FileDescriptor, self).__init__()
-
         self._validate_values(acl, path)
 
         self.path = path

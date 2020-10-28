@@ -1,16 +1,18 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from media_platform.lang.serialization import Serializable, Deserializable
 
 
-class Specification(ABC, Serializable, Deserializable):
+class Specification(Serializable, Deserializable, ABC):
 
-    def serialize(self):
-        raise NotImplementedError()
+    @abstractmethod
+    def serialize(self) -> dict:
+        pass
 
     @classmethod
+    @abstractmethod
     def deserialize(cls, data):
-        raise NotImplementedError()
+        pass
 
     # override for request pre-flight check
     def validate(self):

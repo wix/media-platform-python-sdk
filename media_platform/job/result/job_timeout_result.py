@@ -10,4 +10,4 @@ class JobTimeoutResult(JobResult):
     type = None
 
     def __init__(self, job_id: str, timeout: timedelta):
-        super(JobTimeoutResult, self).__init__(ErrorCode.job_timeout, 'Job %s timed out after %s' % (job_id, timeout))
+        super().__init__(ErrorCode.job_timeout, 'Job %s timed out after %s' % (job_id, timeout))

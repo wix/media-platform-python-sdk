@@ -6,7 +6,7 @@ from media_platform.service.text_service.subset_font_request import SubsetFontRe
 
 class TextService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient):
-        super(TextService, self).__init__(domain, authenticated_http_client)
+        super().__init__(domain, authenticated_http_client)
 
     def convert_font_request(self) -> ConvertFontRequest:
         return ConvertFontRequest(self._authenticated_http_client, self._base_url)

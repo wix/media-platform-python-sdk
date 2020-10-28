@@ -20,7 +20,7 @@ class ArchiveType:
 
 class ArchiveSource(Source):
     def __init__(self, path: str = None, file_id: str = None, path_in_archive: str = None):
-        super(ArchiveSource, self).__init__(path, file_id)
+        super().__init__(path, file_id)
 
         self.path_in_archive = path_in_archive
 
@@ -29,7 +29,7 @@ class ArchiveSource(Source):
         return ArchiveSource(data.get('path'), data.get('fileId'), data.get('pathInArchive'))
 
     def serialize(self) -> dict:
-        data = super(ArchiveSource, self).serialize()
+        data = super().serialize()
         data['pathInArchive'] = self.path_in_archive if self.path_in_archive else None
 
         return data

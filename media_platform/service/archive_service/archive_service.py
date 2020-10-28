@@ -12,8 +12,7 @@ from media_platform.service.media_platform_service import MediaPlatformService
 class ArchiveService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient, app_id: str,
                  app_authenticator: AppAuthenticator):
-        super(ArchiveService, self).__init__(domain, authenticated_http_client)
-
+        super().__init__(domain, authenticated_http_client)
         self._app_id = app_id
         self._app_authenticator = app_authenticator
 

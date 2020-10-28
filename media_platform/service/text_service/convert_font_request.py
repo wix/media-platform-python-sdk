@@ -8,8 +8,7 @@ from media_platform.service.source import Source
 
 class ConvertFontRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ConvertFontRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/fonts/convert',
-                                                 ConvertFontJobGroup)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/fonts/convert', ConvertFontJobGroup)
 
         self.source = None
         self.specification = None
@@ -31,7 +30,7 @@ class ConvertFontRequest(MediaPlatformRequest):
         self.specification.validate()
 
     def execute(self) -> ConvertFontJobGroup:
-        return super(ConvertFontRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

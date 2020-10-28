@@ -7,9 +7,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class ExtractMetadataRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ExtractMetadataRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/audio/metadata',
-                                                     AudioFileMetadata)
-
+        super().__init__(authenticated_http_client, 'GET', base_url + '/audio/metadata', AudioFileMetadata)
         self.path = None
 
     def set_path(self, path: str) -> ExtractMetadataRequest:
@@ -17,7 +15,7 @@ class ExtractMetadataRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> AudioFileMetadata:
-        return super(ExtractMetadataRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

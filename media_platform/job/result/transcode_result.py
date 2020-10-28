@@ -9,7 +9,7 @@ class TranscodeResult(JobResult):
     type = JobType.transcode
 
     def __init__(self, code=None, message=None, file_descriptor=None, master_ffmpeg_command=None):
-        super(TranscodeResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.file_descriptor = file_descriptor
         self.master_ffmpeg_command = master_ffmpeg_command
 

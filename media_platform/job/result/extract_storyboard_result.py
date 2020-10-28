@@ -9,7 +9,7 @@ class ExtractStoryboardResult(JobResult):
     type = JobType.extract_storyboard
 
     def __init__(self, code: int = None, message: str = None, file_descriptors: [FileDescriptor] = None):
-        super(ExtractStoryboardResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.file_descriptors = file_descriptors or []
 
     @classmethod
@@ -26,7 +26,7 @@ class ExtractStoryboardResult(JobResult):
         return result
 
     def serialize(self) -> dict:
-        data = super(ExtractStoryboardResult, self).serialize()
+        data = super().serialize()
         data['payload'] = [f.serialize() for f in self.file_descriptors]
 
         return data

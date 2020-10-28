@@ -7,7 +7,7 @@ from media_platform.service.file_descriptor import FileDescriptor
 
 class VideoFileMetadata(FileMetadata):
     def __init__(self, file_descriptor: FileDescriptor, basic: VideoBasic = None):
-        super(VideoFileMetadata, self).__init__(MediaType.video, file_descriptor, basic)
+        super().__init__(MediaType.video, file_descriptor, basic)
 
     @classmethod
     def deserialize(cls, data: dict) -> VideoFileMetadata:

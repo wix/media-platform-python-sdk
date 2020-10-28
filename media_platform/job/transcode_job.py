@@ -13,8 +13,6 @@ class TranscodeSpecification(Specification):
     def __init__(self, destination: Destination, video: StreamSpecification = None, audio: StreamSpecification = None,
                  quality_range: VideoQualityRange = None, quality: AudioQuality or VideoQuality = None,
                  clipping: Clipping = None):
-        super(Specification, self).__init__()
-
         self.destination = destination
         self.video = video
         self.audio = audio

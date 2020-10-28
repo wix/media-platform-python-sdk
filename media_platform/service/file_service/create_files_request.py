@@ -10,9 +10,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class CreateFilesRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(CreateFilesRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/files',
-                                                 FileDescriptor)
-
+        super().__init__(authenticated_http_client, 'POST', base_url + '/files', FileDescriptor)
         self.file_requests = []
 
     def execute(self) -> Deserializable or None:

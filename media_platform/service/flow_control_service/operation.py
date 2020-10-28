@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import cast
+
 from media_platform.job.specification import Specification
 from media_platform.lang.serialization import Serializable
 from media_platform.service.file_descriptor import FileDescriptor
@@ -20,7 +22,7 @@ class Operation(Component):
                  status: OperationStatus, delete_sources: bool = False, sources: [Source] = None,
                  results: [FileDescriptor] or [dict] = None, jobs: [str] = None, extra_results: dict = None,
                  error_message: str = None, error_code: int = None, state_id: str = None, component_key: str = None):
-        super(Operation, self).__init__(component_type, successors, specification, delete_sources, sources=sources)
+        super().__init__(component_type, successors, specification, delete_sources, sources=sources)
         self.status = status
         self.results = results or []
         self.jobs = jobs or []
@@ -43,10 +45,10 @@ class Operation(Component):
         o.error_code = data.get('errorCode')
         o.state_id = data.get('stateId')
         o.component_key = data.get('componentKey')
-        return o
+        return cast(Operation, o)
 
     def serialize(self) -> dict:
-        data = super(Operation, self).serialize()
+        data = super().serialize()
 
         data.update({
             'status': self.status,

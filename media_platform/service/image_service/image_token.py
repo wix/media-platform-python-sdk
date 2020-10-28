@@ -19,7 +19,6 @@ class Gravity:
 
 class Watermark:
     def __init__(self, path: str, opacity: int = 50, proportions: float = 0.25, gravity: Gravity = Gravity.center):
-        super(Watermark, self).__init__()
         self.path = path
         self.opacity = opacity
         self.proportions = proportions
@@ -43,7 +42,6 @@ class Watermark:
 
 class Policy:
     def __init__(self, path: str, max_width: int = None, max_height: int = None, min_blur: float = None):
-        super(Policy, self).__init__()
         self.path = path
         self.max_width = max_width
         self.max_height = max_height
@@ -68,12 +66,12 @@ class Policy:
 class ImageToken(Token):
     def __init__(self, issuer: str, subject: str, policy: Policy = None, watermark: Watermark = None,
                  issued_at: int = None, expiration: int = None, additional_claims: dict = None, token_id: str = None):
-        super(ImageToken, self).__init__(issuer, subject, [_VERB], issued_at, expiration, additional_claims, token_id)
+        super().__init__(issuer, subject, [_VERB], issued_at, expiration, additional_claims, token_id)
         self.policy = policy
         self.watermark = watermark
 
     def to_claims(self) -> dict:
-        claims = super(ImageToken, self).to_claims()
+        claims = super().to_claims()
 
         if self.watermark:
             claims.update(self.watermark.to_claim())

@@ -8,7 +8,6 @@ from media_platform.job.job_deserializer import _JobDeserializer
 
 class JobList(Deserializable):
     def __init__(self, next_page_token: str, jobs: [Job]):
-        super(JobList, self).__init__()
         self.next_page_token = next_page_token
         self.jobs = jobs
 

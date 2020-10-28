@@ -8,7 +8,6 @@ from media_platform.job.job import Job
 
 class ImageOperationSpecification(Specification):
     def __init__(self, command: str, destination: Destination):
-        super(ImageOperationSpecification, self).__init__()
         self.command = command
         self.destination = destination
 

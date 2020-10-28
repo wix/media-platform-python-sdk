@@ -6,8 +6,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class CloseStreamRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(CloseStreamRequest, self).__init__(authenticated_http_client, 'DELETE',
-                                                 base_url + '/live/streams/', None)
+        super().__init__(authenticated_http_client, 'DELETE', base_url + '/live/streams/', None)
 
         self.stream_id = None
         self._url = base_url + '/live/streams/'
@@ -18,4 +17,4 @@ class CloseStreamRequest(MediaPlatformRequest):
 
     def execute(self):
         self.url = self._url + self.stream_id
-        return super(CloseStreamRequest, self).execute()
+        return super().execute()

@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Serializable
 
 class ExternalAuthorization(Serializable):
     def __init__(self, headers: dict):
-        super(ExternalAuthorization, self).__init__()
         self.headers = headers
 
     def serialize(self) -> dict:

@@ -21,8 +21,7 @@ class Feature:
 
 class ExtractFeaturesRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ExtractFeaturesRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/images/features',
-                                                     ImageFeatures)
+        super().__init__(authenticated_http_client, 'GET', base_url + '/images/features', ImageFeatures)
         self.path = None
         self.features = []
 
@@ -45,4 +44,4 @@ class ExtractFeaturesRequest(MediaPlatformRequest):
         }
 
     def execute(self) -> ImageFeatures:
-        return super(ExtractFeaturesRequest, self).execute()
+        return super().execute()

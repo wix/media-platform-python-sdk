@@ -14,9 +14,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 class ReplaceExtraMetadataBaseRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str, verb: str,
                  response_type: Type[Deserializable]):
-        super(ReplaceExtraMetadataBaseRequest, self).__init__(
-            authenticated_http_client, verb, base_url + '/av/extra-metadata', response_type)
-
+        super().__init__(authenticated_http_client, verb, base_url + '/av/extra-metadata', response_type)
         self.source = None
         self.specification = None
 
@@ -38,11 +36,9 @@ class ReplaceExtraMetadataBaseRequest(MediaPlatformRequest):
 
 class ReplaceExtraMetadataSyncRequest(ReplaceExtraMetadataBaseRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ReplaceExtraMetadataSyncRequest, self).__init__(
-            authenticated_http_client, base_url, 'PUT', FileDescriptor)
+        super().__init__(authenticated_http_client, base_url, 'PUT', FileDescriptor)
 
 
 class ReplaceExtraMetadataAsyncRequest(ReplaceExtraMetadataBaseRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ReplaceExtraMetadataAsyncRequest, self).__init__(
-            authenticated_http_client, base_url, 'POST', ReplaceExtraMetadataJob)
+        super().__init__(authenticated_http_client, base_url, 'POST', ReplaceExtraMetadataJob)

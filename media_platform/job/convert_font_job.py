@@ -31,7 +31,6 @@ class FontSet:
 
 class ConvertFontSpecification(Specification):
     def __init__(self, destination: Destination, font_type: FontType = None, font_set: FontSet = None):
-        super(ConvertFontSpecification, self).__init__()
         self.destination = destination
 
         self.font_type = font_type

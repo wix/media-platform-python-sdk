@@ -12,7 +12,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class UploadFileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(UploadFileRequest, self).__init__(authenticated_http_client, 'POST', base_url, FileDescriptor)
+        super().__init__(authenticated_http_client, 'POST', base_url, FileDescriptor)
 
         self.path = None
         self.mime_type = FileMimeType.defualt

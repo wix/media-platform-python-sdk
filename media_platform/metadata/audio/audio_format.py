@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Deserializable
 
 class AudioFormat(Deserializable):
     def __init__(self, long_name: str = None, bitrate: int = None, duration: int = None, size: int = None):
-        super(AudioFormat, self).__init__()
         self.long_name = long_name
         self.duration = duration
         self.bitrate = int(bitrate) if bitrate else None

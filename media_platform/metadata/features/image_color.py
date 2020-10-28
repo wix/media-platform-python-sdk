@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Deserializable
 
 class Color(Deserializable):
     def __init__(self, r: int, g: int, b: int, pixel_fraction: float, score: float):
-        super(Color, self).__init__()
         self.r = r
         self.g = g
         self.b = b

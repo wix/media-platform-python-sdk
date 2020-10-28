@@ -10,7 +10,7 @@ from media_platform.job.job_deserializer import _JobDeserializer
 
 class JobRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(JobRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/jobs/', _JobDeserializer)
+        super().__init__(authenticated_http_client, 'GET', base_url + '/jobs/', _JobDeserializer)
         self.job_id = None
 
         self._url = base_url + '/jobs/'
@@ -22,4 +22,4 @@ class JobRequest(MediaPlatformRequest):
     def execute(self) -> Job:
         self.url = self._url + self.job_id
 
-        return super(JobRequest, self).execute()
+        return super().execute()

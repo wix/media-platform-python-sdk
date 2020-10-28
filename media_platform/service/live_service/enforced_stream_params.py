@@ -78,7 +78,7 @@ class Params(Serializable, Deserializable):
         return str(self.serialize())
 
 
-class Enforceable(ABC, Serializable):
+class Enforceable(Serializable, ABC):
     name = None
 
     def is_valid(self, params: Params) -> bool:

@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Serializable, Deserializable
 
 class FontBasic(Serializable, Deserializable):
     def __init__(self, font_type: str = None, name: str = None, family: str = None):
-        super(FontBasic, self).__init__()
         self.font_type = font_type
         self.name = name
         self.family = family

@@ -9,9 +9,7 @@ from media_platform.service.source import Source
 
 class CopyFileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(CopyFileRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/copy/file',
-                                              FileDescriptor)
-
+        super().__init__(authenticated_http_client, 'POST', base_url + '/copy/file', FileDescriptor)
         self.source = None
         self.destination = None
 

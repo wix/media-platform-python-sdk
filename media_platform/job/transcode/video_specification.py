@@ -108,7 +108,6 @@ class VideoCodec(Serializable, Deserializable):
 class GOP(Serializable, Deserializable):
     def __init__(self, scene_cut: int, key_interval: int, min_key_interval: int, b_frames: int, b_pyramid: int,
                  b_adapt: int, ref_frame: int):
-        super(GOP, self).__init__()
         self.scene_cut = scene_cut
         self.key_interval = key_interval
         self.min_key_interval = min_key_interval
@@ -143,7 +142,6 @@ class GOP(Serializable, Deserializable):
 
 class VideoScaling(Serializable, Deserializable):
     def __init__(self, algorithm):
-        super(VideoScaling, self).__init__()
         self.algorithm = algorithm
 
     @classmethod
@@ -163,7 +161,6 @@ class VideoFilterName:
 
 class VideoFilter(Serializable, Deserializable):
     def __init__(self, name: VideoFilterName, settings: dict = None):
-        super(ImageFilter, self).__init__()
         self.name = name  # 'unsharp'
         self.settings = settings or {}  # '{"value": "5:5:0.5:3:3:0.0"}'
 

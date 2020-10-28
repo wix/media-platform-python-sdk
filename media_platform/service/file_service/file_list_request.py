@@ -8,7 +8,7 @@ from media_platform.service.list_request import _ListRequest, OrderBy, OrderDire
 
 class FileListRequest(_ListRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(FileListRequest, self).__init__(authenticated_http_client, base_url + '/files/ls_dir', FileList)
+        super().__init__(authenticated_http_client, base_url + '/files/ls_dir', FileList)
         self.path = None
         self.recursive = False
         self.type = FileType.file
@@ -26,22 +26,22 @@ class FileListRequest(_ListRequest):
         return self
 
     def set_next_page_token(self, next_page_token: str) -> FileListRequest:
-        return super(FileListRequest, self).set_next_page_token(next_page_token)
+        return super().set_next_page_token(next_page_token)
 
     def set_page_size(self, page_size: int) -> FileListRequest:
-        return super(FileListRequest, self).set_page_size(page_size)
+        return super().set_page_size(page_size)
 
     def set_order_by(self, order_by: OrderBy) -> FileListRequest:
-        return super(FileListRequest, self).set_order_by(order_by)
+        return super().set_order_by(order_by)
 
     def set_order_direction(self, order_direction: OrderDirection) -> FileListRequest:
-        return super(FileListRequest, self).set_order_direction(order_direction)
+        return super().set_order_direction(order_direction)
 
     def execute(self) -> FileList:
-        return super(FileListRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
-        params = super(FileListRequest, self)._params()
+        params = super()._params()
 
         params['path'] = self.path
 

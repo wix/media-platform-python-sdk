@@ -11,7 +11,7 @@ from media_platform.service.media_platform_service import MediaPlatformService
 class ImageService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient,
                  app_authenticator: AppAuthenticator):
-        super(ImageService, self).__init__(domain, authenticated_http_client)
+        super().__init__(domain, authenticated_http_client)
         self.app_authenticator = app_authenticator
 
     def extract_features_request(self) -> ExtractFeaturesRequest:

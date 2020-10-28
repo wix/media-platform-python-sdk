@@ -7,7 +7,6 @@ from media_platform.job.job import Job
 
 class SubsetFontSpecification(Specification):
     def __init__(self, destination: Destination, language_code: str = None):
-        super(SubsetFontSpecification, self).__init__()
         self.destination = destination
         self.language_code = language_code
 

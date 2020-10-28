@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import time
 
 import requests
@@ -8,7 +9,7 @@ from media_platform.auth.app_authenticator import AppAuthenticator
 from media_platform.auth.token import Token
 
 
-class ArchiveManifestUrlRequest(object):
+class ArchiveManifestUrlRequest:
     def __init__(self, app_id: str, authenticator: AppAuthenticator, domain: str):
         self.path = None
         self.ttl = None  # seconds

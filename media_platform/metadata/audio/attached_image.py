@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from media_platform.lang.serialization import Serializable
+from media_platform.lang.serialization import Serializable, Deserializable
 
 
 # http://id3.org/id3v2.4.0-frames (clause 4.14)
-class AttachedImage(Serializable):
+class AttachedImage(Serializable, Deserializable):
     def __init__(self, picture_type: str, mime_type: str = None, url: str = None):
-        super(AttachedImage, self).__init__()
         self.picture_type = picture_type
         self.mime_type = mime_type  # "image/png" or "image/jpeg"
         self.url = url  # mime tag will be  "-->" if url

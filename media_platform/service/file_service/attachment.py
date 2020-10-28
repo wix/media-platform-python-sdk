@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Serializable
 
 class Attachment(Serializable):
     def __init__(self, file_name: str):
-        super(Attachment, self).__init__()
         self.file_name = file_name
 
     def set_file_name(self, file_name: str) -> Attachment:

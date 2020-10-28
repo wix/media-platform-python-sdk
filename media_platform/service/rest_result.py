@@ -6,7 +6,6 @@ from media_platform.lang.serialization import Serializable, Deserializable
 
 class RestResult(Serializable, Deserializable):
     def __init__(self, code: int, message: str, payload: dict or list = None):
-        super(RestResult, self).__init__()
         self.code = code
         self.message = message
         self.payload = payload

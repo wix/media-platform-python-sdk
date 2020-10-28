@@ -7,21 +7,18 @@ from media_platform.service.destination import Destination
 
 
 class ReplaceAudioExtraMetadataSpecification(Specification):
-    def __init__(self, destination, audio_extra_metadata):
-        # type: (Destination, AudioExtraMetadata) -> None
+    def __init__(self, destination: Destination, audio_extra_metadata: AudioExtraMetadata):
         self.destination = destination
         self.audio_extra_metadata = audio_extra_metadata
 
     @classmethod
-    def deserialize(cls, data):
-        # type: (dict) -> ReplaceAudioExtraMetadataSpecification
+    def deserialize(cls, data: dict) -> ReplaceAudioExtraMetadataSpecification:
         return cls(
             Destination.deserialize(data['destination']),
             AudioExtraMetadata.deserialize(data['audioExtraMetadata'])
         )
 
-    def serialize(self):
-        # type: () -> dict
+    def serialize(self) -> dict:
         return {
             'destination': self.destination.serialize(),
             'audioExtraMetadata': self.audio_extra_metadata.serialize()
