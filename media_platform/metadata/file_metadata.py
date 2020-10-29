@@ -14,8 +14,6 @@ class MediaType:
 
 class FileMetadata(Deserializable):
     def __init__(self, media_type: str, file_descriptor: FileDescriptor, basic: Deserializable = None):
-        super(FileMetadata, self).__init__()
-
         self.media_type = media_type
         self.file_descriptor = file_descriptor
         self.basic = basic

@@ -7,7 +7,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class GetStreamRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(GetStreamRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/live/stream/', LiveStream)
+        super().__init__(authenticated_http_client, 'GET', base_url + '/live/stream/', LiveStream)
         self.id = None
         self._url = base_url + '/live/stream/'
 
@@ -18,4 +18,4 @@ class GetStreamRequest(MediaPlatformRequest):
     def execute(self) -> LiveStream:
         self.url = self._url + self.id
 
-        return super(GetStreamRequest, self).execute()
+        return super().execute()

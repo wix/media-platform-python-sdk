@@ -11,7 +11,7 @@ class ExtractArchiveResult(JobResult):
 
     def __init__(self, code: int = None, message: str = None, extraction_report: ExtractionReport = None,
                  file_descriptor: FileDescriptor = None):
-        super(ExtractArchiveResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.extraction_report = extraction_report
         self.file_descriptor = file_descriptor
 
@@ -32,7 +32,7 @@ class ExtractArchiveResult(JobResult):
         return result
 
     def serialize(self) -> dict:
-        data = super(ExtractArchiveResult, self).serialize()
+        data = super().serialize()
         payload = {}
         if self.extraction_report:
             payload['extractedFilesReport'] = self.extraction_report.serialize()

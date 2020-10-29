@@ -10,8 +10,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class ImportFileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ImportFileRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/import/file',
-                                                ImportFileJob)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/import/file', ImportFileJob)
         self.source_url = None
         self.external_authorization = None
         self.destination = None
@@ -34,7 +33,7 @@ class ImportFileRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> ImportFileJob:
-        return super(ImportFileRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

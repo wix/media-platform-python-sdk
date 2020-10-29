@@ -21,9 +21,7 @@ class ZipAlgorithm:
 
 class CreateArchiveManifestRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(CreateArchiveManifestRequest, self).__init__(authenticated_http_client, 'POST',
-                                                           base_url + '/archive/create/manifest',
-                                                           FileDescriptor)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/archive/create/manifest', FileDescriptor)
         self.name = None
         self.sources = []
         self.destination = None
@@ -50,7 +48,7 @@ class CreateArchiveManifestRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> FileDescriptor:
-        return super(CreateArchiveManifestRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

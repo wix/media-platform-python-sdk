@@ -8,7 +8,6 @@ from media_platform.job.job_deserializer import _JobDeserializer
 
 class _JobGroupResponse(Deserializable):
     def __init__(self, jobs: [Job]):
-        super(_JobGroupResponse, self).__init__()
         self.jobs = jobs
 
     @classmethod

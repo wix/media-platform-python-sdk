@@ -7,7 +7,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class DeleteFileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(DeleteFileRequest, self).__init__(authenticated_http_client, 'DELETE', base_url + '/files', None)
+        super().__init__(authenticated_http_client, 'DELETE', base_url + '/files', None)
         self.path = None
 
     def set_path(self, path: str) -> DeleteFileRequest:
@@ -15,7 +15,7 @@ class DeleteFileRequest(MediaPlatformRequest):
         return self
 
     def execute(self):
-        return super(DeleteFileRequest, self).execute()
+        return super().execute()
 
     def validate(self):
         FileDescriptor.path_validator(self.path)

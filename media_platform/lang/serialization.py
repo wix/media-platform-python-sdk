@@ -1,11 +1,16 @@
-class Serializable:
+from abc import ABC, abstractmethod
 
+
+class Serializable(ABC):
+
+    @abstractmethod
     def serialize(self) -> dict:
-        raise NotImplementedError()
+        pass
 
 
-class Deserializable:
+class Deserializable(ABC):
 
     @classmethod
-    def deserialize(cls, data: dict) -> object:
-        raise NotImplementedError()
+    @abstractmethod
+    def deserialize(cls, data: dict):
+        pass

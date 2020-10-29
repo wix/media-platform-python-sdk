@@ -9,8 +9,7 @@ from media_platform.service.source import Source
 
 class ExtractStoryboardRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ExtractStoryboardRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/av/storyboard',
-                                                       ExtractStoryboardJobGroup)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/av/storyboard', ExtractStoryboardJobGroup)
         self.sources = []
         self.specifications = []
         self.callback = None
@@ -39,7 +38,7 @@ class ExtractStoryboardRequest(MediaPlatformRequest):
         [specification.validate() for specification in self.specifications]
 
     def execute(self) -> ExtractPosterJobGroup:
-        return super(ExtractStoryboardRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

@@ -6,8 +6,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class AbortFlowRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(AbortFlowRequest, self).__init__(authenticated_http_client, 'DELETE', base_url + '/flow_control/flow/',
-                                               None)
+        super().__init__(authenticated_http_client, 'DELETE', base_url + '/flow_control/flow/', None)
         self.flow_id = None
         self._url = base_url + '/flow_control/flow/'
 
@@ -18,4 +17,4 @@ class AbortFlowRequest(MediaPlatformRequest):
     def execute(self):
         self.url = self._url + self.flow_id
 
-        return super(AbortFlowRequest, self).execute()
+        return super().execute()

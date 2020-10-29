@@ -24,7 +24,6 @@ setup(
         'requests',
         'requests-toolbelt',
         'furl',
-        'future'
     ],
     tests_require=[
         'PyHamcrest',

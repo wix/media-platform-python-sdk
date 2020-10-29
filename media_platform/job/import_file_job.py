@@ -9,7 +9,6 @@ from media_platform.service.file_service.external_authorization import ExternalA
 
 class ImportFileSpecification(Specification):
     def __init__(self, source_url: str, destination: Destination, external_authorization: ExternalAuthorization = None):
-        super(ImportFileSpecification, self).__init__()
         self.source_url = source_url
         self.destination = destination
         self.external_authorization = external_authorization

@@ -14,7 +14,7 @@ def live_stream_demo():
         set_connect_timeout(60).\
         set_reconnect_timeout(60).\
         set_protocol(StreamProtocol.rtmp).\
-        execute() # type: LiveStream
+        execute()  # type: LiveStream
 
     server, stream_key = os.path.split(stream.publish_endpoint.url)
     print('Server: ' + server)

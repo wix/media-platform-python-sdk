@@ -13,7 +13,6 @@ class Action:
 
 class Lifecycle(Serializable, Deserializable):
     def __init__(self, age: int, action: Action):
-        super(Lifecycle, self).__init__()
         self._validate_values(action, age)
         self.age = age  # int seconds
         self.action = action  # delete

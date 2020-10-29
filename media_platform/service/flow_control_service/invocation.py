@@ -16,8 +16,6 @@ class ErrorStrategy:
 class Invocation(Serializable, Deserializable):
     def __init__(self, entry_points: [str], sources: [Source] = None, callback: Callback = None,
                  error_strategy: ErrorStrategy = None, operation_callback_status_filter: Set[OperationStatus] = None):
-        super(Invocation, self).__init__()
-
         self.entry_points = entry_points
         self.sources = sources or []
         self.callback = callback

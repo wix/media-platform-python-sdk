@@ -5,7 +5,7 @@ from media_platform.metadata.features.rectangle import Rectangle
 
 class CropHint(Rectangle):
     def __init__(self, x: int, y: int, width: int, height: int, confidence: float, importance_fraction: float):
-        super(CropHint, self).__init__(x, y, width, height)
+        super().__init__(x, y, width, height)
         self.confidence = confidence
         self.importance_fraction = importance_fraction
 

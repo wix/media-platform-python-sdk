@@ -8,7 +8,7 @@ from media_platform.service.media_platform_service import MediaPlatformService
 
 class AudioService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient):
-        super(AudioService, self).__init__(domain, authenticated_http_client)
+        super().__init__(domain, authenticated_http_client)
 
     def extract_metadata_request(self) -> ExtractMetadataRequest:
         return ExtractMetadataRequest(self._authenticated_http_client, self._base_url)

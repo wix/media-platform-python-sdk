@@ -50,7 +50,6 @@ _SPECIFICATIONS = {
 class Component(Serializable, Deserializable):
     def __init__(self, component_type: ComponentType, successors: [str] = None, specification: Specification = None,
                  delete_sources: bool = False, callback: Callback = None, sources: [Source] = None):
-        super(Component, self).__init__()
         self.type = component_type
         self.successors = successors or []
         self.specification = specification

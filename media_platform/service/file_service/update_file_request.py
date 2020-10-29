@@ -7,7 +7,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class UpdateFileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(UpdateFileRequest, self).__init__(authenticated_http_client, 'PUT', base_url + '/files', FileDescriptor)
+        super().__init__(authenticated_http_client, 'PUT', base_url + '/files', FileDescriptor)
         self.file_id = None
         self.path = None
         self.acl = None
@@ -25,7 +25,7 @@ class UpdateFileRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> FileDescriptor:
-        return super(UpdateFileRequest, self).execute()
+        return super().execute()
 
     def validate(self):
         FileDescriptor.acl_validator(self.acl)

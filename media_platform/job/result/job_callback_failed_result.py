@@ -8,7 +8,7 @@ class JobCallbackFailedResult(JobResult):
     type = None
 
     def __init__(self, message: str = None, job_result: dict = None):
-        super(JobCallbackFailedResult, self).__init__(ErrorCode.job_callback_failed, message)
+        super().__init__(ErrorCode.job_callback_failed, message)
         self.job_result = job_result
 
     @classmethod
@@ -24,7 +24,7 @@ class JobCallbackFailedResult(JobResult):
         return result
 
     def serialize(self) -> dict:
-        data = super(JobCallbackFailedResult, self).serialize()
+        data = super().serialize()
         data['payload'] = {
             'jobResult': self.job_result
         }

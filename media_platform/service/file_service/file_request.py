@@ -7,7 +7,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class FileRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(FileRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/files', FileDescriptor)
+        super().__init__(authenticated_http_client, 'GET', base_url + '/files', FileDescriptor)
         self.path = None
 
     def set_path(self, path: str) -> FileRequest:

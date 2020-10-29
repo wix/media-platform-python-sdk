@@ -11,9 +11,7 @@ from media_platform.service.source import Source
 
 class ExtractArchiveRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ExtractArchiveRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/archive/extract',
-                                                    ExtractArchiveJob)
-
+        super().__init__(authenticated_http_client, 'POST', base_url + '/archive/extract', ExtractArchiveJob)
         self.source = None
         self.destination = None
         self.report = None
@@ -36,7 +34,7 @@ class ExtractArchiveRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> ExtractArchiveJob:
-        return super(ExtractArchiveRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

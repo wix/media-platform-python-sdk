@@ -1,3 +1,5 @@
+from typing import Type
+
 import urllib3
 import requests
 from requests.utils import default_headers
@@ -43,7 +45,7 @@ class AuthenticatedHTTPClient:
         return self._send_request('DELETE', url, params=params, payload_type=payload_type)
 
     def post_data(self, url: str, content: str, mime_type: str, params: dict = None,
-                  payload_type: Deserializable = None, filename: str = None,
+                  payload_type: Type[Deserializable] = None, filename: str = None,
                   response_processor: callable = None) -> Deserializable or None:
         fields = {
             'file': (filename or 'file-name', content, mime_type)

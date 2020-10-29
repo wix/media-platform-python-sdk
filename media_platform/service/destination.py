@@ -8,8 +8,6 @@ from media_platform.service.lifecycle import Lifecycle
 class Destination(Serializable, Deserializable):
     def __init__(self, path: str = None, directory: str = None, acl: ACL = ACL.public, lifecycle: Lifecycle = None,
                  bucket: str = None):
-        super(Destination, self).__init__()
-
         self._validate_values(path, directory, acl)
 
         self.path = path

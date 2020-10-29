@@ -10,9 +10,7 @@ from media_platform.service.source import Source
 
 class CreateArchiveRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(CreateArchiveRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/archive/create',
-                                                   CreateArchiveJob)
-
+        super().__init__(authenticated_http_client, 'POST', base_url + '/archive/create', CreateArchiveJob)
         self.sources = []
         self.destination = None
         self.archive_type = 'zip'
@@ -39,7 +37,7 @@ class CreateArchiveRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> CreateArchiveJob:
-        return super(CreateArchiveRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

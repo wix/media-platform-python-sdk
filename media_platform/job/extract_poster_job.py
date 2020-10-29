@@ -39,7 +39,6 @@ class ExtractPosterSpecification(Specification):
     def __init__(self, second: float = None, destination: Destination = None,
                  image_format: PosterImageFormat = PosterImageFormat.jpeg, percentage: float = None,
                  filters: [PosterFilter] = None, resolution: Resolution = None, pixel_format: PixelFormat = None):
-        super(ExtractPosterSpecification, self).__init__()
         self.second = second
         self.destination = destination
         self.image_format = image_format or PosterImageFormat.jpeg

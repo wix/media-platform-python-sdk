@@ -61,4 +61,4 @@ class TestFlowState(TestCase):
 
         flow_state = FlowState.deserialize(state_data)
 
-        self.assertEquals(flow_state.serialize(), state_data)
+        self.assertEqual(flow_state.serialize(), state_data)

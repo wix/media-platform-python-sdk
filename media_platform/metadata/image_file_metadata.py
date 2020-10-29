@@ -8,7 +8,7 @@ from media_platform.service.file_descriptor import FileDescriptor
 
 class ImageFileMetadata(FileMetadata):
     def __init__(self, file_descriptor: FileDescriptor, basic: ImageBasic = None, features: ImageFeatures = None):
-        super(ImageFileMetadata, self).__init__(MediaType.image, file_descriptor, basic)
+        super().__init__(MediaType.image, file_descriptor, basic)
 
         self.features = features
 

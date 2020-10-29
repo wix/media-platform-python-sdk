@@ -9,7 +9,7 @@ from media_platform.service.media_platform_service import MediaPlatformService
 
 class JobService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient):
-        super(JobService, self).__init__(domain, authenticated_http_client)
+        super().__init__(domain, authenticated_http_client)
 
     def job_request(self) -> JobRequest:
         return JobRequest(self._authenticated_http_client, self._base_url)

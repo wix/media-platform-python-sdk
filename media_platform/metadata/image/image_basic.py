@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Serializable, Deserializable
 
 class ImageBasic(Serializable, Deserializable):
     def __init__(self, width: int = None, height: int = None, image_format: str = None, color_space: str = None):
-        super(ImageBasic, self).__init__()
         self.width = int(width) if width else None
         self.height = int(height) if height else None
         self.format = image_format

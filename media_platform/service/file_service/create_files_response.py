@@ -6,8 +6,6 @@ from media_platform.service.file_descriptor import FileDescriptor
 
 class _CreateFilesResponse(Deserializable):
     def __init__(self, file_descriptors: [FileDescriptor]):
-        super(_CreateFilesResponse, self).__init__()
-
         self.file_descriptors = file_descriptors
 
     @classmethod

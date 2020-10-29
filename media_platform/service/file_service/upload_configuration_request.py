@@ -9,9 +9,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class UploadConfigurationRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(UploadConfigurationRequest, self).__init__(authenticated_http_client, 'POST',
-                                                         base_url + '/v3/upload/configuration',
-                                                         UploadConfiguration)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/v3/upload/configuration', UploadConfiguration)
         self.path = None
         self.bucket = None
         self.mime_type = None
@@ -44,11 +42,11 @@ class UploadConfigurationRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> UploadConfiguration:
-        return super(UploadConfigurationRequest, self).execute()
+        return super().execute()
 
     def validate(self):
         # todo
-        super(UploadConfigurationRequest, self).validate()
+        super().validate()
 
     def _params(self) -> dict:
         return {

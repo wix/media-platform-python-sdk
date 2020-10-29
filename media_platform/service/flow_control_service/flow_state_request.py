@@ -7,9 +7,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class FlowStateRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(FlowStateRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/flow_control/flow/',
-                                               FlowState)
-
+        super().__init__(authenticated_http_client, 'GET', base_url + '/flow_control/flow/', FlowState)
         self.flow_id = None
         self._url = base_url + '/flow_control/flow/'
 
@@ -20,4 +18,4 @@ class FlowStateRequest(MediaPlatformRequest):
     def execute(self) -> FlowState:
         self.url = self._url + self.flow_id
 
-        return super(FlowStateRequest, self).execute()
+        return super().execute()

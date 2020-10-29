@@ -17,7 +17,6 @@ class FlowStatus:
 class FlowState(Deserializable, Serializable):
     def __init__(self, flow_id: str, status: FlowStatus, invocation: Invocation, operations: [str, Operation],
                  flow_error: FlowError = None):
-        super(FlowState, self).__init__()
         self.id = flow_id
         self.invocation = invocation
         self.operations = operations

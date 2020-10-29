@@ -7,7 +7,7 @@ from media_platform.service.file_descriptor import FileDescriptor
 
 class FontFileMetadata(FileMetadata):
     def __init__(self, file_descriptor: FileDescriptor, basic: FontBasic = None):
-        super(FontFileMetadata, self).__init__(MediaType.font, file_descriptor, basic)
+        super().__init__(MediaType.font, file_descriptor, basic)
 
     @classmethod
     def deserialize(cls, data: dict) -> FontFileMetadata:

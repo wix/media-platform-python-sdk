@@ -9,8 +9,7 @@ from media_platform.metadata.file_metadata_deserializer import _FileMetadataDese
 
 class FileMetadataRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(FileMetadataRequest, self).__init__(authenticated_http_client, 'GET', base_url + '/files/metadata',
-                                                  _FileMetadataDeserializer)
+        super().__init__(authenticated_http_client, 'GET', base_url + '/files/metadata', _FileMetadataDeserializer)
         self.path = None
 
     def set_path(self, path: str) -> FileMetadataRequest:
@@ -18,7 +17,7 @@ class FileMetadataRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> FileMetadata:
-        return super(FileMetadataRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

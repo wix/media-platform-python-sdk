@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from media_platform.lang.serialization import Deserializable
+from media_platform.lang.serialization import Deserializable, Serializable
 
 
-class VideoFormat(Deserializable):
+class VideoFormat(Serializable, Deserializable):
     def __init__(self, long_name: str = None, bitrate: int = None, duration: int = None, size: int = None):
-        super(VideoFormat, self).__init__()
         self.long_name = long_name
         self.duration = duration
         self.bitrate = int(bitrate) if bitrate else None

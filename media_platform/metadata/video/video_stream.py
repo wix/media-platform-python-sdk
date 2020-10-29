@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from media_platform.lang.serialization import Deserializable
+from media_platform.lang.serialization import Deserializable, Serializable
 
 
-class VideoStream(Deserializable):
+class VideoStream(Serializable, Deserializable):
     def __init__(self, index: int, width: int, height: int, avg_frame_rate: str, r_frame_rate: str,
                  display_aspect_ratio: str, sample_aspect_ratio: str,
                  rotate: int, duration: int, bitrate: int, codec_tag: str, codec_name: str, codec_long_name: str,

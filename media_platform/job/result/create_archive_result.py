@@ -9,7 +9,7 @@ class CreateArchiveResult(JobResult):
     type = JobType.create_archive
 
     def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None):
-        super(CreateArchiveResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.file_descriptor = file_descriptor
 
     @classmethod
@@ -24,6 +24,6 @@ class CreateArchiveResult(JobResult):
         return result
 
     def serialize(self) -> dict:
-        data = super(CreateArchiveResult, self).serialize()
+        data = super().serialize()
         data['payload'] = self.file_descriptor.serialize() if self.file_descriptor else None
         return data

@@ -19,9 +19,8 @@ class Detection:
 
 class ExtractMetadataRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ExtractMetadataRequest, self).__init__(authenticated_http_client, 'GET',
-                                                     base_url + '/files/metadata/extract', _FileMetadataDeserializer)
-
+        super().__init__(authenticated_http_client, 'GET', base_url + '/files/metadata/extract',
+                         _FileMetadataDeserializer)
         self.path = None
         self.detections = []
 
@@ -38,7 +37,7 @@ class ExtractMetadataRequest(MediaPlatformRequest):
         return self
 
     def execute(self) -> FileMetadata:
-        return super(ExtractMetadataRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

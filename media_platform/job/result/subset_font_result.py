@@ -9,7 +9,7 @@ class SubsetFontResult(JobResult):
     type = JobType.subset_font
 
     def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None):
-        super(SubsetFontResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.file_descriptor = file_descriptor
 
     @classmethod

@@ -15,7 +15,6 @@ class ExtractionReportFormat:
 
 class ExtractionReport(Serializable, Deserializable):
     def __init__(self, destination: Destination, report_format: ExtractionReportFormat = ExtractionReportFormat.csv):
-        super(ExtractionReport, self).__init__()
         self.destination = destination
         self.format = report_format
 

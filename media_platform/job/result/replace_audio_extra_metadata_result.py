@@ -9,7 +9,7 @@ class ReplaceAudioExtraMetadataResult(JobResult):
     type = JobType.replace_extra_metadata
 
     def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None):
-        super(ReplaceAudioExtraMetadataResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.file_descriptor = file_descriptor
 
     @classmethod

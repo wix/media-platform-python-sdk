@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Deserializable
 
 class Label(Deserializable):
     def __init__(self, name: str, score: float):
-        super(Label, self).__init__()
         self.name = name
         self.score = score
 

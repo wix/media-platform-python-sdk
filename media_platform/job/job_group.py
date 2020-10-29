@@ -7,7 +7,6 @@ from media_platform.lang.serialization import Deserializable
 
 class JobGroup(Deserializable):
     def __init__(self, group_id: str, jobs: [Job]):
-        super(JobGroup, self).__init__()
         self.group_id = group_id
         self.jobs = jobs
 

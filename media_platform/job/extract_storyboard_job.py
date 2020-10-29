@@ -12,7 +12,6 @@ SUPPORTED_IMAGE_FORMATS = ['jpg', 'png']
 class ExtractStoryboardSpecification(Specification):
     def __init__(self, destination: Destination, columns: int, rows: int, tile_width: int = None,
                  tile_height: int = None, image_format: str = 'jpg', segment_duration: float = None):
-        super(ExtractStoryboardSpecification, self).__init__()
         self.destination = destination
         self.columns = columns
         self.rows = rows

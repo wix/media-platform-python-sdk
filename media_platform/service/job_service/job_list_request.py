@@ -7,7 +7,7 @@ from media_platform.service.list_request import _ListRequest
 
 class JobListRequest(_ListRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(JobListRequest, self).__init__(authenticated_http_client, base_url + '/jobs', JobList)
+        super().__init__(authenticated_http_client, base_url + '/jobs', JobList)
         self.issuer = None
         self.type = None
         self.status = None
@@ -40,10 +40,10 @@ class JobListRequest(_ListRequest):
         return self
 
     def execute(self) -> JobList:
-        return super(JobListRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
-        params = super(JobListRequest, self)._params()
+        params = super()._params()
 
         if self.issuer:
             params['issuer'] = self.issuer

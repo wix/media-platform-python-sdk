@@ -7,7 +7,7 @@ from media_platform.service.media_platform_service import MediaPlatformService
 
 class FlowControlService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient):
-        super(FlowControlService, self).__init__(domain, authenticated_http_client)
+        super().__init__(domain, authenticated_http_client)
 
     def invoke_flow_request(self) -> FlowInvocationRequest:
         return FlowInvocationRequest(self._authenticated_http_client, self._base_url)

@@ -5,7 +5,6 @@ from media_platform.lang.serialization import Deserializable
 
 class UploadConfiguration(Deserializable):
     def __init__(self, upload_url: str):
-        super(UploadConfiguration, self).__init__()
         self.upload_url = upload_url
 
     @classmethod

@@ -6,7 +6,7 @@ from media_platform.service.video_service.extract_storyboard_request import Extr
 
 class VideoService(MediaPlatformService):
     def __init__(self, domain: str, authenticated_http_client: AuthenticatedHTTPClient):
-        super(VideoService, self).__init__(domain, authenticated_http_client)
+        super().__init__(domain, authenticated_http_client)
 
     def extract_poster_request(self) -> ExtractPosterRequest:
         return ExtractPosterRequest(self._authenticated_http_client, self._base_url)

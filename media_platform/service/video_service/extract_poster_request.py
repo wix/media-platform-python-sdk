@@ -7,8 +7,7 @@ from media_platform.service.source import Source
 
 class ExtractPosterRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(ExtractPosterRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/av/poster',
-                                                   ExtractPosterJobGroup)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/av/poster', ExtractPosterJobGroup)
 
         self.sources = []
         self.specifications = []
@@ -33,7 +32,7 @@ class ExtractPosterRequest(MediaPlatformRequest):
         [specification.validate() for specification in self.specifications]
 
     def execute(self) -> ExtractPosterJobGroup:
-        return super(ExtractPosterRequest, self).execute()
+        return super().execute()
 
     def _params(self) -> dict:
         return {

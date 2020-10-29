@@ -13,8 +13,7 @@ from media_platform.service.media_platform_request import MediaPlatformRequest
 
 class OpenStreamRequest(MediaPlatformRequest):
     def __init__(self, authenticated_http_client: AuthenticatedHTTPClient, base_url: str):
-        super(OpenStreamRequest, self).__init__(authenticated_http_client, 'POST', base_url + '/live/streams',
-                                                LiveStream)
+        super().__init__(authenticated_http_client, 'POST', base_url + '/live/streams', LiveStream)
         self.protocol: StreamProtocol or None = None
         self.dvr: StreamDVR or None = None
         self.geo: GeoLocation or None = None

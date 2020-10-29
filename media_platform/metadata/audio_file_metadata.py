@@ -8,7 +8,7 @@ from media_platform.service.file_descriptor import FileDescriptor
 
 class AudioFileMetadata(FileMetadata):
     def __init__(self, file_descriptor: FileDescriptor, basic: AudioBasic = None, extra: AudioExtra = None):
-        super(AudioFileMetadata, self).__init__(MediaType.audio, file_descriptor, basic)
+        super().__init__(MediaType.audio, file_descriptor, basic)
 
         self.extra = extra
 

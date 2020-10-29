@@ -9,7 +9,7 @@ class ImportFileResult(JobResult):
     type = JobType.import_file
 
     def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None):
-        super(ImportFileResult, self).__init__(code, message)
+        super().__init__(code, message)
         self.file_descriptor = file_descriptor
 
     @classmethod
@@ -25,7 +25,7 @@ class ImportFileResult(JobResult):
         return result
 
     def serialize(self) -> dict:
-        data = super(ImportFileResult, self).serialize()
+        data = super().serialize()
         data['payload'] = self.file_descriptor.serialize() if self.file_descriptor else None
 
         return data
