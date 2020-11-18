@@ -9,3 +9,4 @@ class JobType:
     convert_font = 'urn:job:text.font.convert'
     subset_font = 'urn:job:text.font.subset'
     image_operation = 'urn:job:image.operation'
+    av_scan = 'urn:job:av-scanner.scan'
