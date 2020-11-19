@@ -25,9 +25,13 @@ class TestScannerService(unittest.TestCase):
     def test_scan_file_request(self):
         self._register_scan_file_request()
 
-        job = self.scanner_service.scan_file_request().set_source(
+        group = self.scanner_service.scan_file_request().set_source(
             Source(self.file_path)
         ).execute()
+
+        assert_that(group.group_id, is_('g'))
+
+        job = group.jobs[0]
 
         assert_that(job, instance_of(ScanFileJob))
         assert_that(job.group_id, is_('g'))
@@ -36,18 +40,23 @@ class TestScannerService(unittest.TestCase):
 
     def _register_scan_file_request(self):
         payload = {
-            'type': 'urn:job:av-scanner.scan',
-            'id': 'g_1',
-            'groupId': 'g',
-            'status': 'pending',
-            'issuer': 'urn:app:app-id',
-            'sources': [
-                {'path': self.file_path}
+            'jobs': [
+                {
+                    'type': 'urn:job:av-scanner.scan',
+                    'id': 'g_1',
+                    'groupId': 'g',
+                    'status': 'pending',
+                    'issuer': 'urn:app:app-id',
+                    'sources': [
+                        {'path': self.file_path}
+                    ],
+                    'specification': {},
+                    'callback': {},
+                    'dateUpdated': '2017-05-22T07:17:44Z',
+                    'dateCreated': '2017-05-22T07:17:44Z'
+                }
             ],
-            'specification': {},
-            'callback': {},
-            'dateUpdated': '2017-05-22T07:17:44Z',
-            'dateCreated': '2017-05-22T07:17:44Z'
+            'groupId': 'g'
         }
         response = RestResult(0, 'OK', payload)
         httpretty.register_uri(httpretty.POST, 'https://fish.appspot.com/_api/security/av/scan',

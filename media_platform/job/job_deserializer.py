@@ -10,6 +10,7 @@ from media_platform.job.job import Job
 from media_platform.job.replace_extra_metadata_job import ReplaceExtraMetadataJob
 from media_platform.job.subset_font_job import SubsetFontJob
 from media_platform.job.transcode_job import TranscodeJob
+from media_platform.job.scan_file_job import ScanFileJob
 from media_platform.lang.serialization import Deserializable
 
 
@@ -23,7 +24,8 @@ class _JobDeserializer(Deserializable):
         TranscodeJob,
         ReplaceExtraMetadataJob,
         ConvertFontJob,
-        SubsetFontJob
+        SubsetFontJob,
+        ScanFileJob
     ]
 
     _type_to_class = {c.type: c for c in _job_classes}
