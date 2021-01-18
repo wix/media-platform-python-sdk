@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from media_platform.job.job_type import JobType
 from media_platform.service.file_descriptor import FileDescriptor
 from media_platform.job.result.job_result import JobResult
 
 
 class ConvertFontResult(JobResult):
+    type = JobType.convert_font
+
     def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None):
         super().__init__(code, message)
         self.file_descriptor = file_descriptor
