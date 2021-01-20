@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from media_platform.job.extract_archive.extract_archive_job import ExtractArchiveJob, ExtractArchiveSpecification
 from media_platform.job.extract_archive.extraction_report import ExtractionReportFormat, ExtractionReport
+from media_platform.job.job import Job, JobStatus
 from media_platform.job.job_type import JobType
 from media_platform.job.result.extract_archive_result import ExtractArchiveResult
 from media_platform.job.result.transcode_result import TranscodeResult
@@ -10,7 +11,6 @@ from media_platform.job.transcode_job import TranscodeJob, TranscodeSpecificatio
 from media_platform.lang import datetime_serialization
 from media_platform.service.destination import Destination
 from media_platform.service.file_descriptor import ACL, FileDescriptor, FileType
-from media_platform.job.job import Job, JobStatus
 from media_platform.service.source import Source
 
 source = Source('/source.jpg')
@@ -30,11 +30,13 @@ transcode_result = TranscodeResult(
     file_descriptor=FileDescriptor(
         '/path.mp4', 'file-id', FileType.file, 'video/mp4', 123, ACL.private, date_created=frozen_time,
         date_updated=frozen_time),
-    master_ffmpeg_command='command'
+    master_ffmpeg_command='command',
+    error_class='error_class'
 )
 
 extract_archive_job = ExtractArchiveJob(
-    'group-id_job-key', 'urn:member:xxx', JobStatus.pending, extract_archive_specification, [source], result=extract_archive_result,
+    'group-id_job-key', 'urn:member:xxx', JobStatus.pending, extract_archive_specification, [source],
+    result=extract_archive_result,
     date_created=frozen_time, date_updated=frozen_time)
 
 extract_archive_data = {
@@ -52,8 +54,10 @@ extract_archive_data = {
     'type': JobType.extract_archive
 }
 
-transcode_job = TranscodeJob('group-id_job-key', 'urn:member:xxx', JobStatus.pending, transcode_specification, [source],
-                             result=transcode_result, date_created=frozen_time, date_updated=frozen_time)
+transcode_job = TranscodeJob(
+    'group-id_job-key', 'urn:member:xxx', JobStatus.pending, transcode_specification, [source],
+    result=transcode_result, date_created=frozen_time, date_updated=frozen_time
+)
 
 transcode_data = {
     'status': 'pending',

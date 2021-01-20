@@ -1,48 +1,43 @@
 from __future__ import annotations
 
-from media_platform.service.file_descriptor import FileDescriptor
+from typing import Optional, Dict
+
 from media_platform.job.job_type import JobType
 from media_platform.job.result.job_result import JobResult
+from media_platform.service.file_descriptor import FileDescriptor
 
 
 class TranscodeResult(JobResult):
     type = JobType.transcode
 
-    def __init__(self, code=None, message=None, file_descriptor=None, master_ffmpeg_command=None):
+    def __init__(self, code: int = None, message: str = None, file_descriptor: FileDescriptor = None,
+                 master_ffmpeg_command: str = None, error_class: str = None):
         super().__init__(code, message)
         self.file_descriptor = file_descriptor
         self.master_ffmpeg_command = master_ffmpeg_command
+        self.error_class = error_class
 
     @classmethod
-    def deserialize(cls, data: dict or None) -> TranscodeResult or None:
+    def deserialize(cls, data: Optional[Dict]) -> Optional[TranscodeResult]:
         if data is None:
             return None
 
-        result = JobResult.deserialize(data)
-        result.__class__ = TranscodeResult
+        payload_data = data.get('payload') or {}
+        file_descriptor_data = payload_data.get('file')
+        file_descriptor = FileDescriptor.deserialize(file_descriptor_data) if file_descriptor_data else None
 
-        result.file_descriptor = None
-        result.master_ffmpeg_command = None
+        return cls(data['code'], data['message'], file_descriptor, payload_data.get('masterFFMpegCommand'),
+                   payload_data.get('errorClass'))
 
-        payload_data = data.get('payload')
-        if payload_data:
-            # todo: payload.file is deprecated
-            file_descriptor_data = payload_data.get('file')
-            if file_descriptor_data:
-                result.file_descriptor = FileDescriptor.deserialize(file_descriptor_data)
+    def serialize(self) -> Dict:
+        return {
+            'code': self.code,
+            'message': self.message,
+            'payload': self._serialize_payload()
+        }
 
-            result.master_ffmpeg_command = payload_data.get('masterFFMpegCommand')
-
-        return result
-
-    def serialize(self) -> dict:
-        data = super(TranscodeResult, self).serialize()
-        data['payload'] = self._serialize_payload()
-
-        return data
-
-    def _serialize_payload(self) -> dict:
-        payload = None
+    def _serialize_payload(self) -> Dict:
+        payload = {}
 
         if self.file_descriptor:
             payload = self.file_descriptor.serialize()
@@ -50,9 +45,9 @@ class TranscodeResult(JobResult):
             payload['file'] = self.file_descriptor.serialize()
 
         if self.master_ffmpeg_command:
-            if not payload:
-                payload = {}
-
             payload['masterFFMpegCommand'] = self.master_ffmpeg_command
 
-        return payload
+        if self.error_class:
+            payload['errorClass'] = self.error_class
+
+        return payload or None
